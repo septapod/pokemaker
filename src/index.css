@@ -1,0 +1,30 @@
+/* Tailwind CSS base styles */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom global styles for PokéMaker app */
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-blue-100 to-purple-100 min-h-screen;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+}
+
+/* Custom component styles */
+@layer components {
+  /* Pokémon-themed button style */
+  .btn-pokemon {
+    @apply bg-gradient-to-r from-red-500 to-yellow-400 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200;
+  }
+
+  /* Card style for Pokémon display */
+  .pokemon-card {
+    @apply bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-200 overflow-hidden;
+  }
+
+  /* Input field style */
+  .input-field {
+    @apply w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none transition-colors;
+  }
+}
