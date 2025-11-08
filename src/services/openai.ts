@@ -118,17 +118,19 @@ export async function generatePokemonImageWithVision(
           content: [
             {
               type: 'text',
-              text: `This is a child's drawing for a family-friendly creature creation app. Analyze this cute creature drawing and describe what you see in a positive, child-appropriate way.
+              text: `Describe ONLY the physical, visual characteristics of this creature drawing. Focus on what you can SEE, not concepts or personality.
 
-              Focus on these family-friendly aspects:
-              - Body shape and features (cute, friendly characteristics)
-              - Colors (bright, cheerful)
-              - Elemental type it might be (fire/water/grass/electric/nature/etc)
-              - Personality/mood (friendly, playful, cheerful)
-              - Unique characteristics that make it special
-              ${userDescription ? `The young creator says: "${userDescription}"` : ''}
+              Describe these VISUAL details:
+              - Overall body shape (round, oval, angular, etc.)
+              - Size proportions (head to body ratio, limb sizes)
+              - Physical features (number and shape of eyes, limbs, appendages)
+              - Colors (specific shades, where each color appears)
+              - Surface texture (smooth, fuzzy, scaly, rough)
+              - Patterns or markings (stripes, spots, gradients)
+              - Facial features (eye shape, mouth shape, nose if any)
+              ${userDescription ? `Creator's note: "${userDescription}"` : ''}
 
-              Provide a detailed, positive description for creating a professional, kid-friendly fantasy creature illustration suitable for all ages in an anime/manga art style.`
+              Provide a purely visual, physical description with NO personality traits, NO elemental types, NO mood descriptions, NO abstract concepts. Just describe what the creature physically looks like.`
             },
             {
               type: 'image_url',
@@ -153,17 +155,20 @@ export async function generatePokemonImageWithVision(
     // Step 2: Generate image based on the analysis
     console.log('Generating final Pokémon illustration...');
 
-    const finalPrompt = `${aiAnalysis}
+    const finalPrompt = `Create a cute fantasy creature with these exact physical features:
 
-Style: Anime/manga art style with bold outlines, vibrant colors, white background, front-facing view.
+${aiAnalysis}
 
-CRITICAL REQUIREMENTS:
-- Generate ONLY the creature illustration itself
-- NO text of any kind anywhere in the image
-- NO titles, names, or labels
-- NO descriptive text boxes or annotations
-- NO watermarks or signatures
-- Just a clean character illustration with nothing else`;
+Art style: Anime/manga style, bold outlines, vibrant colors, white background, front-facing view.
+
+ABSOLUTE REQUIREMENTS - NO EXCEPTIONS:
+- ZERO text anywhere in the image
+- ZERO words, letters, or labels of any kind
+- ZERO title or name text
+- ZERO annotation boxes or descriptions
+- ZERO watermarks or signatures
+- ONLY draw the creature itself - nothing else
+- Pure visual illustration with no written content whatsoever`;
 
     const imageResponse = await openai.images.generate({
       model: 'dall-e-3',

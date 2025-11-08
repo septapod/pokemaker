@@ -105,7 +105,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
 
       setAiGeneratedImage(imageUrl);
 
-      alert('🎉 Your Pokémon art has been generated! Click "Accept Image" if you like it, or "Try Again" to regenerate.');
+      // Image generation successful - UI will show the result automatically
     } catch (error: any) {
       console.error('Error generating image:', error);
       // Show the actual error message from the error
@@ -176,7 +176,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
   return (
     <div className="max-w-3xl mx-auto">
       {/* Page Header */}
-      <div className="text-center mb-8">
+      <div className="text-center mb-6">
         <h1 className="text-4xl font-bold text-gray-800 mb-2">
           {editMode ? '✏️ Edit Your Pokémon' : '✨ Create Your Pokémon'}
         </h1>
@@ -184,6 +184,31 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
           {editMode ? 'Make changes to your Pokémon' : "Let's bring your creation to life!"}
         </p>
       </div>
+
+      {/* Save Draft Button - Always Visible */}
+      <div className="flex justify-center mb-6">
+        <button
+          type="button"
+          onClick={() => handleSubmit(onSubmit)()}
+          disabled={isSaving}
+          className={`
+            px-6 py-3 rounded-lg font-bold text-lg transition-all shadow-md
+            ${isSaving
+              ? 'bg-gray-400 text-gray-200 cursor-not-allowed'
+              : 'bg-green-600 hover:bg-green-700 text-white hover:shadow-xl transform hover:scale-105'
+            }
+          `}
+        >
+          {isSaving ? '💾 Saving...' : '💾 Save Draft'}
+        </button>
+      </div>
+
+      {/* Error Message Display */}
+      {saveError && (
+        <div className="mb-6 bg-red-50 border-2 border-red-400 rounded-lg p-4 text-red-700">
+          ⚠️ {saveError}
+        </div>
+      )}
 
       {/* Progress Indicator */}
       <div className="mb-8">
@@ -895,6 +920,32 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
             >
               {isGeneratingImage ? '⚡ Creating Magic... (This takes 30-60 seconds)' : '✨ Generate AI Art!'}
             </button>
+
+            {/* Loading Indicator */}
+            {isGeneratingImage && (
+              <div className="mt-6 bg-purple-50 border-2 border-purple-300 rounded-lg p-8">
+                <div className="flex flex-col items-center justify-center">
+                  {/* Animated Spinner */}
+                  <div className="relative w-16 h-16 mb-4">
+                    <div className="absolute inset-0 border-4 border-purple-200 rounded-full"></div>
+                    <div className="absolute inset-0 border-4 border-purple-600 rounded-full border-t-transparent animate-spin"></div>
+                  </div>
+
+                  {/* Loading Text */}
+                  <div className="text-center">
+                    <p className="text-xl font-bold text-purple-800 mb-2 animate-pulse">
+                      ✨ Creating Your Creature Art ✨
+                    </p>
+                    <p className="text-md text-purple-600">
+                      Analyzing your drawing and generating professional artwork...
+                    </p>
+                    <p className="text-sm text-purple-500 mt-2">
+                      This usually takes 30-60 seconds
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* AI Generated Image Preview with Side-by-Side Comparison */}
             {aiGeneratedImage && (
