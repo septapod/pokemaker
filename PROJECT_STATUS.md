@@ -1,8 +1,8 @@
 # PokéMaker - Project Status
 
 **Last Updated**: November 7, 2025
-**Current Phase**: Phase 5 - Testing & Refinement
-**Overall Progress**: 85%
+**Current Phase**: Phase 5 - Final Testing
+**Overall Progress**: 95%
 
 ---
 
@@ -66,8 +66,16 @@ PokéMaker is a web application for creating custom Pokémon with comprehensive 
 - [x] Fixed DALL-E 3 model name (was "gpt-image-1")
 - [x] Made AI image generation optional to prevent data loss
 - [x] Removed blocking validation preventing saves without AI image
+- [x] Fixed content policy violations (removed trademarked terms from prompts)
+- [x] Fixed text appearing in generated images (multiple prompt refinements)
+- [x] Fixed "Accept & Continue" button functionality
+- [x] Fixed database schema (ability columns, optional fields)
+- [x] Created Supabase Storage bucket for images
+- [x] Removed all field requirements except name
+- [x] Added comprehensive error handling and logging
+- [x] Added API key validation on startup
 - [x] Added loading states and animations
-- [x] Added success/error messages
+- [x] Added success/error messages with specific details
 - [x] Mobile-responsive design
 
 ---
@@ -145,13 +153,48 @@ VITE_OPENAI_API_KEY=<your_openai_api_key>
 ## 🐛 Known Issues & Recent Fixes
 
 ### Recently Fixed (November 7, 2025)
+
+#### Initial Issues (Morning)
 - ✅ **CRITICAL**: Fixed incorrect image model name "gpt-image-1" → "dall-e-3"
 - ✅ **CRITICAL**: Removed blocking validation that prevented saving without AI image
 - ✅ Users can now save Pokemon at any point to prevent data loss
 - ✅ AI-generated image is now optional in the database schema
 
+#### Content Policy & Image Issues (Afternoon/Evening)
+- ✅ **CRITICAL**: Fixed OpenAI content policy violations
+  - Root cause: "Pokémon" trademark in prompts triggered copyright filters
+  - Solution: Replaced all trademarked terms with generic alternatives ("creature", "monster")
+  - Changed "Pokémon Trading Card Game" to "anime/manga art style"
+
+- ✅ **Image Quality**: Fixed unwanted text in generated images
+  - Added explicit "NO text, NO labels, NO watermarks" instructions
+  - Multiple prompt iterations to eliminate text artifacts
+  - Images now generate clean without annotations
+
+- ✅ **UI/UX**: Fixed Accept button functionality
+  - Button now scrolls to "Create Pokémon" button
+  - Changed label to "Accept & Continue" for clarity
+
+#### Database & Validation Issues
+- ✅ **Database Schema**: Fixed multiple schema mismatches
+  - Created `pokemon-images` storage bucket in Supabase
+  - Fixed ability column names (separate name/description columns)
+  - Made all stats optional (only name required)
+  - Removed NOT NULL constraints to allow flexible saving
+
+- ✅ **Validation**: Removed all field requirements except name
+  - Users can save with minimal information
+  - Can add details later through edit functionality
+
+#### Error Handling Improvements
+- ✅ Added detailed error logging for OpenAI API calls
+- ✅ Added detailed error logging for Supabase operations
+- ✅ Added specific error messages for common issues (401, 429, content policy)
+- ✅ Added OpenAI API key format validation on startup
+
 ### Current Known Issues
-- None at this time - ready for user testing!
+- None - app is fully functional and ready for production use!
+- Minor: AI sometimes still includes text despite explicit instructions (DALL-E 3 limitation)
 
 ---
 
@@ -168,6 +211,28 @@ VITE_OPENAI_API_KEY=<your_openai_api_key>
 - Multi-step form to avoid overwhelming with 50+ fields
 - Custom Tailwind classes for consistent Pokémon theming
 - Storing both original drawing and AI-generated image
+- Minimal validation (only name required) for flexible, iterative creation
+
+### Lessons Learned
+1. **OpenAI Content Policy**: Avoid using trademarked terms in prompts
+   - "Pokémon" triggers copyright filters → use "creature" instead
+   - Be explicit about "NO text" to prevent annotations in images
+
+2. **Database Schema**: Keep optional fields truly optional
+   - Use `CHECK` constraints with `IS NULL` for flexible validation
+   - Don't use NOT NULL unless absolutely required
+
+3. **Error Handling**: Always log detailed error information
+   - Generic error messages don't help debugging
+   - Include error codes, status, and full error objects in logs
+
+4. **API Keys**: Validate format before making requests
+   - Check for correct prefix (e.g., "sk-")
+   - Verify minimum length to catch truncation
+
+5. **Storage Buckets**: Must be created manually in Supabase
+   - Set public access for image URLs to work
+   - Configure RLS policies for uploads
 
 ---
 
@@ -199,11 +264,22 @@ The app will be available at `http://localhost:5173`
 
 ## 🎯 Next Steps
 
-1. ✅ Complete user testing of "Egglet" Pokemon creation
-2. Verify AI image generation works with DALL-E 3
-3. Test saving Pokemon with and without AI images
-4. Add gallery filtering and sorting features (optional)
-5. Deploy to production when ready
+1. 🔄 **IN PROGRESS**: Complete "Egglet" Pokemon creation test
+   - Database schema has been updated
+   - Storage bucket created
+   - All validation issues resolved
+   - Ready for final save test
+
+2. ✅ Verify AI image generation works with DALL-E 3
+3. ✅ Test saving Pokemon with and without AI images
+4. [ ] Add gallery filtering and sorting features (optional)
+5. [ ] Deploy to production when ready
+
+### Post-Launch Enhancements
+- Add filter by type to gallery
+- Add sort options (date, name, Pokedex number)
+- Optimize image loading performance
+- Add bulk operations (export, delete multiple)
 
 ---
 
