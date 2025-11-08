@@ -153,13 +153,17 @@ export async function generatePokemonImageWithVision(
     // Step 2: Generate image based on the analysis
     console.log('Generating final Pokémon illustration...');
 
-    const finalPrompt = `Create a cute fantasy creature character with these specific visual characteristics:
-
-${aiAnalysis}
+    const finalPrompt = `${aiAnalysis}
 
 Style: Anime/manga art style with bold outlines, vibrant colors, white background, front-facing view.
 
-IMPORTANT: Generate ONLY the character illustration. Do NOT include any text, labels, watermarks, or written words in the image.`;
+CRITICAL REQUIREMENTS:
+- Generate ONLY the creature illustration itself
+- NO text of any kind anywhere in the image
+- NO titles, names, or labels
+- NO descriptive text boxes or annotations
+- NO watermarks or signatures
+- Just a clean character illustration with nothing else`;
 
     const imageResponse = await openai.images.generate({
       model: 'dall-e-3',

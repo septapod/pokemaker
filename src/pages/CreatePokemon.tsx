@@ -267,7 +267,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 Primary Type *
               </label>
               <select
-                {...register('typePrimary', { required: 'Primary type is required' })}
+                {...register('typePrimary')}
                 className="input-field"
               >
                 {POKEMON_TYPES.map((type) => (
@@ -431,7 +431,6 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               <input
                 type="number"
                 {...register('hp', {
-                  required: 'HP is required',
                   min: { value: STAT_MIN, message: `Min HP is ${STAT_MIN}` },
                   max: { value: STAT_MAX, message: `Max HP is ${STAT_MAX}` },
                   valueAsNumber: true
@@ -452,7 +451,6 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               <input
                 type="number"
                 {...register('attack', {
-                  required: 'Attack is required',
                   min: { value: STAT_MIN, message: `Min Attack is ${STAT_MIN}` },
                   max: { value: STAT_MAX, message: `Max Attack is ${STAT_MAX}` },
                   valueAsNumber: true
@@ -473,7 +471,6 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               <input
                 type="number"
                 {...register('defense', {
-                  required: 'Defense is required',
                   min: { value: STAT_MIN, message: `Min Defense is ${STAT_MIN}` },
                   max: { value: STAT_MAX, message: `Max Defense is ${STAT_MAX}` },
                   valueAsNumber: true
@@ -494,7 +491,6 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               <input
                 type="number"
                 {...register('specialAttack', {
-                  required: 'Special Attack is required',
                   min: { value: STAT_MIN, message: `Min Special Attack is ${STAT_MIN}` },
                   max: { value: STAT_MAX, message: `Max Special Attack is ${STAT_MAX}` },
                   valueAsNumber: true
@@ -515,7 +511,6 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               <input
                 type="number"
                 {...register('specialDefense', {
-                  required: 'Special Defense is required',
                   min: { value: STAT_MIN, message: `Min Special Defense is ${STAT_MIN}` },
                   max: { value: STAT_MAX, message: `Max Special Defense is ${STAT_MAX}` },
                   valueAsNumber: true
@@ -536,7 +531,6 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               <input
                 type="number"
                 {...register('speed', {
-                  required: 'Speed is required',
                   min: { value: STAT_MIN, message: `Min Speed is ${STAT_MIN}` },
                   max: { value: STAT_MAX, message: `Max Speed is ${STAT_MAX}` },
                   valueAsNumber: true
