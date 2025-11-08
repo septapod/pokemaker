@@ -106,9 +106,11 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       setAiGeneratedImage(imageUrl);
 
       alert('🎉 Your Pokémon art has been generated! Click "Accept Image" if you like it, or "Try Again" to regenerate.');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error generating image:', error);
-      setSaveError('Failed to generate image. Please try again.');
+      // Show the actual error message from the error
+      const errorMessage = error?.message || 'Failed to generate image. Please try again.';
+      setSaveError(errorMessage);
     } finally {
       setIsGeneratingImage(false);
     }
@@ -146,9 +148,11 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
         alert(`🎉 Congratulations! ${data.name} has been created!`);
         navigate(`/pokemon/${newPokemon.id}`);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving Pokémon:', error);
-      setSaveError('Failed to save Pokémon. Please try again.');
+      // Show the actual error message from the error
+      const errorMessage = error?.message || 'Failed to save Pokémon. Please try again.';
+      setSaveError(errorMessage);
     } finally {
       setIsSaving(false);
     }

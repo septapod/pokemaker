@@ -12,8 +12,15 @@ import { AI_IMAGE_PROMPT_TEMPLATE } from '../utils/constants';
 // Get API key from environment variables
 const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
 
+// Validate API key
 if (!apiKey) {
-  console.error('Missing OpenAI API key. Please check your .env file.');
+  console.error('❌ Missing OpenAI API key. Please check your .env file.');
+} else if (!apiKey.startsWith('sk-')) {
+  console.error('❌ Invalid OpenAI API key format. Key should start with "sk-"');
+} else if (apiKey.length < 20) {
+  console.error('❌ OpenAI API key appears to be truncated or incomplete.');
+} else {
+  console.log('✅ OpenAI API key loaded successfully');
 }
 
 // Create OpenAI client
@@ -59,9 +66,29 @@ export async function generatePokemonImage(
     console.log('Image generated successfully!');
     return imageUrl;
 
-  } catch (error) {
-    console.error('Error generating Pokémon image:', error);
-    throw error;
+  } catch (error: any) {
+    console.error('Error generating Pokémon image:', {
+      message: error?.message,
+      status: error?.status,
+      code: error?.code,
+      type: error?.type,
+      response: error?.response?.data,
+      fullError: error
+    });
+
+    // Provide more specific error message
+    let errorMessage = 'Failed to generate image. ';
+    if (error?.status === 401) {
+      errorMessage += 'Invalid API key. Please check your OpenAI API key.';
+    } else if (error?.status === 429) {
+      errorMessage += 'Rate limit exceeded. Please try again later.';
+    } else if (error?.message) {
+      errorMessage += error.message;
+    } else {
+      errorMessage += 'Please try again.';
+    }
+
+    throw new Error(errorMessage);
   }
 }
 
@@ -141,9 +168,31 @@ ${aiAnalysis}`;
     console.log('Image generated successfully!');
     return imageUrl;
 
-  } catch (error) {
-    console.error('Error generating Pokémon image with vision:', error);
-    throw error;
+  } catch (error: any) {
+    console.error('Error generating Pokémon image with vision:', {
+      message: error?.message,
+      status: error?.status,
+      code: error?.code,
+      type: error?.type,
+      response: error?.response?.data,
+      fullError: error
+    });
+
+    // Provide more specific error message
+    let errorMessage = 'Failed to generate image. ';
+    if (error?.status === 401) {
+      errorMessage += 'Invalid API key. Please check your OpenAI API key in .env file.';
+    } else if (error?.status === 429) {
+      errorMessage += 'Rate limit exceeded. Please try again in a few minutes.';
+    } else if (error?.status === 400) {
+      errorMessage += 'Bad request. There may be an issue with the image format or prompt.';
+    } else if (error?.message) {
+      errorMessage += error.message;
+    } else {
+      errorMessage += 'Please try again.';
+    }
+
+    throw new Error(errorMessage);
   }
 }
 

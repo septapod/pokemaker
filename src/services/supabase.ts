@@ -101,8 +101,27 @@ export async function createPokemon(pokemon: Omit<Pokemon, 'id' | 'createdAt' | 
     .single();
 
   if (error) {
-    console.error('Error creating Pokémon:', error);
-    throw error;
+    console.error('Error creating Pokémon:', {
+      message: error.message,
+      code: error.code,
+      details: error.details,
+      hint: error.hint,
+      fullError: error
+    });
+
+    // Provide more specific error message
+    let errorMessage = 'Failed to save Pokémon. ';
+    if (error.code === '23502') {
+      errorMessage += 'Missing required field: ' + (error.message || 'Please check all required fields.');
+    } else if (error.code === '23505') {
+      errorMessage += 'This Pokémon already exists.';
+    } else if (error.message) {
+      errorMessage += error.message;
+    } else {
+      errorMessage += 'Please try again.';
+    }
+
+    throw new Error(errorMessage);
   }
 
   return convertDatabaseToPokemon(data);
@@ -174,8 +193,25 @@ export async function updatePokemon(id: string, pokemon: Partial<Pokemon>) {
     .single();
 
   if (error) {
-    console.error('Error updating Pokémon:', error);
-    throw error;
+    console.error('Error updating Pokémon:', {
+      message: error.message,
+      code: error.code,
+      details: error.details,
+      hint: error.hint,
+      fullError: error
+    });
+
+    // Provide more specific error message
+    let errorMessage = 'Failed to update Pokémon. ';
+    if (error.code === '23502') {
+      errorMessage += 'Missing required field: ' + (error.message || 'Please check all required fields.');
+    } else if (error.message) {
+      errorMessage += error.message;
+    } else {
+      errorMessage += 'Please try again.';
+    }
+
+    throw new Error(errorMessage);
   }
 
   return convertDatabaseToPokemon(data);
