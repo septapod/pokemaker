@@ -78,7 +78,9 @@ export async function generatePokemonImage(
 
     // Provide more specific error message
     let errorMessage = 'Failed to generate image. ';
-    if (error?.status === 401) {
+    if (error?.code === 'content_policy_violation') {
+      errorMessage = 'The AI safety system flagged this request. This is likely a false positive. Try using a simpler description or saving without AI image generation.';
+    } else if (error?.status === 401) {
       errorMessage += 'Invalid API key. Please check your OpenAI API key.';
     } else if (error?.status === 429) {
       errorMessage += 'Rate limit exceeded. Please try again later.';
@@ -116,11 +118,17 @@ export async function generatePokemonImageWithVision(
           content: [
             {
               type: 'text',
-              text: `Analyze this Pokémon drawing and describe what you see.
-              Focus on: body shape, features, colors, type (fire/water/grass etc),
-              personality/mood, and any unique characteristics.
-              ${userDescription ? `The creator says: "${userDescription}"` : ''}
-              Provide a detailed description for creating a professional Pokémon illustration.`
+              text: `This is a child's drawing for a family-friendly Pokémon creation app. Analyze this cute creature drawing and describe what you see in a positive, child-appropriate way.
+
+              Focus on these family-friendly aspects:
+              - Body shape and features (cute, friendly characteristics)
+              - Colors (bright, cheerful)
+              - Pokémon type it might be (fire/water/grass/electric etc)
+              - Personality/mood (friendly, playful, cheerful)
+              - Unique characteristics that make it special
+              ${userDescription ? `The young creator says: "${userDescription}"` : ''}
+
+              Provide a detailed, positive description for creating a professional, kid-friendly Pokémon illustration suitable for all ages.`
             },
             {
               type: 'image_url',
@@ -180,7 +188,9 @@ ${aiAnalysis}`;
 
     // Provide more specific error message
     let errorMessage = 'Failed to generate image. ';
-    if (error?.status === 401) {
+    if (error?.code === 'content_policy_violation') {
+      errorMessage = 'The AI safety system flagged this request. This is likely a false positive. Try: 1) Using a simpler description, 2) Uploading a clearer drawing, or 3) Saving without AI image generation.';
+    } else if (error?.status === 401) {
       errorMessage += 'Invalid API key. Please check your OpenAI API key in .env file.';
     } else if (error?.status === 429) {
       errorMessage += 'Rate limit exceeded. Please try again in a few minutes.';
