@@ -30,13 +30,10 @@ const openai = new OpenAI({
  * @returns URL of the generated image
  */
 export async function generatePokemonImage(
-  imageFile: File,
+  _imageFile: File,
   description?: string
 ): Promise<string> {
   try {
-    // Convert image file to base64
-    const base64Image = await fileToBase64(imageFile);
-
     // Build the prompt
     const prompt = buildPrompt(description);
 
@@ -55,7 +52,7 @@ export async function generatePokemonImage(
     });
 
     // Get the generated image URL
-    const imageUrl = response.data[0]?.url;
+    const imageUrl = response.data?.[0]?.url;
 
     if (!imageUrl) {
       throw new Error('No image URL returned from OpenAI');
@@ -137,7 +134,7 @@ ${aiAnalysis}`;
       response_format: 'url',
     });
 
-    const imageUrl = imageResponse.data[0]?.url;
+    const imageUrl = imageResponse.data?.[0]?.url;
 
     if (!imageUrl) {
       throw new Error('No image URL returned from OpenAI');

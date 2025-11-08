@@ -9,7 +9,7 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
-import type { Pokemon, PokemonCardData } from '../types/pokemon.types';
+import type { Pokemon } from '../types/pokemon.types';
 
 // Get environment variables
 // VITE_ prefix makes these available in the browser
