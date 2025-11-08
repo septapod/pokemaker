@@ -856,13 +856,20 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
 
             {/* Preview of uploaded drawing */}
             {uploadedImagePreview && (
-              <div>
-                <h3 className="font-bold text-lg text-gray-800 mb-2">Your Drawing:</h3>
-                <img
-                  src={uploadedImagePreview}
-                  alt="Your drawing"
-                  className="w-full max-w-md mx-auto rounded-lg shadow-lg"
-                />
+              <div className="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-6">
+                <h3 className="font-bold text-xl text-yellow-800 mb-4 text-center">
+                  🎨 Your Original Drawing
+                </h3>
+                <div className="bg-white rounded-lg p-4 shadow-lg">
+                  <img
+                    src={uploadedImagePreview}
+                    alt="Your drawing"
+                    className="w-full max-w-md mx-auto rounded-lg"
+                  />
+                </div>
+                <p className="text-center text-yellow-700 mt-4 text-sm">
+                  This drawing will be saved and shown alongside the AI-generated image! 📸
+                </p>
               </div>
             )}
 
@@ -895,17 +902,59 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               {isGeneratingImage ? '⚡ Creating Magic... (This takes 30-60 seconds)' : '✨ Generate AI Art!'}
             </button>
 
-            {/* AI Generated Image Preview */}
+            {/* AI Generated Image Preview with Side-by-Side Comparison */}
             {aiGeneratedImage && (
               <div className="border-4 border-green-400 rounded-lg p-6 bg-green-50">
-                <h3 className="font-bold text-2xl text-green-800 mb-4 text-center">
-                  🎉 Your Pokémon Art!
+                <h3 className="font-bold text-2xl text-green-800 mb-6 text-center">
+                  🎉 Amazing! See the Transformation! 🎉
                 </h3>
-                <img
-                  src={aiGeneratedImage}
-                  alt="AI Generated Pokémon"
-                  className="w-full max-w-md mx-auto rounded-lg shadow-2xl mb-4"
-                />
+
+                {/* Side-by-side comparison */}
+                {uploadedImagePreview && (
+                  <div className="grid md:grid-cols-2 gap-6 mb-6">
+                    {/* Original Drawing */}
+                    <div className="bg-white rounded-lg overflow-hidden shadow-lg">
+                      <div className="bg-yellow-400 px-4 py-2 text-center">
+                        <span className="font-bold text-gray-800">🎨 Your Drawing</span>
+                      </div>
+                      <div className="p-4">
+                        <img
+                          src={uploadedImagePreview}
+                          alt="Original Drawing"
+                          className="w-full rounded-lg"
+                        />
+                      </div>
+                    </div>
+
+                    {/* AI Generated */}
+                    <div className="bg-white rounded-lg overflow-hidden shadow-lg">
+                      <div className="bg-green-400 px-4 py-2 text-center">
+                        <span className="font-bold text-gray-800">🤖 AI Generated</span>
+                      </div>
+                      <div className="p-4">
+                        <img
+                          src={aiGeneratedImage}
+                          alt="AI Generated Pokémon"
+                          className="w-full rounded-lg"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* If no original preview, just show AI image */}
+                {!uploadedImagePreview && (
+                  <img
+                    src={aiGeneratedImage}
+                    alt="AI Generated Pokémon"
+                    className="w-full max-w-md mx-auto rounded-lg shadow-2xl mb-4"
+                  />
+                )}
+
+                <p className="text-center text-green-800 font-bold mb-4">
+                  ✨ Both images will be saved so you can see your creative journey! ✨
+                </p>
+
                 <div className="flex gap-4 justify-center">
                   <button
                     type="button"
