@@ -39,11 +39,9 @@ export async function generatePokemonImage(
 
     console.log('Generating Pokémon image with OpenAI...');
 
-    // Call OpenAI API for image generation
-    // Note: As of my knowledge, GPT-4o with vision can describe images,
-    // but for image generation, we use DALL-E 3
+    // Call OpenAI API for image generation using gpt-image-1
     const response = await openai.images.generate({
-      model: 'dall-e-3',
+      model: 'gpt-image-1',
       prompt: prompt,
       n: 1,
       size: '1024x1024',
@@ -126,7 +124,7 @@ Based on this description, create a Pokémon:
 ${aiAnalysis}`;
 
     const imageResponse = await openai.images.generate({
-      model: 'dall-e-3',
+      model: 'gpt-image-1',
       prompt: finalPrompt,
       n: 1,
       size: '1024x1024',
