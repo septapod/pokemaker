@@ -966,10 +966,13 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                   </button>
                   <button
                     type="button"
-                    onClick={() => {}}
+                    onClick={() => {
+                      // Scroll to the bottom to show the Create Pokemon button
+                      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+                    }}
                     className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
                   >
-                    ✅ Accept Image
+                    ✅ Accept & Continue
                   </button>
                 </div>
               </div>
