@@ -39,9 +39,9 @@ export async function generatePokemonImage(
 
     console.log('Generating Pokémon image with OpenAI...');
 
-    // Call OpenAI API for image generation using gpt-image-1
+    // Call OpenAI API for image generation using DALL-E 3
     const response = await openai.images.generate({
-      model: 'gpt-image-1',
+      model: 'dall-e-3',
       prompt: prompt,
       n: 1,
       size: '1024x1024',
@@ -124,7 +124,7 @@ Based on this description, create a Pokémon:
 ${aiAnalysis}`;
 
     const imageResponse = await openai.images.generate({
-      model: 'gpt-image-1',
+      model: 'dall-e-3',
       prompt: finalPrompt,
       n: 1,
       size: '1024x1024',

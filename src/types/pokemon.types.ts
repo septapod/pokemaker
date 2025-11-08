@@ -111,7 +111,7 @@ export interface Pokemon {
 
   // === IMAGES ===
   originalDrawingUrl?: string; // User's uploaded drawing
-  aiGeneratedImageUrl: string; // Final AI-generated image (required)
+  aiGeneratedImageUrl?: string; // Final AI-generated image (optional - user can save without it)
 
   // === MOVES ===
   levelUpMoves?: LevelUpMove[];
@@ -132,5 +132,6 @@ export interface PokemonCardData {
   pokedexNumber?: number;
   typePrimary: PokemonType;
   typeSecondary?: PokemonType;
-  aiGeneratedImageUrl: string;
+  aiGeneratedImageUrl?: string;
+  originalDrawingUrl?: string; // Fallback if no AI image
 }

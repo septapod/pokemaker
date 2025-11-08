@@ -116,12 +116,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
 
   // Form submission
   async function onSubmit(data: PokemonFormData) {
-    // Validate that we have an AI-generated image
-    if (!aiGeneratedImage) {
-      alert('Please generate an AI image for your Pokémon before saving!');
-      setCurrentStep(6); // Go to image step
-      return;
-    }
+    // Allow saving without AI image - it's now optional!
+    // This ensures work isn't lost if image generation fails
 
     try {
       setIsSaving(true);
@@ -137,7 +133,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       const pokemonData: Omit<Pokemon, 'id' | 'createdAt' | 'updatedAt'> = {
         ...data,
         originalDrawingUrl,
-        aiGeneratedImageUrl: aiGeneratedImage,
+        aiGeneratedImageUrl: aiGeneratedImage || undefined, // Optional now!
       };
 
       // Create or update Pokemon in database
@@ -1008,10 +1004,10 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
           {currentStep === 6 && (
             <button
               type="submit"
-              disabled={isSaving || !aiGeneratedImage}
+              disabled={isSaving}
               className={`
                 flex-1 font-bold py-3 px-6 rounded-lg transition-all
-                ${!isSaving && aiGeneratedImage
+                ${!isSaving
                   ? 'bg-gradient-to-r from-green-500 to-blue-500 text-white hover:shadow-xl transform hover:scale-105'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }
