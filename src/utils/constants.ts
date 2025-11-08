@@ -100,19 +100,20 @@ export const DEFAULT_BASE_FRIENDSHIP = 70;
 export const DEFAULT_EGG_CYCLES = 20;
 
 // Image generation prompt template for OpenAI
-export const AI_IMAGE_PROMPT_TEMPLATE = `Create a cute, family-friendly Pokémon character illustration for a children's game.
+export const AI_IMAGE_PROMPT_TEMPLATE = `Create a cute, family-friendly fantasy creature character illustration for a children's game.
 
-This is for a kid-friendly Pokémon creation app. The character should be:
+This is for a kid-friendly monster creation app. The character should be:
 - Appropriate for all ages
 - Cute and friendly-looking
 - Colorful and cheerful
-- In the style of official Pokémon Trading Card Game artwork
-- Clean design with bold outlines
+- Anime/manga art style with bold outlines
+- Clean, polished design
 - Vibrant, saturated colors
 - White or simple background
 - Front-facing or 3/4 view
+- Japanese monster-collecting game aesthetic
 
-Make it look like it belongs in an official Pokémon game - professional, polished, and completely safe for children.`;
+Make it professional, polished, and completely safe for children.`;
 
 // Type colors for visual display (matches official Pokémon type colors)
 export const TYPE_COLORS: Record<PokemonType, string> = {

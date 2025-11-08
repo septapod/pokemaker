@@ -118,17 +118,17 @@ export async function generatePokemonImageWithVision(
           content: [
             {
               type: 'text',
-              text: `This is a child's drawing for a family-friendly Pokémon creation app. Analyze this cute creature drawing and describe what you see in a positive, child-appropriate way.
+              text: `This is a child's drawing for a family-friendly creature creation app. Analyze this cute creature drawing and describe what you see in a positive, child-appropriate way.
 
               Focus on these family-friendly aspects:
               - Body shape and features (cute, friendly characteristics)
               - Colors (bright, cheerful)
-              - Pokémon type it might be (fire/water/grass/electric etc)
+              - Elemental type it might be (fire/water/grass/electric/nature/etc)
               - Personality/mood (friendly, playful, cheerful)
               - Unique characteristics that make it special
               ${userDescription ? `The young creator says: "${userDescription}"` : ''}
 
-              Provide a detailed, positive description for creating a professional, kid-friendly Pokémon illustration suitable for all ages.`
+              Provide a detailed, positive description for creating a professional, kid-friendly fantasy creature illustration suitable for all ages in an anime/manga art style.`
             },
             {
               type: 'image_url',
