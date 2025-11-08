@@ -8,9 +8,9 @@
 
 ## 🎯 Project Overview
 
-PokéMaker is a web application that allows Aza to create custom Pokémon with comprehensive details, upload drawings, and generate AI-powered Pokémon artwork. The app stores all creations in a Supabase database and provides an intuitive, child-friendly interface.
+PokéMaker is a web application for creating custom Pokémon with comprehensive details, upload drawings, and generate AI-powered Pokémon artwork. The app stores all creations in a Supabase database and provides an intuitive, child-friendly interface.
 
-**Target User**: Aza (child who loves Pokémon)
+**Target User**: Child who loves Pokémon
 **Tech Stack**: React + TypeScript + Vite + Supabase + OpenAI GPT-4o
 
 ---

@@ -7,8 +7,9 @@
  * - Child-friendly design with Pokémon theme
  */
 
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import type { ReactNode } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
 
 // Define the props (inputs) this component accepts
 interface LayoutProps {
@@ -18,9 +19,17 @@ interface LayoutProps {
 function Layout({ children }: LayoutProps) {
   // useLocation hook tells us which page we're currently on
   const location = useLocation();
+  const navigate = useNavigate();
+  const { isAuthenticated, logout } = useAuth();
 
   // Helper function to check if a nav link is active (current page)
   const isActive = (path: string) => location.pathname === path;
+
+  // Handle logout
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -37,61 +46,73 @@ function Layout({ children }: LayoutProps) {
             </p>
           </Link>
 
-          {/* NAVIGATION - Links to different pages */}
-          <nav className="mt-6">
-            <ul className="flex flex-wrap justify-center gap-2 md:gap-4">
-              {/* Home Link */}
-              <li>
-                <Link
-                  to="/"
-                  className={`
-                    px-4 py-2 rounded-full font-bold text-sm md:text-base
-                    transition-all duration-200 transform hover:scale-105
-                    ${isActive('/')
-                      ? 'bg-white text-red-500 shadow-lg'
-                      : 'bg-red-600 text-white hover:bg-red-700'
-                    }
-                  `}
-                >
-                  🏠 Home
-                </Link>
-              </li>
+          {/* NAVIGATION - Links to different pages (only show when logged in) */}
+          {isAuthenticated && (
+            <nav className="mt-6">
+              <ul className="flex flex-wrap justify-center gap-2 md:gap-4">
+                {/* Home Link */}
+                <li>
+                  <Link
+                    to="/"
+                    className={`
+                      px-4 py-2 rounded-full font-bold text-sm md:text-base
+                      transition-all duration-200 transform hover:scale-105
+                      ${isActive('/')
+                        ? 'bg-white text-red-500 shadow-lg'
+                        : 'bg-red-600 text-white hover:bg-red-700'
+                      }
+                    `}
+                  >
+                    🏠 Home
+                  </Link>
+                </li>
 
-              {/* Create Pokémon Link */}
-              <li>
-                <Link
-                  to="/create"
-                  className={`
-                    px-4 py-2 rounded-full font-bold text-sm md:text-base
-                    transition-all duration-200 transform hover:scale-105
-                    ${isActive('/create')
-                      ? 'bg-white text-blue-500 shadow-lg'
-                      : 'bg-blue-600 text-white hover:bg-blue-700'
-                    }
-                  `}
-                >
-                  ✨ Create
-                </Link>
-              </li>
+                {/* Create Pokémon Link */}
+                <li>
+                  <Link
+                    to="/create"
+                    className={`
+                      px-4 py-2 rounded-full font-bold text-sm md:text-base
+                      transition-all duration-200 transform hover:scale-105
+                      ${isActive('/create')
+                        ? 'bg-white text-blue-500 shadow-lg'
+                        : 'bg-blue-600 text-white hover:bg-blue-700'
+                      }
+                    `}
+                  >
+                    ✨ Create
+                  </Link>
+                </li>
 
-              {/* Gallery Link */}
-              <li>
-                <Link
-                  to="/gallery"
-                  className={`
-                    px-4 py-2 rounded-full font-bold text-sm md:text-base
-                    transition-all duration-200 transform hover:scale-105
-                    ${isActive('/gallery')
-                      ? 'bg-white text-green-500 shadow-lg'
-                      : 'bg-green-600 text-white hover:bg-green-700'
-                    }
-                  `}
-                >
-                  📚 My Pokémon
-                </Link>
-              </li>
-            </ul>
-          </nav>
+                {/* Gallery Link */}
+                <li>
+                  <Link
+                    to="/gallery"
+                    className={`
+                      px-4 py-2 rounded-full font-bold text-sm md:text-base
+                      transition-all duration-200 transform hover:scale-105
+                      ${isActive('/gallery')
+                        ? 'bg-white text-green-500 shadow-lg'
+                        : 'bg-green-600 text-white hover:bg-green-700'
+                      }
+                    `}
+                  >
+                    📚 My Pokémon
+                  </Link>
+                </li>
+
+                {/* Logout Button */}
+                <li>
+                  <button
+                    onClick={handleLogout}
+                    className="px-4 py-2 rounded-full font-bold text-sm md:text-base bg-gray-600 text-white hover:bg-gray-700 transition-all duration-200 transform hover:scale-105"
+                  >
+                    🚪 Log Out
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          )}
         </div>
       </header>
 
@@ -104,7 +125,7 @@ function Layout({ children }: LayoutProps) {
       <footer className="bg-gray-800 text-white py-6 mt-auto">
         <div className="container mx-auto px-4 text-center">
           <p className="text-sm">
-            Made with ❤️ for Aza
+            Made with ❤️
           </p>
           <p className="text-xs text-gray-400 mt-2">
             PokéMaker - Create your own Pokémon adventures!

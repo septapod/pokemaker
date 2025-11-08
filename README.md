@@ -1,6 +1,6 @@
 # ⚡ PokéMaker
 
-A web application that allows Aza to create custom Pokémon with AI-generated artwork!
+A web application for creating custom Pokémon with AI-generated artwork!
 
 ## 🎨 Features
 
@@ -241,11 +241,11 @@ npm run type-check
 
 ## 📄 License
 
-This project is for personal use by Aza. Feel free to fork and adapt for your own purposes!
+This project is for personal use. Feel free to fork and adapt for your own purposes!
 
 ## ❤️ Made with Love
 
-Created for Aza with Claude Code
+Built with Claude Code
 
 ---
 
