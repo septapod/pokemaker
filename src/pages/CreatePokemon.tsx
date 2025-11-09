@@ -11,7 +11,7 @@
  * 6. Image Upload & AI Generation
  */
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import type { Pokemon, PokemonFormData } from '../types/pokemon.types';
@@ -64,6 +64,11 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
   // State for form submission
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+
+  // State for auto-save functionality
+  const [autoSaveStatus, setAutoSaveStatus] = useState<'saved' | 'saving' | 'error'>('saved');
+  const [lastAutoSave, setLastAutoSave] = useState<Date | null>(null);
+  const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Watch total stats to display sum
   const hp = watch('hp') || 0;
@@ -213,6 +218,75 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
     }
   }
 
+  // Auto-save function - silently saves in background without navigation
+  async function autoSave() {
+    try {
+      setAutoSaveStatus('saving');
+
+      // Get ALL form values
+      const allFormData = getValues();
+
+      // Skip auto-save if Pokemon has no name yet
+      if (!allFormData.name || allFormData.name.trim() === '') {
+        setAutoSaveStatus('saved');
+        return;
+      }
+
+      // Upload the original drawing to storage if we have one
+      let originalDrawingUrl = existingPokemon?.originalDrawingUrl;
+      if (uploadedImage) {
+        originalDrawingUrl = await uploadImage(uploadedImage, 'pokemon-images');
+      }
+
+      // Prepare Pokemon data
+      const pokemonData: Omit<Pokemon, 'id' | 'createdAt' | 'updatedAt'> = {
+        ...allFormData,
+        originalDrawingUrl,
+        aiGeneratedImageUrl: aiGeneratedImage || undefined,
+      };
+
+      // Create or update Pokemon in database
+      if (savedPokemonId) {
+        await updatePokemon(savedPokemonId, pokemonData);
+      } else {
+        const newPokemon = await createPokemon(pokemonData);
+        setSavedPokemonId(newPokemon.id);
+      }
+
+      setAutoSaveStatus('saved');
+      setLastAutoSave(new Date());
+      setSaveError(null);
+    } catch (error: any) {
+      console.error('Auto-save error:', error);
+      setAutoSaveStatus('error');
+      // Don't show error to user for auto-save failures
+    }
+  }
+
+  // Watch all form values and trigger auto-save when they change
+  useEffect(() => {
+    // Subscribe to all form changes
+    const subscription = watch(() => {
+      // Clear existing timeout
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+      }
+
+      // Set new timeout to save after 3 seconds of inactivity
+      autoSaveTimeoutRef.current = setTimeout(() => {
+        autoSave();
+      }, 3000);
+    });
+
+    // Cleanup on unmount
+    return () => {
+      subscription.unsubscribe();
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+      }
+    };
+  }, [savedPokemonId, uploadedImage, aiGeneratedImage]); // Re-run when these dependencies change
+
   // Navigation between steps
   function nextStep() {
     if (currentStep < 6) {
@@ -238,6 +312,25 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
         <p className="text-xl text-gray-600">
           {editMode ? 'Make changes to your Pokémon' : "Let's bring your creation to life!"}
         </p>
+      </div>
+
+      {/* Auto-Save Status Indicator */}
+      <div className="flex justify-center mb-4">
+        <div className={`
+          px-4 py-2 rounded-full text-sm font-medium transition-all
+          ${autoSaveStatus === 'saving' ? 'bg-blue-100 text-blue-700' : ''}
+          ${autoSaveStatus === 'saved' ? 'bg-green-100 text-green-700' : ''}
+          ${autoSaveStatus === 'error' ? 'bg-red-100 text-red-700' : ''}
+        `}>
+          {autoSaveStatus === 'saving' && '💾 Saving...'}
+          {autoSaveStatus === 'saved' && lastAutoSave && (
+            <>✅ All changes saved at {lastAutoSave.toLocaleTimeString()}</>
+          )}
+          {autoSaveStatus === 'saved' && !lastAutoSave && (
+            <>✅ Auto-save enabled</>
+          )}
+          {autoSaveStatus === 'error' && '⚠️ Auto-save failed - use Save Draft button'}
+        </div>
       </div>
 
       {/* Save Draft Button - Always Visible - Captures ALL form data */}
