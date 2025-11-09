@@ -23,7 +23,6 @@ import {
   GROWTH_RATES,
   EGG_GROUPS,
   BODY_SHAPES,
-  POKEMON_COLORS,
   DEFAULT_STATS,
   STAT_MIN,
   STAT_MAX,
@@ -322,24 +321,6 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               <p className="text-sm text-gray-500 mt-1">
                 Optional - Some Pokémon have two types
               </p>
-            </div>
-
-            {/* Color */}
-            <div>
-              <label className="block font-bold text-gray-700 mb-2">
-                Main Color
-              </label>
-              <select
-                {...register('color')}
-                className="input-field"
-              >
-                <option value="">Choose a color...</option>
-                {POKEMON_COLORS.map((color) => (
-                  <option key={color} value={color}>
-                    {color}
-                  </option>
-                ))}
-              </select>
             </div>
           </div>
         )}
