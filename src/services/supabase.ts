@@ -176,6 +176,7 @@ export async function updatePokemon(id: string, pokemon: Partial<Pokemon>) {
     .from('pokemon')
     .update({
       // Only update provided fields
+      // Basic Identity
       ...(pokemon.name && { name: pokemon.name }),
       ...(pokemon.pokedexNumber !== undefined && { pokedex_number: pokemon.pokedexNumber }),
       ...(pokemon.category && { category: pokemon.category }),
@@ -183,8 +184,56 @@ export async function updatePokemon(id: string, pokemon: Partial<Pokemon>) {
       ...(pokemon.typeSecondary !== undefined && { type_secondary: pokemon.typeSecondary }),
       ...(pokemon.color && { color: pokemon.color }),
 
-      // Add other fields as needed...
-      // (abbreviated for brevity - would include all fields)
+      // Physical Characteristics
+      ...(pokemon.heightValue !== undefined && { height_value: pokemon.heightValue }),
+      ...(pokemon.heightUnit && { height_unit: pokemon.heightUnit }),
+      ...(pokemon.weightValue !== undefined && { weight_value: pokemon.weightValue }),
+      ...(pokemon.weightUnit && { weight_unit: pokemon.weightUnit }),
+      ...(pokemon.shape && { shape: pokemon.shape }),
+      ...(pokemon.pokedexEntry && { pokedex_entry: pokemon.pokedexEntry }),
+
+      // Battle Stats
+      ...(pokemon.hp !== undefined && { hp: pokemon.hp }),
+      ...(pokemon.attack !== undefined && { attack: pokemon.attack }),
+      ...(pokemon.defense !== undefined && { defense: pokemon.defense }),
+      ...(pokemon.specialAttack !== undefined && { special_attack: pokemon.specialAttack }),
+      ...(pokemon.specialDefense !== undefined && { special_defense: pokemon.specialDefense }),
+      ...(pokemon.speed !== undefined && { speed: pokemon.speed }),
+
+      // Abilities
+      ...(pokemon.ability1?.name && { ability_1_name: pokemon.ability1.name }),
+      ...(pokemon.ability1?.description && { ability_1_description: pokemon.ability1.description }),
+      ...(pokemon.ability2?.name && { ability_2_name: pokemon.ability2.name }),
+      ...(pokemon.ability2?.description && { ability_2_description: pokemon.ability2.description }),
+      ...(pokemon.hiddenAbility?.name && { hidden_ability_name: pokemon.hiddenAbility.name }),
+      ...(pokemon.hiddenAbility?.description && { hidden_ability_description: pokemon.hiddenAbility.description }),
+
+      // Evolution & Breeding
+      ...(pokemon.evolutionStage && { evolution_stage: pokemon.evolutionStage }),
+      ...(pokemon.evolvesFrom && { evolves_from: pokemon.evolvesFrom }),
+      ...(pokemon.evolvesInto && { evolves_into: pokemon.evolvesInto }),
+      ...(pokemon.evolutionMethod && { evolution_method: pokemon.evolutionMethod }),
+      ...(pokemon.eggGroup1 && { egg_group_1: pokemon.eggGroup1 }),
+      ...(pokemon.eggGroup2 && { egg_group_2: pokemon.eggGroup2 }),
+      ...(pokemon.genderRatioMale !== undefined && { gender_ratio_male: pokemon.genderRatioMale }),
+      ...(pokemon.genderRatioFemale !== undefined && { gender_ratio_female: pokemon.genderRatioFemale }),
+      ...(pokemon.isGenderless !== undefined && { is_genderless: pokemon.isGenderless }),
+      ...(pokemon.eggCycles !== undefined && { egg_cycles: pokemon.eggCycles }),
+
+      // Game Mechanics
+      ...(pokemon.catchRate !== undefined && { catch_rate: pokemon.catchRate }),
+      ...(pokemon.baseFriendship !== undefined && { base_friendship: pokemon.baseFriendship }),
+      ...(pokemon.growthRate && { growth_rate: pokemon.growthRate }),
+      ...(pokemon.evYield && { ev_yield: pokemon.evYield }),
+
+      // Images
+      ...(pokemon.originalDrawingUrl && { original_drawing_url: pokemon.originalDrawingUrl }),
+      ...(pokemon.aiGeneratedImageUrl && { ai_generated_image_url: pokemon.aiGeneratedImageUrl }),
+
+      // Moves
+      ...(pokemon.levelUpMoves && { level_up_moves: pokemon.levelUpMoves }),
+      ...(pokemon.tmMoves && { tm_moves: pokemon.tmMoves }),
+      ...(pokemon.eggMoves && { egg_moves: pokemon.eggMoves }),
 
       updated_at: new Date().toISOString(),
     })

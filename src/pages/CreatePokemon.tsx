@@ -58,8 +58,6 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
   const [uploadedImagePreview, setUploadedImagePreview] = useState<string>('');
   const [aiGeneratedImage, setAiGeneratedImage] = useState<string>(existingPokemon?.aiGeneratedImageUrl || '');
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
-  const [physicalAppearance, setPhysicalAppearance] = useState('');
-  const [imageDescription, setImageDescription] = useState('');
 
   // State for form submission
   const [isSaving, setIsSaving] = useState(false);
@@ -104,14 +102,15 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       setIsGeneratingImage(true);
       setSaveError(null);
 
-      // Combine physical appearance and personality/mood descriptions
+      // Combine physical appearance and personality/mood descriptions from form
+      const formData = getValues();
       let combinedDescription = '';
-      if (physicalAppearance) {
-        combinedDescription += `Physical features: ${physicalAppearance}`;
+      if (formData.physicalAppearance) {
+        combinedDescription += `Physical features: ${formData.physicalAppearance}`;
       }
-      if (imageDescription) {
+      if (formData.imageDescription) {
         if (combinedDescription) combinedDescription += '\n\n';
-        combinedDescription += `Personality/mood: ${imageDescription}`;
+        combinedDescription += `Personality/mood: ${formData.imageDescription}`;
       }
 
       // Call OpenAI API with the uploaded image and combined description
@@ -990,8 +989,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 Physical Appearance (Optional)
               </label>
               <textarea
-                value={physicalAppearance}
-                onChange={(e) => setPhysicalAppearance(e.target.value)}
+                {...register('physicalAppearance')}
                 className="input-field min-h-24"
                 placeholder="Describe colors, patterns, textures, markings, body features... (e.g., 'bright orange body with yellow lightning bolt stripes, fuzzy texture, large round eyes')"
               />
@@ -1006,8 +1004,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 Personality & Mood (Optional)
               </label>
               <textarea
-                value={imageDescription}
-                onChange={(e) => setImageDescription(e.target.value)}
+                {...register('imageDescription')}
                 className="input-field min-h-24"
                 placeholder="How should it feel? (e.g., 'friendly and cheerful', 'mysterious and wise', 'energetic and playful')"
               />
