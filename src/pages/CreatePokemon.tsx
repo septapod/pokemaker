@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import type { Pokemon, PokemonFormData } from '../types/pokemon.types';
 import { createPokemon, updatePokemon, uploadImage } from '../services/supabase';
-import { generatePokemonImageWithVision } from '../services/openai';
+import { generatePokemonImageWithVision, urlToFile } from '../services/openai';
 import {
   POKEMON_TYPES,
   EVOLUTION_STAGES,
@@ -114,12 +114,17 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       }
 
       // Call OpenAI API with the uploaded image and combined description
-      const imageUrl = await generatePokemonImageWithVision(
+      const temporaryImageUrl = await generatePokemonImageWithVision(
         uploadedImage,
         combinedDescription || undefined
       );
 
-      setAiGeneratedImage(imageUrl);
+      // Download the image from OpenAI and upload to Supabase Storage
+      // (OpenAI URLs expire after 2 hours, so we need a permanent URL)
+      const imageFile = await urlToFile(temporaryImageUrl, 'ai-generated.png');
+      const permanentImageUrl = await uploadImage(imageFile, 'pokemon-images');
+
+      setAiGeneratedImage(permanentImageUrl);
 
       // Image generation successful - UI will show the result automatically
     } catch (error: any) {
