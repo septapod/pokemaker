@@ -127,27 +127,39 @@ function PokemonDetail() {
                     <span className="font-bold text-gray-800">🤖 AI-Generated</span>
                   </div>
                   <div className="aspect-square">
-                    <img
-                      src={pokemon.aiGeneratedImageUrl}
-                      alt={`${pokemon.name} - AI Generated`}
-                      className="w-full h-full object-contain bg-white p-4"
-                    />
+                    {pokemon.aiGeneratedImageUrl ? (
+                      <img
+                        src={pokemon.aiGeneratedImageUrl}
+                        alt={`${pokemon.name} - AI Generated`}
+                        className="w-full h-full object-contain bg-white p-4"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400 text-6xl">
+                        🎨
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
           )}
 
-          {/* If no original drawing, just show AI image */}
+          {/* If no original drawing, just show AI image (or placeholder if neither exists) */}
           {!pokemon.originalDrawingUrl && (
             <div className="flex flex-col md:flex-row items-center gap-8 mb-6">
               {/* Pokémon Image */}
               <div className="w-64 h-64 bg-white rounded-xl shadow-xl overflow-hidden flex-shrink-0">
-                <img
-                  src={pokemon.aiGeneratedImageUrl}
-                  alt={pokemon.name}
-                  className="w-full h-full object-cover"
-                />
+                {pokemon.aiGeneratedImageUrl ? (
+                  <img
+                    src={pokemon.aiGeneratedImageUrl}
+                    alt={pokemon.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400 text-6xl">
+                    🎨
+                  </div>
+                )}
               </div>
               <div className="flex-grow"></div>
             </div>

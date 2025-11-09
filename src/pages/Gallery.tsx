@@ -106,11 +106,17 @@ function Gallery() {
           >
             {/* Pokémon Image */}
             <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
-              <img
-                src={p.aiGeneratedImageUrl}
-                alt={p.name}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-              />
+              {(p.aiGeneratedImageUrl || p.originalDrawingUrl) ? (
+                <img
+                  src={p.aiGeneratedImageUrl || p.originalDrawingUrl}
+                  alt={p.name}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-gray-400 text-6xl">
+                  🎨
+                </div>
+              )}
               {/* Pokédex Number Badge */}
               {p.pokedexNumber && (
                 <div className="absolute top-2 right-2 bg-black bg-opacity-70 text-white px-3 py-1 rounded-full text-sm font-bold">
