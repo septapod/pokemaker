@@ -39,6 +39,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
   // Current step in the multi-step form (1-6)
   const [currentStep, setCurrentStep] = useState(1);
 
+  // Track saved Pokemon ID for draft saves (so we update instead of creating duplicates)
+  const [savedPokemonId, setSavedPokemonId] = useState<string | undefined>(existingPokemon?.id);
+
   // Form handling with React Hook Form
   const { register, handleSubmit, watch, getValues, formState: { errors } } = useForm<PokemonFormData>({
     defaultValues: editMode && existingPokemon ? existingPokemon : {
@@ -167,14 +170,47 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
     }
   }
 
-  // Save Draft - captures ALL form data, not just current step
+  // Save Draft - captures ALL form data, STAYS on form to continue editing
   async function handleSaveDraft() {
-    // Get ALL form values from React Hook Form's internal state
-    // This includes fields from all steps, even if they're not currently mounted
-    const allFormData = getValues();
+    try {
+      setIsSaving(true);
+      setSaveError(null);
 
-    // Call onSubmit with all the data
-    await onSubmit(allFormData as PokemonFormData);
+      // Get ALL form values from React Hook Form's internal state
+      const allFormData = getValues();
+
+      // Upload the original drawing to storage if we have one
+      let originalDrawingUrl = existingPokemon?.originalDrawingUrl;
+      if (uploadedImage) {
+        originalDrawingUrl = await uploadImage(uploadedImage, 'pokemon-images');
+      }
+
+      // Prepare Pokemon data
+      const pokemonData: Omit<Pokemon, 'id' | 'createdAt' | 'updatedAt'> = {
+        ...allFormData,
+        originalDrawingUrl,
+        aiGeneratedImageUrl: aiGeneratedImage || undefined,
+      };
+
+      // Create or update Pokemon in database
+      if (savedPokemonId) {
+        // Update existing Pokemon (either from edit mode or previously saved draft)
+        await updatePokemon(savedPokemonId, pokemonData);
+        alert(`✅ Draft saved! You can continue editing ${allFormData.name || 'your Pokemon'}.`);
+      } else {
+        // Create new Pokemon for the first time
+        const newPokemon = await createPokemon(pokemonData);
+        setSavedPokemonId(newPokemon.id); // Track ID for future saves
+        alert(`✅ Draft saved! You can continue editing ${allFormData.name || 'your Pokemon'}.`);
+      }
+      // Stay on the form so user can continue editing!
+    } catch (error: any) {
+      console.error('Error saving draft:', error);
+      const errorMessage = error?.message || 'Failed to save draft. Please try again.';
+      setSaveError(errorMessage);
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   // Navigation between steps
