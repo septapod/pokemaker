@@ -192,8 +192,31 @@ VITE_OPENAI_API_KEY=<your_openai_api_key>
 - ✅ Added specific error messages for common issues (401, 429, content policy)
 - ✅ Added OpenAI API key format validation on startup
 
+### Recently Fixed (November 9, 2025)
+
+#### CRITICAL Image Handling Issues
+- ✅ **CRITICAL**: Fixed physicalAppearance & imageDescription never being saved
+  - Root cause: Fields didn't exist in database schema or save functions
+  - Solution: Added columns to database, updated TypeScript types, updated all CRUD functions
+  - Impact: User descriptions now persist through saves and auto-saves
+
+- ✅ **CRITICAL**: Fixed original drawings not uploading early enough
+  - Root cause: Only uploaded on final submission, not on file selection
+  - Solution: Upload immediately to Supabase when user selects file
+  - Impact: Drawings now display correctly in gallery, even if AI generation fails
+
+- ✅ **CRITICAL**: Fixed expired OpenAI image URLs (403 errors)
+  - Root cause: OpenAI URLs expire after 2 hours
+  - Solution: Download from OpenAI and re-upload to Supabase Storage immediately
+  - Impact: AI-generated images now permanent and never expire
+
+- ✅ **Image Fallback**: Added fallback to show original drawings
+  - Gallery and detail pages now show originalDrawingUrl if no AI image exists
+  - Placeholder emoji shown if neither image exists
+
 ### Current Known Issues
-- None - app is fully functional and ready for production use!
+- ⚠️ **Database Migration Required**: Run SQL to add new columns (see below)
+- ⚠️ **Old Pokemon**: Pokemon created before Nov 9 have expired AI image URLs (can't be recovered)
 - Minor: AI sometimes still includes text despite explicit instructions (DALL-E 3 limitation)
 
 ---
@@ -250,6 +273,25 @@ npm run build
 ```
 
 The app will be available at `http://localhost:5173`
+
+### ⚠️ IMPORTANT: Database Migration Required (November 9, 2025)
+
+Before testing the app, run this SQL in your Supabase SQL Editor:
+
+```sql
+-- Add physical_appearance and image_description columns
+ALTER TABLE pokemon
+ADD COLUMN IF NOT EXISTS physical_appearance TEXT,
+ADD COLUMN IF NOT EXISTS image_description TEXT;
+
+-- Verify the columns were added
+SELECT column_name, data_type
+FROM information_schema.columns
+WHERE table_name = 'pokemon'
+AND column_name IN ('physical_appearance', 'image_description');
+```
+
+This adds support for saving user descriptions that guide AI image generation.
 
 ---
 
