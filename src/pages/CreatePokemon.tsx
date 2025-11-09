@@ -40,7 +40,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
   const [currentStep, setCurrentStep] = useState(1);
 
   // Form handling with React Hook Form
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<PokemonFormData>({
+  const { register, handleSubmit, watch, getValues, formState: { errors } } = useForm<PokemonFormData>({
     defaultValues: editMode && existingPokemon ? existingPokemon : {
       // Default values for new Pokémon
       typePrimary: 'Normal',
@@ -70,6 +70,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
   const specialDefense = watch('specialDefense') || 0;
   const speed = watch('speed') || 0;
   const totalStats = hp + attack + defense + specialAttack + specialDefense + speed;
+
+  // Watch evolution stage to conditionally show "Evolves From" field
+  const evolutionStage = watch('evolutionStage');
 
   // Handle image file selection
   function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
@@ -164,6 +167,16 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
     }
   }
 
+  // Save Draft - captures ALL form data, not just current step
+  async function handleSaveDraft() {
+    // Get ALL form values from React Hook Form's internal state
+    // This includes fields from all steps, even if they're not currently mounted
+    const allFormData = getValues();
+
+    // Call onSubmit with all the data
+    await onSubmit(allFormData as PokemonFormData);
+  }
+
   // Navigation between steps
   function nextStep() {
     if (currentStep < 6) {
@@ -191,11 +204,11 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
         </p>
       </div>
 
-      {/* Save Draft Button - Always Visible */}
+      {/* Save Draft Button - Always Visible - Captures ALL form data */}
       <div className="flex justify-center mb-6">
         <button
           type="button"
-          onClick={() => handleSubmit(onSubmit)()}
+          onClick={handleSaveDraft}
           disabled={isSaving}
           className={`
             px-6 py-3 rounded-lg font-bold text-lg transition-all shadow-md
@@ -670,18 +683,20 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               </select>
             </div>
 
-            {/* Evolves From */}
-            <div>
-              <label className="block font-bold text-gray-700 mb-2">
-                Evolves From
-              </label>
-              <input
-                type="text"
-                {...register('evolvesFrom')}
-                className="input-field"
-                placeholder="Previous evolution (if any)"
-              />
-            </div>
+            {/* Evolves From - Only show if NOT Basic stage */}
+            {evolutionStage && evolutionStage !== 'Basic' && (
+              <div>
+                <label className="block font-bold text-gray-700 mb-2">
+                  Evolves From
+                </label>
+                <input
+                  type="text"
+                  {...register('evolvesFrom')}
+                  className="input-field"
+                  placeholder="Previous evolution"
+                />
+              </div>
+            )}
 
             {/* Evolves Into */}
             <div>
