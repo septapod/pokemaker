@@ -20,14 +20,10 @@ import { generatePokemonImageWithVision } from '../services/openai';
 import {
   POKEMON_TYPES,
   EVOLUTION_STAGES,
-  GROWTH_RATES,
   EGG_GROUPS,
   BODY_SHAPES,
-  DEFAULT_STATS,
   STAT_MIN,
   STAT_MAX,
-  DEFAULT_CATCH_RATE,
-  DEFAULT_BASE_FRIENDSHIP,
   DEFAULT_EGG_CYCLES,
 } from '../utils/constants';
 
@@ -47,10 +43,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
   const { register, handleSubmit, watch, formState: { errors } } = useForm<PokemonFormData>({
     defaultValues: editMode && existingPokemon ? existingPokemon : {
       // Default values for new Pokémon
-      ...DEFAULT_STATS,
       typePrimary: 'Normal',
-      catchRate: DEFAULT_CATCH_RATE,
-      baseFriendship: DEFAULT_BASE_FRIENDSHIP,
       eggCycles: DEFAULT_EGG_CYCLES,
       heightUnit: 'feet',
       weightUnit: 'pounds',
@@ -62,6 +55,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
   const [uploadedImagePreview, setUploadedImagePreview] = useState<string>('');
   const [aiGeneratedImage, setAiGeneratedImage] = useState<string>(existingPokemon?.aiGeneratedImageUrl || '');
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+  const [physicalAppearance, setPhysicalAppearance] = useState('');
   const [imageDescription, setImageDescription] = useState('');
 
   // State for form submission
@@ -99,8 +93,21 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       setIsGeneratingImage(true);
       setSaveError(null);
 
-      // Call OpenAI API with the uploaded image and description
-      const imageUrl = await generatePokemonImageWithVision(uploadedImage, imageDescription || undefined);
+      // Combine physical appearance and personality/mood descriptions
+      let combinedDescription = '';
+      if (physicalAppearance) {
+        combinedDescription += `Physical features: ${physicalAppearance}`;
+      }
+      if (imageDescription) {
+        if (combinedDescription) combinedDescription += '\n\n';
+        combinedDescription += `Personality/mood: ${imageDescription}`;
+      }
+
+      // Call OpenAI API with the uploaded image and combined description
+      const imageUrl = await generatePokemonImageWithVision(
+        uploadedImage,
+        combinedDescription || undefined
+      );
 
       setAiGeneratedImage(imageUrl);
 
@@ -432,7 +439,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
             {/* HP */}
             <div>
               <label className="block font-bold text-gray-700 mb-2">
-                HP (Hit Points) *
+                HP (Hit Points)
               </label>
               <input
                 type="number"
@@ -442,8 +449,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                   valueAsNumber: true
                 })}
                 className="input-field"
-                placeholder="e.g., 45"
+                placeholder="Leave blank if unsure"
               />
+              <p className="text-sm text-gray-500 mt-1">Optional - Range: 1-255</p>
               {errors.hp && (
                 <p className="text-red-600 text-sm mt-1">{errors.hp.message}</p>
               )}
@@ -452,7 +460,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
             {/* Attack */}
             <div>
               <label className="block font-bold text-gray-700 mb-2">
-                Attack *
+                Attack
               </label>
               <input
                 type="number"
@@ -462,8 +470,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                   valueAsNumber: true
                 })}
                 className="input-field"
-                placeholder="e.g., 49"
+                placeholder="Leave blank if unsure"
               />
+              <p className="text-sm text-gray-500 mt-1">Optional - Range: 1-255</p>
               {errors.attack && (
                 <p className="text-red-600 text-sm mt-1">{errors.attack.message}</p>
               )}
@@ -472,7 +481,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
             {/* Defense */}
             <div>
               <label className="block font-bold text-gray-700 mb-2">
-                Defense *
+                Defense
               </label>
               <input
                 type="number"
@@ -482,8 +491,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                   valueAsNumber: true
                 })}
                 className="input-field"
-                placeholder="e.g., 49"
+                placeholder="Leave blank if unsure"
               />
+              <p className="text-sm text-gray-500 mt-1">Optional - Range: 1-255</p>
               {errors.defense && (
                 <p className="text-red-600 text-sm mt-1">{errors.defense.message}</p>
               )}
@@ -492,7 +502,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
             {/* Special Attack */}
             <div>
               <label className="block font-bold text-gray-700 mb-2">
-                Special Attack *
+                Special Attack
               </label>
               <input
                 type="number"
@@ -502,8 +512,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                   valueAsNumber: true
                 })}
                 className="input-field"
-                placeholder="e.g., 65"
+                placeholder="Leave blank if unsure"
               />
+              <p className="text-sm text-gray-500 mt-1">Optional - Range: 1-255</p>
               {errors.specialAttack && (
                 <p className="text-red-600 text-sm mt-1">{errors.specialAttack.message}</p>
               )}
@@ -512,7 +523,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
             {/* Special Defense */}
             <div>
               <label className="block font-bold text-gray-700 mb-2">
-                Special Defense *
+                Special Defense
               </label>
               <input
                 type="number"
@@ -522,8 +533,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                   valueAsNumber: true
                 })}
                 className="input-field"
-                placeholder="e.g., 65"
+                placeholder="Leave blank if unsure"
               />
+              <p className="text-sm text-gray-500 mt-1">Optional - Range: 1-255</p>
               {errors.specialDefense && (
                 <p className="text-red-600 text-sm mt-1">{errors.specialDefense.message}</p>
               )}
@@ -532,7 +544,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
             {/* Speed */}
             <div>
               <label className="block font-bold text-gray-700 mb-2">
-                Speed *
+                Speed
               </label>
               <input
                 type="number"
@@ -542,8 +554,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                   valueAsNumber: true
                 })}
                 className="input-field"
-                placeholder="e.g., 45"
+                placeholder="Leave blank if unsure"
               />
+              <p className="text-sm text-gray-500 mt-1">Optional - Range: 1-255</p>
               {errors.speed && (
                 <p className="text-red-600 text-sm mt-1">{errors.speed.message}</p>
               )}
@@ -769,52 +782,6 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 <span className="text-gray-700">This Pokémon is genderless</span>
               </label>
             </div>
-
-            {/* Game Mechanics */}
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label className="block font-bold text-gray-700 mb-2">
-                  Catch Rate (0-255)
-                </label>
-                <input
-                  type="number"
-                  {...register('catchRate', { valueAsNumber: true })}
-                  className="input-field"
-                  min="0"
-                  max="255"
-                />
-              </div>
-
-              <div>
-                <label className="block font-bold text-gray-700 mb-2">
-                  Base Friendship (0-255)
-                </label>
-                <input
-                  type="number"
-                  {...register('baseFriendship', { valueAsNumber: true })}
-                  className="input-field"
-                  min="0"
-                  max="255"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block font-bold text-gray-700 mb-2">
-                Growth Rate
-              </label>
-              <select
-                {...register('growthRate')}
-                className="input-field"
-              >
-                <option value="">Choose...</option>
-                {GROWTH_RATES.map((rate) => (
-                  <option key={rate} value={rate}>
-                    {rate}
-                  </option>
-                ))}
-              </select>
-            </div>
           </div>
         )}
 
@@ -873,17 +840,36 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               </div>
             )}
 
+            {/* Physical Appearance (for AI) */}
+            <div>
+              <label className="block font-bold text-gray-700 mb-2">
+                Physical Appearance (Optional)
+              </label>
+              <textarea
+                value={physicalAppearance}
+                onChange={(e) => setPhysicalAppearance(e.target.value)}
+                className="input-field min-h-24"
+                placeholder="Describe colors, patterns, textures, markings, body features... (e.g., 'bright orange body with yellow lightning bolt stripes, fuzzy texture, large round eyes')"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                💡 Tip: Focus on visual details the AI can draw - colors, shapes, patterns, textures
+              </p>
+            </div>
+
             {/* Description (optional) */}
             <div>
               <label className="block font-bold text-gray-700 mb-2">
-                Describe Your Pokémon (Optional)
+                Personality & Mood (Optional)
               </label>
               <textarea
                 value={imageDescription}
                 onChange={(e) => setImageDescription(e.target.value)}
                 className="input-field min-h-24"
-                placeholder="Help the AI understand your vision! What colors, features, or mood should it have?"
+                placeholder="How should it feel? (e.g., 'friendly and cheerful', 'mysterious and wise', 'energetic and playful')"
               />
+              <p className="text-sm text-gray-500 mt-1">
+                💡 Tip: Describe the creature's personality or the mood you want to convey
+              </p>
             </div>
 
             {/* Generate Button */}

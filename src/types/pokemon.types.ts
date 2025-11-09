@@ -78,13 +78,13 @@ export interface Pokemon {
   pokedexEntry?: string; // Description text
 
   // === BATTLE STATS ===
-  // Stats range from 1-255
-  hp: number;
-  attack: number;
-  defense: number;
-  specialAttack: number;
-  specialDefense: number;
-  speed: number;
+  // Stats range from 1-255 (all optional)
+  hp?: number;
+  attack?: number;
+  defense?: number;
+  specialAttack?: number;
+  specialDefense?: number;
+  speed?: number;
 
   // === ABILITIES ===
   ability1?: Ability;
