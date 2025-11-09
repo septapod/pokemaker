@@ -43,7 +43,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
   const [savedPokemonId, setSavedPokemonId] = useState<string | undefined>(existingPokemon?.id);
 
   // Form handling with React Hook Form
-  const { register, handleSubmit, watch, getValues, formState: { errors } } = useForm<PokemonFormData>({
+  const { register, handleSubmit, watch, getValues, setValue, formState: { errors } } = useForm<PokemonFormData>({
     defaultValues: editMode && existingPokemon ? existingPokemon : {
       // Default values for new Pokémon
       typePrimary: 'Normal',
