@@ -112,6 +112,8 @@ export interface Pokemon {
   // === IMAGES ===
   originalDrawingUrl?: string; // User's uploaded drawing
   aiGeneratedImageUrl?: string; // Final AI-generated image (optional - user can save without it)
+  physicalAppearance?: string; // Description of physical features for AI generation
+  imageDescription?: string; // Description of personality/mood for AI generation
 
   // === MOVES ===
   levelUpMoves?: LevelUpMove[];

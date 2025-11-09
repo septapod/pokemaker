@@ -91,6 +91,8 @@ export async function createPokemon(pokemon: Omit<Pokemon, 'id' | 'createdAt' | 
       // Images
       original_drawing_url: pokemon.originalDrawingUrl,
       ai_generated_image_url: pokemon.aiGeneratedImageUrl,
+      physical_appearance: pokemon.physicalAppearance,
+      image_description: pokemon.imageDescription,
 
       // Moves
       level_up_moves: pokemon.levelUpMoves,
@@ -229,6 +231,8 @@ export async function updatePokemon(id: string, pokemon: Partial<Pokemon>) {
       // Images
       ...(pokemon.originalDrawingUrl && { original_drawing_url: pokemon.originalDrawingUrl }),
       ...(pokemon.aiGeneratedImageUrl && { ai_generated_image_url: pokemon.aiGeneratedImageUrl }),
+      ...(pokemon.physicalAppearance !== undefined && { physical_appearance: pokemon.physicalAppearance }),
+      ...(pokemon.imageDescription !== undefined && { image_description: pokemon.imageDescription }),
 
       // Moves
       ...(pokemon.levelUpMoves && { level_up_moves: pokemon.levelUpMoves }),
@@ -389,6 +393,8 @@ function convertDatabaseToPokemon(row: any): Pokemon {
     // Images
     originalDrawingUrl: row.original_drawing_url,
     aiGeneratedImageUrl: row.ai_generated_image_url,
+    physicalAppearance: row.physical_appearance,
+    imageDescription: row.image_description,
 
     // Moves
     levelUpMoves: row.level_up_moves,

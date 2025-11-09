@@ -80,14 +80,27 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
   // Watch evolution stage to conditionally show "Evolves From" field
   const evolutionStage = watch('evolutionStage');
 
-  // Handle image file selection
-  function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
+  // Handle image file selection - uploads immediately to Supabase for persistence
+  async function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (file) {
-      setUploadedImage(file);
-      // Create preview URL
-      const previewUrl = URL.createObjectURL(file);
-      setUploadedImagePreview(previewUrl);
+      try {
+        // Create preview URL for immediate display
+        const previewUrl = URL.createObjectURL(file);
+        setUploadedImagePreview(previewUrl);
+        setUploadedImage(file);
+
+        // Upload immediately to Supabase Storage to ensure it persists
+        const permanentUrl = await uploadImage(file, 'pokemon-images');
+
+        // Update form with the permanent URL
+        setValue('originalDrawingUrl', permanentUrl);
+
+        console.log('✅ Original drawing uploaded successfully:', permanentUrl);
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        setSaveError('Failed to upload image. Please try again.');
+      }
     }
   }
 
@@ -146,11 +159,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       setIsSaving(true);
       setSaveError(null);
 
-      // Upload the original drawing to storage if we have one
-      let originalDrawingUrl = existingPokemon?.originalDrawingUrl;
-      if (uploadedImage) {
-        originalDrawingUrl = await uploadImage(uploadedImage, 'pokemon-images');
-      }
+      // Original drawing already uploaded immediately on selection
+      // Use the URL from form data (set by handleImageUpload)
+      const originalDrawingUrl = data.originalDrawingUrl || existingPokemon?.originalDrawingUrl;
 
       // Prepare Pokemon data
       const pokemonData: Omit<Pokemon, 'id' | 'createdAt' | 'updatedAt'> = {
@@ -188,11 +199,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       // Get ALL form values from React Hook Form's internal state
       const allFormData = getValues();
 
-      // Upload the original drawing to storage if we have one
-      let originalDrawingUrl = existingPokemon?.originalDrawingUrl;
-      if (uploadedImage) {
-        originalDrawingUrl = await uploadImage(uploadedImage, 'pokemon-images');
-      }
+      // Original drawing already uploaded immediately on selection
+      // Use the URL from form data (set by handleImageUpload)
+      const originalDrawingUrl = allFormData.originalDrawingUrl || existingPokemon?.originalDrawingUrl;
 
       // Prepare Pokemon data
       const pokemonData: Omit<Pokemon, 'id' | 'createdAt' | 'updatedAt'> = {
@@ -236,11 +245,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
         return;
       }
 
-      // Upload the original drawing to storage if we have one
-      let originalDrawingUrl = existingPokemon?.originalDrawingUrl;
-      if (uploadedImage) {
-        originalDrawingUrl = await uploadImage(uploadedImage, 'pokemon-images');
-      }
+      // Original drawing already uploaded immediately on selection
+      // Use the URL from form data (set by handleImageUpload)
+      const originalDrawingUrl = allFormData.originalDrawingUrl || existingPokemon?.originalDrawingUrl;
 
       // Prepare Pokemon data
       const pokemonData: Omit<Pokemon, 'id' | 'createdAt' | 'updatedAt'> = {
