@@ -276,6 +276,167 @@ function PokemonDetail() {
             </div>
           )}
 
+          {/* Evolution Info */}
+          {(pokemon.evolutionStage || pokemon.evolvesFrom || pokemon.evolvesInto || pokemon.evolutionMethod) && (
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">Evolution</h2>
+              <div className="grid md:grid-cols-2 gap-4">
+                {pokemon.evolutionStage && (
+                  <div className="bg-indigo-50 p-4 rounded-lg">
+                    <h3 className="font-bold text-gray-600">Evolution Stage</h3>
+                    <p className="text-lg font-bold text-gray-800">{pokemon.evolutionStage}</p>
+                  </div>
+                )}
+                {pokemon.evolvesFrom && (
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <h3 className="font-bold text-gray-600">Evolves From</h3>
+                    <p className="text-lg font-bold text-gray-800">{pokemon.evolvesFrom}</p>
+                  </div>
+                )}
+                {pokemon.evolvesInto && (
+                  <div className="bg-green-50 p-4 rounded-lg">
+                    <h3 className="font-bold text-gray-600">Evolves Into</h3>
+                    <p className="text-lg font-bold text-gray-800">{pokemon.evolvesInto}</p>
+                  </div>
+                )}
+                {pokemon.evolutionMethod && (
+                  <div className="bg-orange-50 p-4 rounded-lg">
+                    <h3 className="font-bold text-gray-600">Evolution Method</h3>
+                    <p className="text-lg font-bold text-gray-800">{pokemon.evolutionMethod}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Breeding Info */}
+          {(pokemon.eggGroup1 || pokemon.eggGroup2 || pokemon.isGenderless !== undefined || pokemon.genderRatioMale !== undefined || pokemon.eggCycles !== undefined) && (
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">Breeding</h2>
+              <div className="grid md:grid-cols-2 gap-4">
+                {pokemon.eggGroup1 && (
+                  <div className="bg-pink-50 p-4 rounded-lg">
+                    <h3 className="font-bold text-gray-600">Egg Group 1</h3>
+                    <p className="text-lg font-bold text-gray-800">{pokemon.eggGroup1}</p>
+                  </div>
+                )}
+                {pokemon.eggGroup2 && (
+                  <div className="bg-pink-50 p-4 rounded-lg">
+                    <h3 className="font-bold text-gray-600">Egg Group 2</h3>
+                    <p className="text-lg font-bold text-gray-800">{pokemon.eggGroup2}</p>
+                  </div>
+                )}
+                {pokemon.isGenderless ? (
+                  <div className="bg-gray-100 p-4 rounded-lg">
+                    <h3 className="font-bold text-gray-600">Gender</h3>
+                    <p className="text-lg font-bold text-gray-800">Genderless</p>
+                  </div>
+                ) : pokemon.genderRatioMale !== undefined && pokemon.genderRatioMale !== null ? (
+                  <>
+                    <div className="bg-violet-100 p-4 rounded-lg">
+                      <h3 className="font-bold text-gray-600">Male %</h3>
+                      <p className="text-lg font-bold text-gray-800">{pokemon.genderRatioMale}%</p>
+                    </div>
+                    <div className="bg-cyan-100 p-4 rounded-lg">
+                      <h3 className="font-bold text-gray-600">Female %</h3>
+                      <p className="text-lg font-bold text-gray-800">{100 - pokemon.genderRatioMale}%</p>
+                    </div>
+                  </>
+                ) : null}
+                {pokemon.eggCycles && (
+                  <div className="bg-yellow-50 p-4 rounded-lg">
+                    <h3 className="font-bold text-gray-600">Egg Cycles</h3>
+                    <p className="text-lg font-bold text-gray-800">{pokemon.eggCycles}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Game Mechanics */}
+          {(pokemon.catchRate !== undefined || pokemon.baseFriendship !== undefined || pokemon.growthRate || pokemon.color || pokemon.shape) && (
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">Game Mechanics</h2>
+              <div className="grid md:grid-cols-2 gap-4">
+                {pokemon.catchRate !== undefined && pokemon.catchRate !== null && (
+                  <div className="bg-red-50 p-4 rounded-lg">
+                    <h3 className="font-bold text-gray-600">Catch Rate</h3>
+                    <p className="text-lg font-bold text-gray-800">{pokemon.catchRate} / 255</p>
+                  </div>
+                )}
+                {pokemon.baseFriendship !== undefined && pokemon.baseFriendship !== null && (
+                  <div className="bg-red-50 p-4 rounded-lg">
+                    <h3 className="font-bold text-gray-600">Base Friendship</h3>
+                    <p className="text-lg font-bold text-gray-800">{pokemon.baseFriendship} / 255</p>
+                  </div>
+                )}
+                {pokemon.growthRate && (
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <h3 className="font-bold text-gray-600">Growth Rate</h3>
+                    <p className="text-lg font-bold text-gray-800">{pokemon.growthRate}</p>
+                  </div>
+                )}
+                {pokemon.color && (
+                  <div className="bg-green-50 p-4 rounded-lg">
+                    <h3 className="font-bold text-gray-600">Color</h3>
+                    <p className="text-lg font-bold text-gray-800">{pokemon.color}</p>
+                  </div>
+                )}
+                {pokemon.shape && (
+                  <div className="bg-purple-50 p-4 rounded-lg">
+                    <h3 className="font-bold text-gray-600">Shape</h3>
+                    <p className="text-lg font-bold text-gray-800">{pokemon.shape}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Moves */}
+          {(pokemon.levelUpMoves?.length || pokemon.tmMoves?.length || pokemon.eggMoves?.length) && (
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">Moves</h2>
+              <div className="space-y-4">
+                {pokemon.levelUpMoves && pokemon.levelUpMoves.length > 0 && (
+                  <div>
+                    <h3 className="font-bold text-gray-700 mb-2">Level Up Moves</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {pokemon.levelUpMoves.map((move, idx) => (
+                        <div key={idx} className="bg-blue-100 px-3 py-1 rounded-full text-sm">
+                          <span className="font-semibold text-blue-900">{move.name}</span> <span className="text-xs text-blue-700">Lv.{move.level}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {pokemon.tmMoves && pokemon.tmMoves.length > 0 && (
+                  <div>
+                    <h3 className="font-bold text-gray-700 mb-2">TM Moves</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {pokemon.tmMoves.map((move, idx) => (
+                        <span key={idx} className="bg-yellow-100 px-3 py-1 rounded-full text-sm text-yellow-900">
+                          {move}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {pokemon.eggMoves && pokemon.eggMoves.length > 0 && (
+                  <div>
+                    <h3 className="font-bold text-gray-700 mb-2">Egg Moves</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {pokemon.eggMoves.map((move, idx) => (
+                        <span key={idx} className="bg-pink-100 px-3 py-1 rounded-full text-sm text-pink-900">
+                          {move}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {/* Action Buttons */}
           <div className="flex gap-4 pt-6 border-t border-gray-200">
             <Link
