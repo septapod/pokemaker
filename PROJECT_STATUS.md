@@ -1,8 +1,8 @@
 # PokéMaker - Project Status
 
-**Last Updated**: November 10, 2025
+**Last Updated**: November 10, 2025 (Evening)
 **Current Phase**: Phase 5 - Final Testing
-**Overall Progress**: 98%
+**Overall Progress**: 99%
 
 ---
 
@@ -243,9 +243,18 @@ VITE_OPENAI_API_KEY=<your_openai_api_key>
 - ✅ **Compilation**: Fixed duplicate variable name in openai.ts
   - Renamed second `base64Image` to `aiImageBase64` to avoid conflict (line 182)
 
+#### Duplicate Pokemon Creation Bug (November 10 - Evening)
+- ✅ **CRITICAL**: Fixed duplicate Pokemon being created in gallery
+  - Root cause: Auto-save created draft with ID in `savedPokemonId`
+  - onSubmit was creating NEW Pokemon instead of updating draft
+  - Result: Two identical Pokemon cards instead of one
+  - Solution: Updated onSubmit() to check for existing draft before creating new
+  - Impact: Pokemon creation now works correctly, no duplicates
+
 ### Current Known Issues
 - ✅ **RESOLVED**: CORS error blocking AI image generation (fixed Nov 10)
 - ✅ **RESOLVED**: Expired OpenAI image URLs (now using Supabase permanent storage)
+- ✅ **RESOLVED**: Duplicate Pokemon creation (fixed Nov 10 evening)
 - ℹ️ **INFO**: Old Pokemon created before Nov 9 have expired AI image URLs (can regenerate to fix)
 - ℹ️ **Database Migration**: SQL already run to add physicalAppearance & imageDescription columns
 - Minor: AI sometimes still includes text despite explicit instructions (DALL-E 3 limitation)
@@ -349,14 +358,20 @@ This adds support for saving user descriptions that guide AI image generation.
    - Images persist to Supabase Storage immediately
    - No more expired URL issues
 
-2. 🔄 **READY FOR TESTING**: Test complete Pokemon creation flow
-   - Create new Pokemon with drawing
-   - Generate AI image (should work without CORS error)
-   - Verify image appears in gallery
-   - Verify old Pokemon with expired URLs can be regenerated
+2. ✅ **COMPLETED**: Fix duplicate Pokemon creation bug
+   - Auto-save drafts now properly finalize instead of creating duplicates
+   - onSubmit checks for existing draft before creating new Pokemon
+   - Pokemon creation workflow is now correct
 
-3. [ ] Test on mobile devices (iOS/Android camera upload)
-4. [ ] Final UI polish and user feedback
+3. 🔄 **READY FOR TESTING**: Full end-to-end Pokemon creation test
+   - Create new Pokemon with drawing
+   - Generate AI image (CORS fixed ✅)
+   - Finalize creation (no more duplicates ✅)
+   - Verify single card appears in gallery
+   - Verify all images display correctly
+
+4. [ ] Test on mobile devices (iOS/Android camera upload)
+5. [ ] Final UI polish and user feedback
 
 ### Optional Enhancements (Post-MVP)
 - [ ] Add filter by type functionality to gallery
