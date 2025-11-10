@@ -5,7 +5,7 @@
  * Shows them in a grid of cards that can be filtered and sorted.
  */
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getAllPokemon } from '../services/supabase';
 import type { Pokemon } from '../types/pokemon.types';
@@ -90,12 +90,12 @@ function Gallery() {
   }
 
   // Filter and sort Pokémon based on search query and sort option
-  const filteredAndSortedPokemon = useMemo(() => {
+  const getFilteredAndSortedPokemon = () => {
     let result = pokemon.filter((p) =>
       p.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    // Sort based on sort option - use spread to avoid mutation
+    // Sort based on sort option
     if (sortBy === 'alphabetical') {
       return [...result].sort((a, b) => a.name.localeCompare(b.name));
     } else if (sortBy === 'newest') {
@@ -113,7 +113,9 @@ function Gallery() {
     }
 
     return result;
-  }, [pokemon, searchQuery, sortBy]);
+  };
+
+  const filteredAndSortedPokemon = getFilteredAndSortedPokemon();
 
   // Display the gallery of Pokémon cards
   return (
