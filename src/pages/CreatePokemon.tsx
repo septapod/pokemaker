@@ -475,6 +475,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 className="input-field"
                 placeholder="e.g., Flameburst"
               />
+              <p className="text-sm text-gray-500 mt-1">
+                The species name or nickname of the Pokémon. Example: Pikachu, Charizard, Mewtwo. Required.
+              </p>
               {errors.name && (
                 <p className="text-red-600 text-sm mt-1">{errors.name.message}</p>
               )}
@@ -492,7 +495,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 placeholder="e.g., 001"
               />
               <p className="text-sm text-gray-500 mt-1">
-                Optional - You can assign a number to your Pokémon
+                A unique identifier assigned to each Pokémon species in numerical order. Example: #001 Bulbasaur, #025 Pikachu. Optional.
               </p>
             </div>
 
@@ -508,7 +511,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 placeholder="e.g., Fire Cat Pokémon"
               />
               <p className="text-sm text-gray-500 mt-1">
-                What kind of creature is it? (Optional)
+                A descriptive title for the Pokémon's species type. Example: "Mouse Pokémon" (Pikachu), "Seed Pokémon" (Bulbasaur). Optional.
               </p>
             </div>
 
@@ -527,6 +530,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                   </option>
                 ))}
               </select>
+              <p className="text-sm text-gray-500 mt-1">
+                The main elemental type that determines battle mechanics. Example: Fairy, Fire, Water, Grass, Electric. Required.
+              </p>
             </div>
 
             {/* Secondary Type */}
@@ -546,7 +552,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 ))}
               </select>
               <p className="text-sm text-gray-500 mt-1">
-                Optional - Some Pokémon have two types
+                An optional second elemental type some Pokémon have. Example: Charizard is Fire/Flying, Gyarados is Water/Flying. Optional.
               </p>
             </div>
           </div>
@@ -580,6 +586,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                   <option value="meters">Meters</option>
                 </select>
               </div>
+              <p className="text-sm text-gray-500 mt-1">
+                The Pokémon's physical height measurement. Example: Pikachu is 1'4" (0.4m), Wailord is 47'7" (14.5m). Optional.
+              </p>
             </div>
 
             {/* Weight */}
@@ -603,6 +612,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                   <option value="kilograms">Kilograms</option>
                 </select>
               </div>
+              <p className="text-sm text-gray-500 mt-1">
+                The Pokémon's body mass measurement. Example: Pikachu weighs 13.2 lbs (6.0 kg), Cosmoem weighs 2204.4 lbs (999.9 kg). Optional.
+              </p>
             </div>
 
             {/* Body Shape */}
@@ -621,6 +633,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                   </option>
                 ))}
               </select>
+              <p className="text-sm text-gray-500 mt-1">
+                A classification system grouping Pokémon by physical form. Example: Bipedal with tail, Quadruped, Serpentine, Fish-like. Optional.
+              </p>
             </div>
 
             {/* Pokédex Entry */}
@@ -634,7 +649,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 placeholder="Write a 2-3 sentence description of your Pokémon. What makes it special? What can it do?"
               />
               <p className="text-sm text-gray-500 mt-1">
-                Example: "Flameburst loves to play in volcanoes. Its tail flame burns brighter when it's happy!"
+                A 2-3 sentence description of the Pokémon's habitat, behavior, or abilities. Example: "Pikachu stores electricity in its cheeks". Optional.
               </p>
             </div>
           </div>
@@ -671,7 +686,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 className="input-field"
                 placeholder="Leave blank if unsure"
               />
-              <p className="text-sm text-gray-500 mt-1">Optional - Range: 1-255</p>
+              <p className="text-sm text-gray-500 mt-1">
+                Determines how much damage a Pokémon can take before fainting. Example: Blissey has 255 base HP, Shedinja has 1. Optional.
+              </p>
               {errors.hp && (
                 <p className="text-red-600 text-sm mt-1">{errors.hp.message}</p>
               )}
@@ -692,7 +709,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 className="input-field"
                 placeholder="Leave blank if unsure"
               />
-              <p className="text-sm text-gray-500 mt-1">Optional - Range: 1-255</p>
+              <p className="text-sm text-gray-500 mt-1">
+                Determines physical move damage output. Example: Mega Mewtwo X has 190 base Attack, Chansey has 5. Optional.
+              </p>
               {errors.attack && (
                 <p className="text-red-600 text-sm mt-1">{errors.attack.message}</p>
               )}
@@ -713,7 +732,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 className="input-field"
                 placeholder="Leave blank if unsure"
               />
-              <p className="text-sm text-gray-500 mt-1">Optional - Range: 1-255</p>
+              <p className="text-sm text-gray-500 mt-1">
+                Determines resistance to physical move damage. Example: Shuckle has 230 base Defense, Chansey has 5. Optional.
+              </p>
               {errors.defense && (
                 <p className="text-red-600 text-sm mt-1">{errors.defense.message}</p>
               )}
@@ -734,7 +755,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 className="input-field"
                 placeholder="Leave blank if unsure"
               />
-              <p className="text-sm text-gray-500 mt-1">Optional - Range: 1-255</p>
+              <p className="text-sm text-gray-500 mt-1">
+                Determines special move damage output. Example: Mega Mewtwo Y has 194 base Special Attack. Optional.
+              </p>
               {errors.specialAttack && (
                 <p className="text-red-600 text-sm mt-1">{errors.specialAttack.message}</p>
               )}
@@ -755,7 +778,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 className="input-field"
                 placeholder="Leave blank if unsure"
               />
-              <p className="text-sm text-gray-500 mt-1">Optional - Range: 1-255</p>
+              <p className="text-sm text-gray-500 mt-1">
+                Determines resistance to special move damage. Example: Shuckle has 230 base Special Defense. Optional.
+              </p>
               {errors.specialDefense && (
                 <p className="text-red-600 text-sm mt-1">{errors.specialDefense.message}</p>
               )}
@@ -776,7 +801,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 className="input-field"
                 placeholder="Leave blank if unsure"
               />
-              <p className="text-sm text-gray-500 mt-1">Optional - Range: 1-255</p>
+              <p className="text-sm text-gray-500 mt-1">
+                Determines turn order in battle. Example: Regieleki has 200 base Speed, Shuckle has 5. Optional.
+              </p>
               {errors.speed && (
                 <p className="text-red-600 text-sm mt-1">{errors.speed.message}</p>
               )}
@@ -888,6 +915,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                   </option>
                 ))}
               </select>
+              <p className="text-sm text-gray-500 mt-1">
+                Indicates position in an evolutionary line (Basic, Stage 1, Stage 2). Example: Bulbasaur (Basic), Ivysaur (Stage 1), Venusaur (Stage 2). Optional.
+              </p>
             </div>
 
             {/* Evolves From - Only show if NOT Basic stage */}
@@ -902,6 +932,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                   className="input-field"
                   placeholder="Previous evolution"
                 />
+                <p className="text-sm text-gray-500 mt-1">
+                  The prior Pokémon in the evolution chain, if any. Example: Charmeleon evolves from Charmander. Optional.
+                </p>
               </div>
             )}
 
@@ -916,6 +949,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 className="input-field"
                 placeholder="Next evolution (if any)"
               />
+              <p className="text-sm text-gray-500 mt-1">
+                The next Pokémon in the evolution chain, if any. Example: Charmander evolves into Charmeleon. Optional.
+              </p>
             </div>
 
             {/* Evolution Method */}
@@ -929,6 +965,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 className="input-field"
                 placeholder="e.g., Level 16, Fire Stone, Friendship"
               />
+              <p className="text-sm text-gray-500 mt-1">
+                How a Pokémon evolves (level, item, trade, etc.). Example: Level 16, Fire Stone, Trade with King's Rock. Optional.
+              </p>
             </div>
 
             {/* Egg Groups */}
@@ -947,6 +986,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                   </option>
                 ))}
               </select>
+              <p className="text-sm text-gray-500 mt-1">
+                Primary breeding category for compatibility. Example: Monster, Field, Water 1, Fairy, Dragon. Optional.
+              </p>
             </div>
 
             <div>
@@ -964,6 +1006,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                   </option>
                 ))}
               </select>
+              <p className="text-sm text-gray-500 mt-1">
+                Optional secondary breeding category. Example: Charizard is in Monster and Dragon groups. Optional.
+              </p>
             </div>
 
             {/* Gender Ratio */}
@@ -971,6 +1016,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               <label className="block font-bold text-gray-700 mb-2">
                 Gender Ratio
               </label>
+              <p className="text-sm text-gray-500 mb-4">
+                The percentage chance of male vs. female. Example: Starters are 87.5% male/12.5% female, Pikachu is 50/50. Optional.
+              </p>
 
               {/* Genderless Checkbox */}
               <label className="flex items-center mb-4">
