@@ -15,7 +15,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import type { Pokemon, PokemonFormData } from '../types/pokemon.types';
-import { createPokemon, updatePokemon, uploadImage } from '../services/supabase';
+import { createPokemon, updatePokemon, uploadImage, findOrCreatePokemonByName, getPokemonByName } from '../services/supabase';
 import { generatePokemonImageWithVision, base64ToFile } from '../services/openai';
 import {
   POKEMON_TYPES,
@@ -183,22 +183,29 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       };
 
       // Create or update Pokemon in database
+      let finalPokemonId: string;
       if (editMode && existingPokemon?.id) {
         // Editing an existing Pokemon
         await updatePokemon(existingPokemon.id, pokemonData);
+        finalPokemonId = existingPokemon.id;
         alert(`✨ ${data.name} has been updated successfully!`);
-        navigate(`/pokemon/${existingPokemon.id}`);
       } else if (savedPokemonId) {
         // Finalizing a draft that was auto-saved
         await updatePokemon(savedPokemonId, pokemonData);
+        finalPokemonId = savedPokemonId;
         alert(`🎉 Congratulations! ${data.name} has been created!`);
-        navigate(`/pokemon/${savedPokemonId}`);
       } else {
         // Creating brand new Pokemon (no prior auto-save)
         const newPokemon = await createPokemon(pokemonData);
+        finalPokemonId = newPokemon.id!;
         alert(`🎉 Congratulations! ${data.name} has been created!`);
-        navigate(`/pokemon/${newPokemon.id}`);
       }
+
+      // Link evolutions (create/find related Pokemon and link them)
+      await linkEvolutions(finalPokemonId, pokemonData);
+
+      // Navigate to the Pokemon detail page
+      navigate(`/pokemon/${finalPokemonId}`);
     } catch (error: any) {
       console.error('Error saving Pokémon:', error);
       // Show the actual error message from the error
@@ -230,16 +237,23 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       };
 
       // Create or update Pokemon in database
+      let draftPokemonId: string;
       if (savedPokemonId) {
         // Update existing Pokemon (either from edit mode or previously saved draft)
         await updatePokemon(savedPokemonId, pokemonData);
+        draftPokemonId = savedPokemonId;
         alert(`✅ Draft saved! You can continue editing ${allFormData.name || 'your Pokemon'}.`);
       } else {
         // Create new Pokemon for the first time
         const newPokemon = await createPokemon(pokemonData);
+        draftPokemonId = newPokemon.id!;
         setSavedPokemonId(newPokemon.id); // Track ID for future saves
         alert(`✅ Draft saved! You can continue editing ${allFormData.name || 'your Pokemon'}.`);
       }
+
+      // Link evolutions (create/find related Pokemon and link them)
+      await linkEvolutions(draftPokemonId, pokemonData);
+
       // Stay on the form so user can continue editing!
     } catch (error: any) {
       console.error('Error saving draft:', error);
@@ -316,6 +330,43 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       }
     };
   }, [savedPokemonId, uploadedImage, aiGeneratedImage]); // Re-run when these dependencies change
+
+  // Link evolution Pokemon together
+  // If "Evolves Into" or "Evolves From" is set, create or find that Pokemon and link them
+  async function linkEvolutions(pokemonId: string, pokemonData: Omit<Pokemon, 'id' | 'createdAt' | 'updatedAt'>) {
+    try {
+      let updateData: Partial<Pokemon> = {};
+      let updatesNeeded = false;
+
+      // Handle "Evolves Into"
+      if (pokemonData.evolvesInto) {
+        const evolutionPokemon = await findOrCreatePokemonByName(pokemonData.evolvesInto);
+        if (evolutionPokemon) {
+          // Update the evolution Pokemon to have this one as "Evolves From"
+          await updatePokemon(evolutionPokemon.id!, {
+            evolvesFrom: pokemonData.name,
+            evolutionStage: pokemonData.evolutionStage === 'Basic' ? 'Stage 1' : 'Stage 2',
+          });
+          console.log(`Linked ${pokemonData.name} → ${evolutionPokemon.name}`);
+        }
+      }
+
+      // Handle "Evolves From"
+      if (pokemonData.evolvesFrom) {
+        const priorEvolutionPokemon = await findOrCreatePokemonByName(pokemonData.evolvesFrom);
+        if (priorEvolutionPokemon) {
+          // Update the prior evolution Pokemon to have this one as "Evolves Into"
+          await updatePokemon(priorEvolutionPokemon.id!, {
+            evolvesInto: pokemonData.name,
+          });
+          console.log(`Linked ${priorEvolutionPokemon.name} → ${pokemonData.name}`);
+        }
+      }
+    } catch (error) {
+      console.error('Error linking evolutions:', error);
+      // Don't throw - linking evolutions shouldn't prevent save
+    }
+  }
 
   // Navigation between steps
   function nextStep() {

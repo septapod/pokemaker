@@ -168,6 +168,66 @@ export async function getPokemonById(id: string): Promise<Pokemon> {
 }
 
 /**
+ * Find a Pokémon by name (case-insensitive)
+ * @param name - The Pokémon's name
+ * @returns The Pokémon data or null if not found
+ */
+export async function getPokemonByName(name: string): Promise<Pokemon | null> {
+  try {
+    const { data, error } = await supabase
+      .from('pokemon')
+      .select('*')
+      .ilike('name', name)
+      .single();
+
+    if (error) {
+      // Not found is not an error
+      if (error.code === 'PGRST116') {
+        return null;
+      }
+      console.error('Error fetching Pokémon by name:', error);
+      throw error;
+    }
+
+    return convertDatabaseToPokemon(data);
+  } catch (error) {
+    console.error('Error in getPokemonByName:', error);
+    return null;
+  }
+}
+
+/**
+ * Find or create a Pokémon by name
+ * If the Pokémon doesn't exist, creates a new one with just the name
+ * @param name - The Pokémon's name
+ * @returns The Pokémon data (existing or newly created)
+ */
+export async function findOrCreatePokemonByName(name: string): Promise<Pokemon | null> {
+  if (!name || name.trim() === '') {
+    return null;
+  }
+
+  try {
+    // First try to find existing Pokemon
+    let pokemon = await getPokemonByName(name);
+
+    // If not found, create a new one with just the name
+    if (!pokemon) {
+      console.log(`Creating new Pokémon: ${name}`);
+      pokemon = await createPokemon({
+        name: name.trim(),
+        typePrimary: 'Normal', // Default type for new evolution Pokemon
+      });
+    }
+
+    return pokemon;
+  } catch (error) {
+    console.error('Error in findOrCreatePokemonByName:', error);
+    return null;
+  }
+}
+
+/**
  * Update an existing Pokémon
  * @param id - The Pokémon's ID
  * @param pokemon - The updated Pokémon data
