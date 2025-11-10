@@ -1068,7 +1068,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
           </div>
         )}
 
-        {/* STEP 6: IMAGE UPLOAD & AI GENERATION */}
+        {/* STEP 6: CREATE YOUR POKÉMON ART */}
         {currentStep === 6 && (
           <div className="space-y-6">
             <h2 className="text-3xl font-bold text-gray-800 mb-6">
@@ -1080,7 +1080,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 🖍️ Draw your Pokémon on paper, take a photo, and upload it here!
               </p>
               <p className="text-sm text-yellow-700">
-                Our AI will turn your drawing into amazing Pokémon art!
+                Your drawing will transform into amazing Pokémon art!
               </p>
             </div>
 
@@ -1118,12 +1118,12 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                   />
                 </div>
                 <p className="text-center text-yellow-700 mt-4 text-sm">
-                  This drawing will be saved and shown alongside the AI-generated image! 📸
+                  This drawing will be saved and shown alongside your magical new Pokémon! 📸
                 </p>
               </div>
             )}
 
-            {/* Physical Appearance (for AI) */}
+            {/* Physical Appearance */}
             <div>
               <label className="block font-bold text-gray-700 mb-2">
                 Physical Appearance (Optional)
@@ -1134,7 +1134,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 placeholder="Describe colors, patterns, textures, markings, body features... (e.g., 'bright orange body with yellow lightning bolt stripes, fuzzy texture, large round eyes')"
               />
               <p className="text-sm text-gray-500 mt-1">
-                💡 Tip: Focus on visual details the AI can draw - colors, shapes, patterns, textures
+                💡 Tip: Focus on cool visual details - colors, shapes, patterns, textures
               </p>
             </div>
 
@@ -1166,7 +1166,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 }
               `}
             >
-              {isGeneratingImage ? '⚡ Creating Magic... (This takes 30-60 seconds)' : '✨ Generate AI Art!'}
+              {isGeneratingImage ? '⚡ Creating Magic... (This takes 30-60 seconds)' : '✨ Transform My Drawing!'}
             </button>
 
             {/* Loading Indicator */}
@@ -1195,7 +1195,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               </div>
             )}
 
-            {/* AI Generated Image Preview with Side-by-Side Comparison */}
+            {/* Your New Pokémon Preview with Side-by-Side Comparison */}
             {aiGeneratedImage && (
               <div className="border-4 border-green-400 rounded-lg p-6 bg-green-50">
                 <h3 className="font-bold text-2xl text-green-800 mb-6 text-center">
@@ -1219,15 +1219,15 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                       </div>
                     </div>
 
-                    {/* AI Generated */}
+                    {/* Your New Pokémon */}
                     <div className="bg-white rounded-lg overflow-hidden shadow-lg">
                       <div className="bg-green-400 px-4 py-2 text-center">
-                        <span className="font-bold text-gray-800">🤖 AI Generated</span>
+                        <span className="font-bold text-gray-800">✨ Your Creation</span>
                       </div>
                       <div className="p-4">
                         <img
                           src={aiGeneratedImage}
-                          alt="AI Generated Pokémon"
+                          alt="Your New Pokémon"
                           className="w-full rounded-lg"
                         />
                       </div>
@@ -1235,11 +1235,11 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                   </div>
                 )}
 
-                {/* If no original preview, just show AI image */}
+                {/* If no original preview, just show your new Pokémon image */}
                 {!uploadedImagePreview && (
                   <img
                     src={aiGeneratedImage}
-                    alt="AI Generated Pokémon"
+                    alt="Your New Pokémon"
                     className="w-full max-w-md mx-auto rounded-lg shadow-2xl mb-4"
                   />
                 )}

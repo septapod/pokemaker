@@ -16,7 +16,7 @@ function Home() {
           Welcome to PokéMaker! 🎨
         </h2>
         <p className="text-xl md:text-2xl text-gray-600">
-          Create your very own Pokémon with AI-powered art!
+          Create your very own Pokémon with magical art transformation!
         </p>
       </div>
 
@@ -67,10 +67,10 @@ function Home() {
 
           {/* Feature 2 */}
           <div className="text-center">
-            <div className="text-4xl mb-3">🤖</div>
-            <h4 className="font-bold text-lg mb-2">AI Magic</h4>
+            <div className="text-4xl mb-3">✨</div>
+            <h4 className="font-bold text-lg mb-2">The Magic Touch</h4>
             <p className="text-gray-600 text-sm">
-              Watch as AI turns your drawing into professional Pokémon art!
+              Watch your sketch transform into awesome Pokémon art!
             </p>
           </div>
 
@@ -118,7 +118,7 @@ function Home() {
             </div>
             <div>
               <h4 className="font-bold text-lg">Upload Your Drawing</h4>
-              <p className="text-gray-700">Take a photo of your drawing and let AI create amazing art!</p>
+              <p className="text-gray-700">Take a photo of your drawing and let the magic create amazing art!</p>
             </div>
           </div>
 

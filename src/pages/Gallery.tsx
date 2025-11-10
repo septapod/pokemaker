@@ -5,11 +5,13 @@
  * Shows them in a grid of cards that can be filtered and sorted.
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { getAllPokemon } from '../services/supabase';
 import type { Pokemon } from '../types/pokemon.types';
 import { TYPE_COLORS } from '../utils/constants';
+
+type SortOption = 'alphabetical' | 'newest' | 'oldest';
 
 function Gallery() {
   // State to store the list of Pokémon
@@ -18,6 +20,10 @@ function Gallery() {
   const [loading, setLoading] = useState(true);
   // State for any errors
   const [error, setError] = useState<string | null>(null);
+  // State for search query
+  const [searchQuery, setSearchQuery] = useState('');
+  // State for sort option
+  const [sortBy, setSortBy] = useState<SortOption>('newest');
 
   // Load Pokémon when the page first loads
   useEffect(() => {
@@ -83,6 +89,32 @@ function Gallery() {
     );
   }
 
+  // Filter and sort Pokémon based on search query and sort option
+  const filteredAndSortedPokemon = useMemo(() => {
+    let result = pokemon.filter((p) =>
+      p.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    // Sort based on sort option
+    if (sortBy === 'alphabetical') {
+      result.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortBy === 'newest') {
+      result.sort((a, b) => {
+        const dateA = new Date(a.createdAt || 0).getTime();
+        const dateB = new Date(b.createdAt || 0).getTime();
+        return dateB - dateA; // Newest first
+      });
+    } else if (sortBy === 'oldest') {
+      result.sort((a, b) => {
+        const dateA = new Date(a.createdAt || 0).getTime();
+        const dateB = new Date(b.createdAt || 0).getTime();
+        return dateA - dateB; // Oldest first
+      });
+    }
+
+    return result;
+  }, [pokemon, searchQuery, sortBy]);
+
   // Display the gallery of Pokémon cards
   return (
     <div>
@@ -96,9 +128,77 @@ function Gallery() {
         </p>
       </div>
 
+      {/* Search and Sort Controls */}
+      <div className="mb-8 space-y-4">
+        {/* Search Bar */}
+        <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+          <div className="w-full sm:w-96">
+            <input
+              type="text"
+              placeholder="Search Pokémon by name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-lg"
+            />
+          </div>
+        </div>
+
+        {/* Sort Options */}
+        <div className="flex flex-wrap gap-3 justify-center">
+          <button
+            onClick={() => setSortBy('alphabetical')}
+            className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+              sortBy === 'alphabetical'
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+            }`}
+          >
+            A-Z
+          </button>
+          <button
+            onClick={() => setSortBy('newest')}
+            className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+              sortBy === 'newest'
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+            }`}
+          >
+            Newest First
+          </button>
+          <button
+            onClick={() => setSortBy('oldest')}
+            className={`px-4 py-2 rounded-lg font-semibold transition-colors ${
+              sortBy === 'oldest'
+                ? 'bg-blue-500 text-white'
+                : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+            }`}
+          >
+            Oldest First
+          </button>
+        </div>
+
+        {/* Results count */}
+        {searchQuery && (
+          <div className="text-center text-gray-600">
+            Found {filteredAndSortedPokemon.length} of {pokemon.length} Pokémon
+          </div>
+        )}
+      </div>
+
+      {/* Show message if no results found */}
+      {filteredAndSortedPokemon.length === 0 && (
+        <div className="text-center py-12">
+          <div className="text-6xl mb-4">🔍</div>
+          <p className="text-xl text-gray-600">
+            No Pokémon found matching "{searchQuery}"
+          </p>
+        </div>
+      )}
+
       {/* Pokémon Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {pokemon.map((p) => (
+      {filteredAndSortedPokemon.length > 0 && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {filteredAndSortedPokemon.map((p) => (
           <Link
             key={p.id}
             to={`/pokemon/${p.id}`}
@@ -160,7 +260,8 @@ function Gallery() {
             </div>
           </Link>
         ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
