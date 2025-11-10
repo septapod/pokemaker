@@ -987,7 +987,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
 
               {/* Slider (only show if not genderless) */}
               {!watch('isGenderless') && (
-                <div className="bg-blue-50 p-4 rounded-lg border-2 border-blue-200">
+                <div className="bg-gradient-to-r from-violet-50 to-cyan-50 p-4 rounded-lg border-2 border-purple-200">
                   <div className="mb-4">
                     <label className="block text-sm font-bold text-gray-700 mb-3">
                       Adjust Male/Female Ratio
@@ -995,9 +995,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                     <input
                       type="range"
                       {...register('genderRatioMale', { valueAsNumber: true })}
-                      className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer"
+                      className="w-full h-2 rounded-lg appearance-none cursor-pointer"
                       style={{
-                        background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${genderRatioMale}%, #ec4899 ${genderRatioMale}%, #ec4899 100%)`
+                        background: `linear-gradient(to right, #a78bfa 0%, #a78bfa ${genderRatioMale}%, #22d3ee ${genderRatioMale}%, #22d3ee 100%)`
                       }}
                       min="0"
                       max="100"
@@ -1007,14 +1007,14 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
 
                   {/* Display percentages */}
                   <div className="flex justify-between items-center gap-2">
-                    <div className="flex-1 bg-blue-100 p-3 rounded-lg text-center">
-                      <div className="text-sm font-semibold text-blue-700">♂ Male</div>
-                      <div className="text-2xl font-bold text-blue-600">{genderRatioMale}%</div>
+                    <div className="flex-1 bg-gradient-to-br from-violet-100 to-purple-100 p-3 rounded-lg text-center">
+                      <div className="text-sm font-semibold text-purple-700">♂ Male</div>
+                      <div className="text-2xl font-bold text-purple-600">{genderRatioMale}%</div>
                     </div>
                     <div className="text-gray-400 font-bold">vs</div>
-                    <div className="flex-1 bg-pink-100 p-3 rounded-lg text-center">
-                      <div className="text-sm font-semibold text-pink-700">♀ Female</div>
-                      <div className="text-2xl font-bold text-pink-600">{100 - genderRatioMale}%</div>
+                    <div className="flex-1 bg-gradient-to-br from-cyan-100 to-sky-100 p-3 rounded-lg text-center">
+                      <div className="text-sm font-semibold text-cyan-700">♀ Female</div>
+                      <div className="text-2xl font-bold text-cyan-600">{100 - genderRatioMale}%</div>
                     </div>
                   </div>
                 </div>
