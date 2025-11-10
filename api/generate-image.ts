@@ -10,13 +10,13 @@
  */
 
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import { openai } from './_lib/openai-client';
-import { handleOpenAIError } from './_lib/error-handler';
-import type { GenerateImageRequest, GenerateImageResponse, ErrorResponse } from '../src/types/api';
+import { openai } from './_lib/openai-client.js';
+import { handleOpenAIError } from './_lib/error-handler.js';
+import type { GenerateImageRequest, GenerateImageResponse, ErrorResponse } from '../src/types/api.js';
 
 export default async function handler(
   request: VercelRequest,
-  response: VercelResponse<GenerateImageResponse | ErrorResponse>
+  response: VercelResponse
 ) {
   // Only allow POST requests
   if (request.method !== 'POST') {
