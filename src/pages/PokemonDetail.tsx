@@ -7,7 +7,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { getPokemonById, deletePokemon } from '../services/supabase';
+import { getPokemonById, deletePokemon, getPokemonByName } from '../services/supabase';
 import type { Pokemon } from '../types/pokemon.types';
 import { TYPE_COLORS } from '../utils/constants';
 
@@ -22,6 +22,9 @@ function PokemonDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  // State for evolution Pokémon IDs
+  const [evolvesFromId, setEvolvesFromId] = useState<string | null>(null);
+  const [evolvesIntoId, setEvolvesIntoId] = useState<string | null>(null);
 
   // Load the Pokémon data when the page loads
   useEffect(() => {
@@ -29,6 +32,13 @@ function PokemonDetail() {
       loadPokemon(id);
     }
   }, [id]);
+
+  // Load evolution Pokémon data when the main Pokémon data is loaded
+  useEffect(() => {
+    if (pokemon) {
+      loadEvolutionPokemon();
+    }
+  }, [pokemon]);
 
   // Fetch Pokémon data from the database
   async function loadPokemon(pokemonId: string) {
@@ -42,6 +52,29 @@ function PokemonDetail() {
       setError('Failed to load Pokémon details.');
     } finally {
       setLoading(false);
+    }
+  }
+
+  // Fetch evolution Pokémon by name
+  async function loadEvolutionPokemon() {
+    try {
+      // Look up the Pokémon that this one evolves from
+      if (pokemon?.evolvesFrom) {
+        const fromPokemon = await getPokemonByName(pokemon.evolvesFrom);
+        if (fromPokemon?.id) {
+          setEvolvesFromId(fromPokemon.id);
+        }
+      }
+
+      // Look up the Pokémon that this one evolves into
+      if (pokemon?.evolvesInto) {
+        const intoPokemon = await getPokemonByName(pokemon.evolvesInto);
+        if (intoPokemon?.id) {
+          setEvolvesIntoId(intoPokemon.id);
+        }
+      }
+    } catch (err) {
+      console.error('Error loading evolution Pokémon:', err);
     }
   }
 
@@ -121,16 +154,16 @@ function PokemonDetail() {
                   </div>
                 </div>
 
-                {/* AI-Generated Image */}
+                {/* Your Creation */}
                 <div className="bg-white rounded-xl shadow-xl overflow-hidden">
                   <div className="bg-green-400 px-4 py-2 text-center">
-                    <span className="font-bold text-gray-800">🤖 AI-Generated</span>
+                    <span className="font-bold text-gray-800">✨ Your Creation</span>
                   </div>
                   <div className="aspect-square">
                     {pokemon.aiGeneratedImageUrl ? (
                       <img
                         src={pokemon.aiGeneratedImageUrl}
-                        alt={`${pokemon.name} - AI Generated`}
+                        alt={`${pokemon.name} - Your Creation`}
                         className="w-full h-full object-contain bg-white p-4"
                       />
                     ) : (
@@ -290,13 +323,31 @@ function PokemonDetail() {
                 {pokemon.evolvesFrom && (
                   <div className="bg-blue-50 p-4 rounded-lg">
                     <h3 className="font-bold text-gray-600">Evolves From</h3>
-                    <p className="text-lg font-bold text-gray-800">{pokemon.evolvesFrom}</p>
+                    {evolvesFromId ? (
+                      <Link
+                        to={`/pokemon/${evolvesFromId}`}
+                        className="text-lg font-bold text-blue-600 hover:text-blue-800 hover:underline"
+                      >
+                        {pokemon.evolvesFrom} →
+                      </Link>
+                    ) : (
+                      <p className="text-lg font-bold text-gray-800">{pokemon.evolvesFrom}</p>
+                    )}
                   </div>
                 )}
                 {pokemon.evolvesInto && (
                   <div className="bg-green-50 p-4 rounded-lg">
                     <h3 className="font-bold text-gray-600">Evolves Into</h3>
-                    <p className="text-lg font-bold text-gray-800">{pokemon.evolvesInto}</p>
+                    {evolvesIntoId ? (
+                      <Link
+                        to={`/pokemon/${evolvesIntoId}`}
+                        className="text-lg font-bold text-green-600 hover:text-green-800 hover:underline"
+                      >
+                        → {pokemon.evolvesInto}
+                      </Link>
+                    ) : (
+                      <p className="text-lg font-bold text-gray-800">{pokemon.evolvesInto}</p>
+                    )}
                   </div>
                 )}
                 {pokemon.evolutionMethod && (
