@@ -95,17 +95,17 @@ function Gallery() {
       p.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    // Sort based on sort option
+    // Sort based on sort option - use spread to avoid mutation
     if (sortBy === 'alphabetical') {
-      result.sort((a, b) => a.name.localeCompare(b.name));
+      return [...result].sort((a, b) => a.name.localeCompare(b.name));
     } else if (sortBy === 'newest') {
-      result.sort((a, b) => {
+      return [...result].sort((a, b) => {
         const dateA = new Date(a.createdAt || 0).getTime();
         const dateB = new Date(b.createdAt || 0).getTime();
         return dateB - dateA; // Newest first
       });
     } else if (sortBy === 'oldest') {
-      result.sort((a, b) => {
+      return [...result].sort((a, b) => {
         const dateA = new Date(a.createdAt || 0).getTime();
         const dateB = new Date(b.createdAt || 0).getTime();
         return dateA - dateB; // Oldest first
