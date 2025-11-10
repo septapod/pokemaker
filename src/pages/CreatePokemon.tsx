@@ -15,7 +15,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import type { Pokemon, PokemonFormData } from '../types/pokemon.types';
-import { createPokemon, updatePokemon, uploadImage, findOrCreatePokemonByName, getPokemonByName } from '../services/supabase';
+import { createPokemon, updatePokemon, uploadImage, findOrCreatePokemonByName } from '../services/supabase';
 import { generatePokemonImageWithVision, base64ToFile } from '../services/openai';
 import {
   POKEMON_TYPES,
@@ -333,11 +333,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
 
   // Link evolution Pokemon together
   // If "Evolves Into" or "Evolves From" is set, create or find that Pokemon and link them
-  async function linkEvolutions(pokemonId: string, pokemonData: Omit<Pokemon, 'id' | 'createdAt' | 'updatedAt'>) {
+  async function linkEvolutions(_pokemonId: string, pokemonData: Omit<Pokemon, 'id' | 'createdAt' | 'updatedAt'>) {
     try {
-      let updateData: Partial<Pokemon> = {};
-      let updatesNeeded = false;
-
       // Handle "Evolves Into"
       if (pokemonData.evolvesInto) {
         const evolutionPokemon = await findOrCreatePokemonByName(pokemonData.evolvesInto);

@@ -82,9 +82,9 @@ function PokemonDetail() {
     );
   }
 
-  // Calculate total base stats
-  const totalStats = pokemon.hp + pokemon.attack + pokemon.defense +
-                     pokemon.specialAttack + pokemon.specialDefense + pokemon.speed;
+  // Calculate total base stats (handle optional stats with ?? 0)
+  const totalStats = (pokemon.hp ?? 0) + (pokemon.attack ?? 0) + (pokemon.defense ?? 0) +
+                     (pokemon.specialAttack ?? 0) + (pokemon.specialDefense ?? 0) + (pokemon.speed ?? 0);
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -487,14 +487,15 @@ function PokemonDetail() {
 }
 
 // Helper component for stat bars
-function StatBar({ label, value, color }: { label: string; value: number; color: string }) {
-  const percentage = (value / 255) * 100;
+function StatBar({ label, value, color }: { label: string; value: number | undefined; color: string }) {
+  const actualValue = value ?? 0;
+  const percentage = (actualValue / 255) * 100;
 
   return (
     <div>
       <div className="flex justify-between mb-1">
         <span className="font-bold text-gray-700">{label}</span>
-        <span className="font-bold text-gray-800">{value}</span>
+        <span className="font-bold text-gray-800">{actualValue}</span>
       </div>
       <div className="w-full bg-gray-200 rounded-full h-4 overflow-hidden">
         <div

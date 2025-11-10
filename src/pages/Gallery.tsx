@@ -152,9 +152,9 @@ function Gallery() {
               {/* Stats Preview */}
               <div className="mt-3 pt-3 border-t border-gray-200">
                 <div className="flex justify-between text-sm text-gray-600">
-                  <span>HP: {p.hp}</span>
-                  <span>ATK: {p.attack}</span>
-                  <span>DEF: {p.defense}</span>
+                  <span>HP: {p.hp ?? '-'}</span>
+                  <span>ATK: {p.attack ?? '-'}</span>
+                  <span>DEF: {p.defense ?? '-'}</span>
                 </div>
               </div>
             </div>

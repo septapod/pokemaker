@@ -279,6 +279,28 @@ VITE_OPENAI_API_KEY=<your_openai_api_key>
   - Conditional rendering: Sections only display when data exists (clean interface)
   - Impact: Provides complete Pokédex-style encyclopedia view for each Pokémon
 
+#### Vercel Deployment Fixes (November 10 - Night)
+- ✅ **CRITICAL**: Fixed TypeScript compilation errors blocking Vercel deployment
+  - Root cause: Optional Pokemon stats (`hp?: number`) used in arithmetic without null checks
+  - Errors found:
+    1. PokemonDetail.tsx line 86-87: totalStats calculation on possibly undefined values
+    2. PokemonDetail.tsx lines 236-241: StatBar component didn't accept `number | undefined`
+    3. Gallery.tsx lines 155-157: Would display "undefined" text for missing stats
+    4. CreatePokemon.tsx: Unused imports and variables (getPokemonByName, updateData, etc.)
+  - Solutions:
+    1. Added nullish coalescing (`?? 0`) to totalStats calculation
+    2. Updated StatBar component to accept `number | undefined` and handle internally
+    3. Added `?? '-'` fallback display in Gallery for missing stats
+    4. Removed unused imports and variables, prefixed unused parameters with underscore
+  - Verification: Ran `npm run build` locally - **BUILD SUCCESSFUL**
+  - Impact: App now compiles with strict TypeScript and will deploy to Vercel
+
+- ✅ **Deployment Configuration**: Added Vercel configuration files
+  - Fixed broken ESLint v9 configuration (removed invalid 'eslint/config' import)
+  - Created `src/vite-env.d.ts` with TypeScript definitions for Vite env variables
+  - Created `vercel.json` with build settings and SPA routing configuration
+  - Created `VERCEL_DEPLOYMENT.md` with comprehensive deployment guide
+
 ### Current Known Issues
 - ✅ **RESOLVED**: CORS error blocking AI image generation (fixed Nov 10)
 - ✅ **RESOLVED**: Expired OpenAI image URLs (now using Supabase permanent storage)
@@ -330,6 +352,19 @@ VITE_OPENAI_API_KEY=<your_openai_api_key>
    - Workaround 1: Use base64 response format (data in API response)
    - Workaround 2: Backend API proxy (production-ready but more complex)
    - Always prefer API response-embedded data over separate fetch() calls
+
+7. **CRITICAL: Never Claim Success Without Build Verification**
+   - **ALWAYS run `npm run build` locally before claiming fixes work**
+   - Local dev server (`npm run dev`) doesn't catch all TypeScript errors
+   - Vercel uses strict TypeScript compilation that may catch errors missed locally
+   - Only commit and deploy after successful local production build
+   - Claiming "fixed" without verification wastes time and breaks trust
+
+8. **TypeScript Optional Values**: Handle optional number types carefully
+   - Use nullish coalescing (`?? 0`) for arithmetic operations on optional numbers
+   - Use `number | undefined` in component prop types when values are optional
+   - Prefix unused function parameters with underscore (`_paramName`) to satisfy linter
+   - Always test arithmetic operations (addition, division) on possibly-undefined values
 
 ---
 
