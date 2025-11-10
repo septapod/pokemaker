@@ -1,6 +1,6 @@
 # PokéMaker - Project Status
 
-**Last Updated**: November 10, 2025 (Evening)
+**Last Updated**: November 10, 2025 (Late Evening)
 **Current Phase**: Phase 5 - Final Testing
 **Overall Progress**: 99%
 
@@ -251,6 +251,34 @@ VITE_OPENAI_API_KEY=<your_openai_api_key>
   - Solution: Updated onSubmit() to check for existing draft before creating new
   - Impact: Pokemon creation now works correctly, no duplicates
 
+#### UX Improvements (November 10 - Late Evening)
+- ✅ **Gender Ratio Slider**: Replaced two separate number inputs with single slider
+  - Issue: Two separate inputs risked invalid percentages (e.g., 60% + 50%)
+  - Solution: Implemented single range slider (0-100%) with auto-sync
+  - Male ratio drives female ratio (always totals 100%)
+  - Visual display with purple/cyan gradient (inclusive color scheme)
+  - Added useEffect to auto-update female ratio based on male ratio
+  - Added colored cards showing live percentage updates
+
+- ✅ **Auto-Create Evolution Pokemon**: Evolution linking now automatic
+  - Feature: Entering Pokemon name in "Evolves To" or "Evolves From" auto-creates that Pokemon
+  - Implementation:
+    - Added getPokemonByName() function in supabase.ts for case-insensitive lookup
+    - Added findOrCreatePokemonByName() to create new Pokemon with default type if not found
+    - Added linkEvolutions() function in CreatePokemon.tsx called after every save
+    - Bidirectional linking: Creating "A evolves to B" also sets "B evolves from A"
+  - Impact: Evolution chains can now be built gradually and connect automatically
+
+- ✅ **Comprehensive Pokemon Detail View**: View all Pokémon info without edit mode
+  - Feature: PokemonDetail.tsx now displays complete Pokémon information
+  - Four new sections added:
+    1. **Evolution Info**: Evolution stage, evolves from/to, evolution method
+    2. **Breeding Info**: Egg groups, gender ratios, egg cycles (with purple/cyan display)
+    3. **Game Mechanics**: Catch rate, base friendship, growth rate, color, shape
+    4. **Moves**: Level-up moves (with levels), TM moves, egg moves as colored tags
+  - Conditional rendering: Sections only display when data exists (clean interface)
+  - Impact: Provides complete Pokédex-style encyclopedia view for each Pokémon
+
 ### Current Known Issues
 - ✅ **RESOLVED**: CORS error blocking AI image generation (fixed Nov 10)
 - ✅ **RESOLVED**: Expired OpenAI image URLs (now using Supabase permanent storage)
@@ -363,15 +391,31 @@ This adds support for saving user descriptions that guide AI image generation.
    - onSubmit checks for existing draft before creating new Pokemon
    - Pokemon creation workflow is now correct
 
-3. 🔄 **READY FOR TESTING**: Full end-to-end Pokemon creation test
+3. ✅ **COMPLETED**: Gender ratio slider implementation
+   - Single slider replaces two number inputs
+   - Auto-sync ensures total always equals 100%
+   - Purple/cyan gradient colors (inclusive design)
+
+4. ✅ **COMPLETED**: Auto-create evolution Pokemon functionality
+   - Enter Pokemon names in "Evolves To/From" auto-creates them
+   - Bidirectional linking connects evolution chains
+   - Can build evolution chains gradually
+
+5. ✅ **COMPLETED**: Comprehensive Pokemon detail view
+   - View all stats without entering edit mode
+   - Four new info sections (Evolution, Breeding, Game Mechanics, Moves)
+   - Provides complete Pokédex-style encyclopedia experience
+
+6. 🔄 **READY FOR TESTING**: Full end-to-end Pokemon creation test
    - Create new Pokemon with drawing
    - Generate AI image (CORS fixed ✅)
    - Finalize creation (no more duplicates ✅)
    - Verify single card appears in gallery
-   - Verify all images display correctly
+   - Test evolution chain creation and linking
+   - Verify all info displays correctly on detail page
 
-4. [ ] Test on mobile devices (iOS/Android camera upload)
-5. [ ] Final UI polish and user feedback
+7. [ ] Test on mobile devices (iOS/Android camera upload)
+8. [ ] Final UI polish and user feedback
 
 ### Optional Enhancements (Post-MVP)
 - [ ] Add filter by type functionality to gallery
