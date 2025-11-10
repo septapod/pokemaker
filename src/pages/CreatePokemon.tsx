@@ -80,6 +80,17 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
   // Watch evolution stage to conditionally show "Evolves From" field
   const evolutionStage = watch('evolutionStage');
 
+  // Watch gender ratio - automatically sync male/female to always equal 100%
+  const genderRatioMale = watch('genderRatioMale') || 0;
+
+  // Auto-sync female ratio to complement male ratio
+  useEffect(() => {
+    if (genderRatioMale !== undefined && genderRatioMale !== null) {
+      const femaleRatio = 100 - genderRatioMale;
+      setValue('genderRatioFemale', femaleRatio);
+    }
+  }, [genderRatioMale, setValue]);
+
   // Handle image file selection - uploads immediately to Supabase for persistence
   async function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
@@ -912,31 +923,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               <label className="block font-bold text-gray-700 mb-2">
                 Gender Ratio
               </label>
-              <div className="flex gap-4 items-center">
-                <div className="flex-1">
-                  <label className="text-sm text-gray-600 mb-1 block">Male %</label>
-                  <input
-                    type="number"
-                    {...register('genderRatioMale', { valueAsNumber: true })}
-                    className="input-field"
-                    placeholder="0-100"
-                    min="0"
-                    max="100"
-                  />
-                </div>
-                <div className="flex-1">
-                  <label className="text-sm text-gray-600 mb-1 block">Female %</label>
-                  <input
-                    type="number"
-                    {...register('genderRatioFemale', { valueAsNumber: true })}
-                    className="input-field"
-                    placeholder="0-100"
-                    min="0"
-                    max="100"
-                  />
-                </div>
-              </div>
-              <label className="flex items-center mt-3">
+
+              {/* Genderless Checkbox */}
+              <label className="flex items-center mb-4">
                 <input
                   type="checkbox"
                   {...register('isGenderless')}
@@ -944,6 +933,41 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 />
                 <span className="text-gray-700">This Pokémon is genderless</span>
               </label>
+
+              {/* Slider (only show if not genderless) */}
+              {!watch('isGenderless') && (
+                <div className="bg-blue-50 p-4 rounded-lg border-2 border-blue-200">
+                  <div className="mb-4">
+                    <label className="block text-sm font-bold text-gray-700 mb-3">
+                      Adjust Male/Female Ratio
+                    </label>
+                    <input
+                      type="range"
+                      {...register('genderRatioMale', { valueAsNumber: true })}
+                      className="w-full h-2 bg-blue-200 rounded-lg appearance-none cursor-pointer"
+                      style={{
+                        background: `linear-gradient(to right, #3b82f6 0%, #3b82f6 ${genderRatioMale}%, #ec4899 ${genderRatioMale}%, #ec4899 100%)`
+                      }}
+                      min="0"
+                      max="100"
+                      step="1"
+                    />
+                  </div>
+
+                  {/* Display percentages */}
+                  <div className="flex justify-between items-center gap-2">
+                    <div className="flex-1 bg-blue-100 p-3 rounded-lg text-center">
+                      <div className="text-sm font-semibold text-blue-700">♂ Male</div>
+                      <div className="text-2xl font-bold text-blue-600">{genderRatioMale}%</div>
+                    </div>
+                    <div className="text-gray-400 font-bold">vs</div>
+                    <div className="flex-1 bg-pink-100 p-3 rounded-lg text-center">
+                      <div className="text-sm font-semibold text-pink-700">♀ Female</div>
+                      <div className="text-2xl font-bold text-pink-600">{100 - genderRatioMale}%</div>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
