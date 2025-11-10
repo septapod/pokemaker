@@ -66,7 +66,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
   // State for auto-save functionality
   const [autoSaveStatus, setAutoSaveStatus] = useState<'saved' | 'saving' | 'error'>('saved');
   const [lastAutoSave, setLastAutoSave] = useState<Date | null>(null);
-  const autoSaveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const autoSaveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Watch total stats to display sum
   const hp = watch('hp') || 0;
