@@ -20,7 +20,9 @@ This guide explains how to deploy the PokéMaker app to Vercel with proper envir
 3. Select your GitHub repository containing PokéMaker
 4. Click **"Import"**
 
-### Step 2: Configure Environment Variables
+### Step 2: Configure Environment Variables ⚠️ REQUIRED
+
+**IMPORTANT:** You MUST add environment variables via the Vercel Dashboard. Do NOT use Vercel Secrets - this app uses the simpler dashboard approach.
 
 Before deploying, you must add environment variables to Vercel:
 
@@ -33,7 +35,12 @@ Before deploying, you must add environment variables to Vercel:
    | `VITE_SUPABASE_ANON_KEY` | Your Supabase anonymous public key |
    | `VITE_OPENAI_API_KEY` | Your OpenAI API key (starts with `sk-`) |
 
-3. Click **"Deploy"**
+3. **For each variable**, make sure to select all three environments:
+   - ☑️ Production
+   - ☑️ Preview
+   - ☑️ Development
+
+4. Click **"Deploy"**
 
 ### Step 3: Verify Environment Variable Setup (Alternative Method)
 
@@ -95,6 +102,26 @@ This configuration:
 1. Ensure you have the latest code from your repository
 2. Verify `eslint.config.js` doesn't contain invalid imports
 3. Redeploy from the Vercel dashboard
+
+### Build Fails: "Environment Variable references Secret which does not exist"
+
+**Error Message**:
+```
+Environment Variable "VITE_SUPABASE_URL" references Secret "vite_supabase_url", which does not exist.
+```
+
+**Cause**: This error means environment variables are NOT configured in the Vercel Dashboard.
+
+**Solution**:
+1. Go to Vercel Dashboard → Your Project → Settings → Environment Variables
+2. Add all three required variables:
+   - `VITE_SUPABASE_URL` - Your Supabase URL
+   - `VITE_SUPABASE_ANON_KEY` - Your Supabase anonymous key
+   - `VITE_OPENAI_API_KEY` - Your OpenAI API key
+3. For EACH variable, select: Production, Preview, AND Development
+4. Save and redeploy
+
+**Why this happens**: The `vercel.json` file used to reference Vercel Secrets (with `@` prefix), but this app now uses the simpler Dashboard approach. Make sure you have the latest code with the updated `vercel.json`.
 
 ### Environment Variables Not Working
 
