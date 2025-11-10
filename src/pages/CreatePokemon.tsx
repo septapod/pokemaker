@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import type { Pokemon, PokemonFormData } from '../types/pokemon.types';
 import { createPokemon, updatePokemon, uploadImage } from '../services/supabase';
-import { generatePokemonImageWithVision, urlToFile } from '../services/openai';
+import { generatePokemonImageWithVision, base64ToFile } from '../services/openai';
 import {
   POKEMON_TYPES,
   EVOLUTION_STAGES,
@@ -127,14 +127,15 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       }
 
       // Call OpenAI API with the uploaded image and combined description
-      const temporaryImageUrl = await generatePokemonImageWithVision(
+      // Returns base64 image data (not a URL) to avoid CORS issues
+      const base64ImageData = await generatePokemonImageWithVision(
         uploadedImage,
         combinedDescription || undefined
       );
 
-      // Download the image from OpenAI and upload to Supabase Storage
-      // (OpenAI URLs expire after 2 hours, so we need a permanent URL)
-      const imageFile = await urlToFile(temporaryImageUrl, 'ai-generated.png');
+      // Convert base64 to File and upload to Supabase Storage
+      // (This gives us a permanent URL that won't expire)
+      const imageFile = base64ToFile(base64ImageData, 'ai-generated.png');
       const permanentImageUrl = await uploadImage(imageFile, 'pokemon-images');
 
       setAiGeneratedImage(permanentImageUrl);
@@ -172,10 +173,17 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
 
       // Create or update Pokemon in database
       if (editMode && existingPokemon?.id) {
+        // Editing an existing Pokemon
         await updatePokemon(existingPokemon.id, pokemonData);
         alert(`✨ ${data.name} has been updated successfully!`);
         navigate(`/pokemon/${existingPokemon.id}`);
+      } else if (savedPokemonId) {
+        // Finalizing a draft that was auto-saved
+        await updatePokemon(savedPokemonId, pokemonData);
+        alert(`🎉 Congratulations! ${data.name} has been created!`);
+        navigate(`/pokemon/${savedPokemonId}`);
       } else {
+        // Creating brand new Pokemon (no prior auto-save)
         const newPokemon = await createPokemon(pokemonData);
         alert(`🎉 Congratulations! ${data.name} has been created!`);
         navigate(`/pokemon/${newPokemon.id}`);

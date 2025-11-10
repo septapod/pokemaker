@@ -176,17 +176,17 @@ ABSOLUTE REQUIREMENTS - NO EXCEPTIONS:
       n: 1,
       size: '1024x1024',
       quality: 'hd', // Use HD quality for better results
-      response_format: 'url',
+      response_format: 'b64_json', // Use base64 to avoid CORS issues
     });
 
-    const imageUrl = imageResponse.data?.[0]?.url;
+    const aiImageBase64 = imageResponse.data?.[0]?.b64_json;
 
-    if (!imageUrl) {
-      throw new Error('No image URL returned from OpenAI');
+    if (!aiImageBase64) {
+      throw new Error('No image data returned from OpenAI');
     }
 
     console.log('Image generated successfully!');
-    return imageUrl;
+    return aiImageBase64;
 
   } catch (error: any) {
     console.error('Error generating Pokémon image with vision:', {
@@ -244,6 +244,23 @@ function buildPrompt(userDescription?: string): string {
 }
 
 /**
+ * Convert base64 image data to a File object
+ * (Used after AI image generation to upload to Supabase)
+ */
+export function base64ToFile(base64: string, filename: string): File {
+  // Convert base64 to binary
+  const byteCharacters = atob(base64);
+  const byteNumbers = new Array(byteCharacters.length);
+  for (let i = 0; i < byteCharacters.length; i++) {
+    byteNumbers[i] = byteCharacters.charCodeAt(i);
+  }
+  const byteArray = new Uint8Array(byteNumbers);
+  const blob = new Blob([byteArray], { type: 'image/png' });
+  return new File([blob], filename, { type: 'image/png' });
+}
+
+/**
+ * @deprecated - Use base64ToFile instead to avoid CORS issues
  * Download an image URL and convert it to a File object
  * (Useful for saving the generated image to Supabase)
  */
