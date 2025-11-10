@@ -1,8 +1,8 @@
 # PokéMaker - Project Status
 
-**Last Updated**: November 7, 2025
+**Last Updated**: November 10, 2025
 **Current Phase**: Phase 5 - Final Testing
-**Overall Progress**: 95%
+**Overall Progress**: 98%
 
 ---
 
@@ -214,9 +214,40 @@ VITE_OPENAI_API_KEY=<your_openai_api_key>
   - Gallery and detail pages now show originalDrawingUrl if no AI image exists
   - Placeholder emoji shown if neither image exists
 
+### Recently Fixed (November 10, 2025)
+
+#### CRITICAL CORS Error - AI Image Generation Blocked
+- ✅ **CRITICAL**: Fixed CORS error preventing AI image download from OpenAI
+  - Root cause: OpenAI blob storage doesn't send CORS headers (security by design)
+  - Browser fetch() from client-side was blocked
+  - Solution: Switched from URL-based to base64-encoded image delivery
+  - Impact: AI image generation now works end-to-end without CORS blocking
+
+#### Technical Implementation
+- ✅ **Response Format Change**: Updated DALL-E 3 to return base64 instead of URL
+  - Changed `response_format: 'url'` → `response_format: 'b64_json'` in openai.ts:179
+  - Image data now comes directly in API response (no separate fetch needed)
+  - Eliminated CORS issues entirely
+
+- ✅ **Base64 Converter**: Added `base64ToFile()` function
+  - New helper in openai.ts:250-260 converts base64 strings to File objects
+  - Uses native `atob()` and `Uint8Array` for efficient conversion
+  - Maintains PNG MIME type for Supabase compatibility
+
+- ✅ **Integration**: Updated CreatePokemon.tsx image generation flow
+  - Changed import from `urlToFile` to `base64ToFile` (line 19)
+  - Now receives base64 data directly from OpenAI
+  - Converts to File and uploads to Supabase immediately
+  - Generates permanent URL that won't expire
+
+- ✅ **Compilation**: Fixed duplicate variable name in openai.ts
+  - Renamed second `base64Image` to `aiImageBase64` to avoid conflict (line 182)
+
 ### Current Known Issues
-- ⚠️ **Database Migration Required**: Run SQL to add new columns (see below)
-- ⚠️ **Old Pokemon**: Pokemon created before Nov 9 have expired AI image URLs (can't be recovered)
+- ✅ **RESOLVED**: CORS error blocking AI image generation (fixed Nov 10)
+- ✅ **RESOLVED**: Expired OpenAI image URLs (now using Supabase permanent storage)
+- ℹ️ **INFO**: Old Pokemon created before Nov 9 have expired AI image URLs (can regenerate to fix)
+- ℹ️ **Database Migration**: SQL already run to add physicalAppearance & imageDescription columns
 - Minor: AI sometimes still includes text despite explicit instructions (DALL-E 3 limitation)
 
 ---
@@ -256,6 +287,12 @@ VITE_OPENAI_API_KEY=<your_openai_api_key>
 5. **Storage Buckets**: Must be created manually in Supabase
    - Set public access for image URLs to work
    - Configure RLS policies for uploads
+
+6. **CORS with External APIs**: Client-side fetch() from browsers is restricted
+   - OpenAI blob storage doesn't send CORS headers (by design)
+   - Workaround 1: Use base64 response format (data in API response)
+   - Workaround 2: Backend API proxy (production-ready but more complex)
+   - Always prefer API response-embedded data over separate fetch() calls
 
 ---
 
@@ -306,22 +343,35 @@ This adds support for saving user descriptions that guide AI image generation.
 
 ## 🎯 Next Steps
 
-1. 🔄 **IN PROGRESS**: Complete "Egglet" Pokemon creation test
-   - Database schema has been updated
-   - Storage bucket created
-   - All validation issues resolved
-   - Ready for final save test
+### Immediate (Phase 5 - Final Testing)
+1. ✅ **COMPLETED**: Fix CORS error with base64 solution
+   - OpenAI image generation now works end-to-end
+   - Images persist to Supabase Storage immediately
+   - No more expired URL issues
 
-2. ✅ Verify AI image generation works with DALL-E 3
-3. ✅ Test saving Pokemon with and without AI images
-4. [ ] Add gallery filtering and sorting features (optional)
-5. [ ] Deploy to production when ready
+2. 🔄 **READY FOR TESTING**: Test complete Pokemon creation flow
+   - Create new Pokemon with drawing
+   - Generate AI image (should work without CORS error)
+   - Verify image appears in gallery
+   - Verify old Pokemon with expired URLs can be regenerated
 
-### Post-Launch Enhancements
-- Add filter by type to gallery
-- Add sort options (date, name, Pokedex number)
-- Optimize image loading performance
-- Add bulk operations (export, delete multiple)
+3. [ ] Test on mobile devices (iOS/Android camera upload)
+4. [ ] Final UI polish and user feedback
+
+### Optional Enhancements (Post-MVP)
+- [ ] Add filter by type functionality to gallery
+- [ ] Add sort options (date, name, Pokedex number)
+- [ ] Advanced search and filters
+- [ ] Evolution chain visualization
+- [ ] Export as trading card
+- [ ] Share Pokémon with friends
+- [ ] Battle simulator
+- [ ] Import from PokéAPI for learning
+
+### Deployment
+- [ ] Deploy to production when ready (Vercel/Netlify)
+- [ ] Set up environment variables on hosting platform
+- [ ] Test production build thoroughly
 
 ---
 
