@@ -93,8 +93,14 @@ export async function generatePokemonImageWithVision(
     // Step 3: Build simplified prompt like the old working version
     console.log('Visual analysis from drawing:', analysis.visualDescription);
 
-    // Build final prompt - prepend Vision description to the template
-    let finalPrompt = `Physical appearance: ${analysis.visualDescription}
+    // Build final prompt - user description FIRST (most important), then Vision details
+    let finalPrompt = '';
+
+    if (userDescription) {
+      // User's explicit description is the PRIMARY directive
+      finalPrompt = `${userDescription}
+
+Visual reference from drawing: ${analysis.visualDescription}
 
 Create a cute, family-friendly fantasy creature character illustration for a children's game.
 
@@ -110,12 +116,9 @@ This is for a kid-friendly monster creation app. The character should be:
 - Japanese monster-collecting game aesthetic
 
 Make it professional, polished, and completely safe for children.`;
-
-    // Add user's custom description if provided
-    if (userDescription) {
-      finalPrompt = `Physical appearance: ${analysis.visualDescription}
-
-Additional notes: ${userDescription}
+    } else {
+      // No user description - Vision analysis is primary
+      finalPrompt = `Physical appearance from drawing: ${analysis.visualDescription}
 
 Create a cute, family-friendly fantasy creature character illustration for a children's game.
 
