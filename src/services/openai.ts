@@ -65,16 +65,17 @@ export async function generatePokemonImage(
 /**
  * Analyze a Pokémon image using GPT-4o Vision via the backend API
  *
- * Converts image to base64, sends to backend, and receives Pokemon data.
+ * Converts image to base64, sends to backend for Vision analysis, then generates
+ * a new AI image based on the analysis results and user description.
  * The Vision API analysis happens server-side using the secure API key.
  *
  * @param imageFile - The image file to analyze
  * @param userDescription - Optional user description to guide analysis
- * @returns Base64-encoded image data for further processing
+ * @returns Base64-encoded image data for the generated Pokémon image
  */
 export async function generatePokemonImageWithVision(
   imageFile: File,
-  _userDescription?: string
+  userDescription?: string
 ): Promise<string> {
   try {
     // Step 1: Convert image to base64
@@ -89,14 +90,39 @@ export async function generatePokemonImageWithVision(
     console.log('Analyzing image via backend API...');
     const analysis = await analyzePokemonImage(base64Data, mediaType);
 
-    // Step 3: For now, analysis is returned to calling code
-    // In a full implementation, you'd use the analysis data to create/update a Pokémon
+    // Step 3: Build prompt combining analysis + user description
     console.log('Analysis complete:', analysis);
     console.log('Pokemon data from analysis:', analysis);
 
-    // Note: For full implementation, this would generate an image using the analysis
-    // For now, return empty string as placeholder since the real Pokemon data is in analysis
-    return '';
+    // Combine the analyzed visual description with any user-provided description
+    let generationPrompt = AI_IMAGE_PROMPT_TEMPLATE;
+
+    // Add physical appearance from vision analysis
+    if (analysis.description) {
+      generationPrompt += `\n\nVisual appearance and characteristics: ${analysis.description}`;
+    }
+
+    // Add/emphasize user's custom description
+    if (userDescription) {
+      generationPrompt += `\n\nAdditional details from user: ${userDescription}`;
+    }
+
+    // Step 4: Generate a new Pokémon image using DALL-E based on the analysis
+    console.log('Generating new Pokémon image from analyzed drawing...');
+    const imageResponse = await generateImage(generationPrompt);
+
+    if (!imageResponse.imageUrl) {
+      throw new Error('No image URL returned from image generation');
+    }
+
+    // Step 5: Convert the generated image URL back to base64 for processing
+    console.log('Converting generated image to base64...');
+    const generatedImageResponse = await fetch(imageResponse.imageUrl);
+    const generatedImageBlob = await generatedImageResponse.blob();
+    const generatedBase64 = await blobToBase64(generatedImageBlob);
+
+    // Return just the base64 data (without the data URL prefix)
+    return generatedBase64.split(',')[1] || generatedBase64;
 
   } catch (error: any) {
     console.error('Error analyzing Pokémon image:', {
@@ -127,6 +153,18 @@ async function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
+}
+
+/**
+ * Helper function to convert Blob to base64 data URL
+ */
+async function blobToBase64(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
     reader.onload = () => resolve(reader.result as string);
     reader.onerror = (error) => reject(error);
   });
