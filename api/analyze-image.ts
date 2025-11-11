@@ -65,36 +65,36 @@ export default async function handler(
             },
             {
               type: 'text',
-              text: `This is a drawing for a family-friendly creature creation app. Analyze this cute creature drawing and describe what you see in a whimsical, positive way that emphasizes charm.
+              text: `This is a drawing for a family-friendly creature creation app. Analyze this drawing and describe what you see LITERALLY and ACCURATELY, using positive, whimsical language.
 
-Focus on these friendly aspects:
-- Overall shape (cute, friendly characteristics like "round", "bean-shaped", "oval")
+CRITICAL: If the drawing looks like a BODY PART (nose, ear, eye, mouth, etc.), describe it as that body part literally. Be accurate first, whimsical second.
+
+Focus on:
+- Accurate identification of shapes (if it looks like a nose, call it a nose)
 - Colors (bright, cheerful)
-- Key features (ears, tail, wings, feet, etc.) described positively
-- Cheerful personality traits
+- Key features (feet, legs, wings, tail, etc.)
+- Use positive, friendly language
 
 CRITICAL RULES:
-- NEVER mention what is missing, absent, or not present
-- NEVER use words like "no", "without", "lacks", "missing"
-- ONLY describe what you CAN see
-- Use positive, playful language
+- NEVER mention what is missing ("no eyes", "without arms")
+- ONLY describe what IS visible
+- Be LITERAL about unusual shapes (giant nose = "giant nose", not "bean-shaped")
 
 GOOD examples:
-- "A cheerful bean-shaped creature with tiny feet"
-- "Round, cuddly body with stubby legs"
-- "Whimsical oval character with playful feet"
+- "Giant nose with tiny feet" ✓
+- "Large ear with stubby legs" ✓
+- "Oval body with playful feet" ✓
 
-BAD examples (NEVER SAY):
-- "no eyes or arms" ❌
-- "without wings" ❌
-- "lacks a tail" ❌
+BAD examples:
+- "Bean-shaped creature with big nose" ❌ (should be "giant nose with feet")
+- "Round body, no eyes or arms" ❌ (never mention what's missing)
 
 Return ONLY valid JSON:
 {
-  "visualDescription": "concise, positive visual description using whimsical language"
+  "visualDescription": "concise, accurate, positive description"
 }
 
-Keep under 150 characters. Focus on charm and cuteness. ONLY describe what IS visible.`,
+Keep under 120 characters. Be accurate and literal while staying positive.`,
             },
           ],
         },
@@ -126,9 +126,9 @@ Keep under 150 characters. Focus on charm and cuteness. ONLY describe what IS vi
       throw new Error('Invalid response structure from GPT-4o Vision - missing visualDescription');
     }
 
-    // Truncate description to ensure it doesn't exceed limits (keep under 150 for combined prompt)
-    if (analysis.visualDescription.length > 150) {
-      analysis.visualDescription = analysis.visualDescription.substring(0, 147) + '...';
+    // Truncate description to ensure it doesn't exceed limits (keep under 120 for combined prompt)
+    if (analysis.visualDescription.length > 120) {
+      analysis.visualDescription = analysis.visualDescription.substring(0, 117) + '...';
     }
 
     return response.status(200).json(analysis);

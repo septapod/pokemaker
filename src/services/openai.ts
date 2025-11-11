@@ -102,8 +102,8 @@ export async function generatePokemonImageWithVision(
       finalPrompt += ` The creator says: ${userDescription}`;
     }
 
-    // Add essential style guidance with anti-text instructions
-    finalPrompt += ` Anime/manga art style with bold outlines, vibrant saturated colors, white background, front-facing view. NO text, NO labels, NO watermarks.`;
+    // Add essential style guidance for clean trading card illustration style
+    finalPrompt += ` Official trading card illustration style: clean character art ONLY. Vibrant colors, bold outlines, white background, front-facing. NO art supplies, NO paint palettes, NO decorative elements, NO artist materials, NO backgrounds, NO text, NO labels.`;
 
     // Safety check - should never exceed now, but just in case
     if (finalPrompt.length > 500) {
