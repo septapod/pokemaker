@@ -97,7 +97,18 @@ export async function generatePokemonImageWithVision(
 
 ${analysis.visualDescription}
 
-Style: Anime/manga art style with bold outlines, vibrant colors, white background, front-facing view.
+Style: Anime/manga/Japanese art style with bold outlines, vibrant colors, white background, front-facing view.
+
+Other style elements include:
+- Linework: Clean, thick black outlines; rounded corners; minimal internal hatching.
+
+- Proportions: Chibi-leaning bodies with oversized heads, big eyes, tiny hands/feet; toy-like symmetry.
+
+- Coloring: High-saturation palettes with flat cel-shading (usually 1 to 2 shadows), crisp highlight pops.
+
+- Materials: Smooth, plastic-like surfaces; glossy specular dots on cheeks, eyes, and key forms.
+
+- Shapes & silhouettes: Built from simple geometry (circles, ovals, wedges); instantly readable silhouettes.
 
 IMPORTANT: Generate ONLY the character illustration. Do NOT include any text, labels, watermarks, or written words in the image.`;
 
