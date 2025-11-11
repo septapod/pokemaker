@@ -64,6 +64,32 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
+  // Watch imageDescription from form
+  const formImageDescription = watch('imageDescription') || '';
+
+  // Load image state from localStorage on mount
+  useEffect(() => {
+    const savedImageState = localStorage.getItem('pokemonImageState');
+    if (savedImageState) {
+      try {
+        const { preview, generated } = JSON.parse(savedImageState);
+        if (preview) setUploadedImagePreview(preview);
+        if (generated) setAiGeneratedImage(generated);
+      } catch (e) {
+        console.error('Failed to restore image state from localStorage', e);
+      }
+    }
+  }, []);
+
+  // Save image state to localStorage whenever it changes
+  useEffect(() => {
+    const imageState = {
+      preview: uploadedImagePreview,
+      generated: aiGeneratedImage,
+    };
+    localStorage.setItem('pokemonImageState', JSON.stringify(imageState));
+  }, [uploadedImagePreview, aiGeneratedImage]);
+
   // State for auto-save functionality
   const [autoSaveStatus, setAutoSaveStatus] = useState<'saved' | 'saving' | 'error'>('saved');
   const [lastAutoSave, setLastAutoSave] = useState<Date | null>(null);
@@ -118,7 +144,16 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
 
   // Generate AI image from uploaded drawing
   async function handleGenerateImage() {
-    if (!uploadedImage) {
+    // Use uploaded image, or convert preview to file if refreshed
+    let imageToUse = uploadedImage;
+    if (!imageToUse && uploadedImagePreview) {
+      // Convert data URL back to File for regeneration after refresh
+      const response = await fetch(uploadedImagePreview);
+      const blob = await response.blob();
+      imageToUse = new File([blob], 'drawing.png', { type: 'image/png' });
+    }
+
+    if (!imageToUse) {
       alert('Please upload a drawing first!');
       return;
     }
@@ -141,7 +176,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       // Call OpenAI API with the uploaded image and combined description
       // Returns base64 image data (not a URL) to avoid CORS issues
       const base64ImageData = await generatePokemonImageWithVision(
-        uploadedImage,
+        imageToUse,
         combinedDescription || undefined
       );
 
@@ -1149,6 +1184,11 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               {uploadedImage && (
                 <p className="mt-4 text-green-600 font-bold flex items-center justify-center gap-2">
                   <i className="ri-checkbox-circle-line"></i> Drawing uploaded: {uploadedImage.name}
+                </p>
+              )}
+              {uploadedImagePreview && !uploadedImage && (
+                <p className="mt-4 text-blue-600 font-bold flex items-center justify-center gap-2">
+                  <i className="ri-refresh-line"></i> Drawing restored from previous session
                 </p>
               )}
             </div>
