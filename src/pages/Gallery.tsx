@@ -219,6 +219,15 @@ function Gallery() {
                   <i className="ri-image-line text-6xl"></i>
                 </div>
               )}
+              {/* Type Badge */}
+              {p.typePrimary && (
+                <div
+                  className="absolute bottom-2 left-2 text-white px-2 py-1 rounded-full text-sm font-bold flex items-center gap-1 shadow-lg"
+                  style={{ backgroundColor: TYPE_COLORS[p.typePrimary] }}
+                >
+                  <i className={`${TYPE_ICONS[p.typePrimary]} text-base`}></i>
+                </div>
+              )}
               {/* Pokédex Number Badge */}
               {p.pokedexNumber && (
                 <div className="absolute top-2 right-2 bg-black bg-opacity-70 text-white px-3 py-1 rounded-full text-sm font-bold">
