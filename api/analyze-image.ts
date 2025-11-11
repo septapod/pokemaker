@@ -65,23 +65,12 @@ export default async function handler(
             },
             {
               type: 'text',
-              text: `Analyze this Pokémon image and provide a detailed character sheet. Return ONLY valid JSON with this exact structure (no markdown, no extra text):
+              text: `Describe ONLY what you see in this drawing visually. Focus on physical appearance, shapes, proportions, and any notable features. Return ONLY valid JSON with this structure:
 {
-  "name": "creative pokemon name",
-  "type": "primary type (e.g., Fire, Water, Grass, Electric, etc.)",
-  "stats": {
-    "hp": number 1-100,
-    "attack": number 1-100,
-    "defense": number 1-100,
-    "spAtk": number 1-100,
-    "spDef": number 1-100,
-    "speed": number 1-100
-  },
-  "abilities": ["ability1", "ability2", "ability3"],
-  "description": "2-3 sentence creative description of this pokemon"
+  "description": "detailed visual description of what's in the drawing (shapes, features, proportions, etc.)"
 }
 
-Ensure stats are balanced and realistic for the pokemon's appearance and type. Make the name creative but pronounceable. The description should be engaging and capture the essence of what you see.`,
+Be specific about visual details like: body shape, size of features, stance, any appendages, texture suggestions, etc. Do NOT create names, stats, or abilities - just describe what you see.`,
             },
           ],
         },
@@ -109,8 +98,8 @@ Ensure stats are balanced and realistic for the pokemon's appearance and type. M
     }
 
     // Validate the response structure
-    if (!analysis.name || !analysis.type || !analysis.stats || !analysis.abilities || !analysis.description) {
-      throw new Error('Invalid response structure from GPT-4o Vision');
+    if (!analysis.description) {
+      throw new Error('Invalid response structure from GPT-4o Vision - missing description');
     }
 
     return response.status(200).json(analysis);

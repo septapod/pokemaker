@@ -90,23 +90,23 @@ export async function generatePokemonImageWithVision(
     console.log('Analyzing image via backend API...');
     const analysis = await analyzePokemonImage(base64Data, mediaType);
 
-    // Step 3: Build prompt combining analysis + user description
-    console.log('Analysis complete:', analysis);
-    console.log('Pokemon data from analysis:', analysis);
+    // Step 3: Build prompt combining visual analysis + user description
+    console.log('Visual analysis from drawing:', analysis.description);
 
-    // Combine the analyzed visual description with any user-provided description
+    // Build a comprehensive prompt for DALL-E
     let generationPrompt = AI_IMAGE_PROMPT_TEMPLATE;
 
-    // Add physical appearance from vision analysis (truncate if needed)
-    if (analysis.description) {
-      const truncatedDescription = analysis.description.substring(0, 300);
-      generationPrompt += `\n\nVisual appearance: ${truncatedDescription}`;
-    }
-
-    // Add/emphasize user's custom description
-    if (userDescription) {
-      const truncatedUserDesc = userDescription.substring(0, 200);
-      generationPrompt += `\n\nUser description: ${truncatedUserDesc}`;
+    // Combine the visual analysis with user's description for the best result
+    if (analysis.description && userDescription) {
+      // Both visual analysis and user description available
+      generationPrompt += `\n\nCreature details: ${userDescription}`;
+      generationPrompt += `\n\nVisual appearance from drawing: ${analysis.description}`;
+    } else if (userDescription) {
+      // Only user description available
+      generationPrompt += `\n\nCreature description: ${userDescription}`;
+    } else if (analysis.description) {
+      // Only visual analysis available
+      generationPrompt += `\n\nBased on this drawing description: ${analysis.description}`;
     }
 
     // Step 4: Generate a new Pokémon image using DALL-E based on the analysis
