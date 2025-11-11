@@ -70,9 +70,12 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
   // Load image state from localStorage on mount
   useEffect(() => {
     const savedImageState = localStorage.getItem('pokemonImageState');
+    console.log('Loading from localStorage:', savedImageState ? 'Found saved state' : 'No saved state');
     if (savedImageState) {
       try {
         const { preview, generated } = JSON.parse(savedImageState);
+        console.log('Restored preview:', preview ? `${preview.substring(0, 50)}...` : 'none');
+        console.log('Restored generated:', generated ? 'yes' : 'no');
         if (preview) setUploadedImagePreview(preview);
         if (generated) setAiGeneratedImage(generated);
       } catch (e) {
