@@ -70,25 +70,31 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
     console.log('Loading from localStorage:', savedImageState ? 'Found saved state' : 'No saved state');
     if (savedImageState) {
       try {
-        const { preview, generated } = JSON.parse(savedImageState);
-        console.log('Restored preview:', preview ? `${preview.substring(0, 50)}...` : 'none');
+        const { permanentUrl, generated } = JSON.parse(savedImageState);
+        console.log('Restored permanent URL:', permanentUrl ? `${permanentUrl.substring(0, 50)}...` : 'none');
         console.log('Restored generated:', generated ? 'yes' : 'no');
-        if (preview) setUploadedImagePreview(preview);
+        // Use permanent Supabase URL for preview (survives page refresh)
+        if (permanentUrl) {
+          setUploadedImagePreview(permanentUrl);
+          setValue('originalDrawingUrl', permanentUrl);
+        }
         if (generated) setAiGeneratedImage(generated);
       } catch (e) {
         console.error('Failed to restore image state from localStorage', e);
       }
     }
-  }, []);
+  }, [setValue]);
 
   // Save image state to localStorage whenever it changes
+  // Store permanent Supabase URL, not blob URL, so it survives page refresh
   useEffect(() => {
+    const originalDrawingUrl = watch('originalDrawingUrl');
     const imageState = {
-      preview: uploadedImagePreview,
+      permanentUrl: originalDrawingUrl, // Use Supabase URL, not blob URL
       generated: aiGeneratedImage,
     };
     localStorage.setItem('pokemonImageState', JSON.stringify(imageState));
-  }, [uploadedImagePreview, aiGeneratedImage]);
+  }, [watch('originalDrawingUrl'), aiGeneratedImage, watch]);
 
   // State for auto-save functionality
   const [autoSaveStatus, setAutoSaveStatus] = useState<'saved' | 'saving' | 'error'>('saved');
