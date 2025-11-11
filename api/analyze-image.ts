@@ -73,12 +73,28 @@ Focus on these friendly aspects:
 - Key features (ears, tail, wings, feet, etc.) described positively
 - Cheerful personality traits
 
+CRITICAL RULES:
+- NEVER mention what is missing, absent, or not present
+- NEVER use words like "no", "without", "lacks", "missing"
+- ONLY describe what you CAN see
+- Use positive, playful language
+
+GOOD examples:
+- "A cheerful bean-shaped creature with tiny feet"
+- "Round, cuddly body with stubby legs"
+- "Whimsical oval character with playful feet"
+
+BAD examples (NEVER SAY):
+- "no eyes or arms" ❌
+- "without wings" ❌
+- "lacks a tail" ❌
+
 Return ONLY valid JSON:
 {
   "visualDescription": "concise, positive visual description using whimsical language"
 }
 
-Keep under 180 characters. Use friendly, imaginative language that emphasizes cuteness. Describe what IS present, not what's missing.`,
+Keep under 150 characters. Focus on charm and cuteness. ONLY describe what IS visible.`,
             },
           ],
         },
@@ -110,9 +126,9 @@ Keep under 180 characters. Use friendly, imaginative language that emphasizes cu
       throw new Error('Invalid response structure from GPT-4o Vision - missing visualDescription');
     }
 
-    // Truncate description to ensure it doesn't exceed limits (keep under 180 for combined prompt)
-    if (analysis.visualDescription.length > 180) {
-      analysis.visualDescription = analysis.visualDescription.substring(0, 177) + '...';
+    // Truncate description to ensure it doesn't exceed limits (keep under 150 for combined prompt)
+    if (analysis.visualDescription.length > 150) {
+      analysis.visualDescription = analysis.visualDescription.substring(0, 147) + '...';
     }
 
     return response.status(200).json(analysis);

@@ -10,7 +10,7 @@
  * - POST /api/analyze-image - Analyze a Pokémon image using GPT-4o Vision
  */
 
-import { generatePokemonImage as generateImage, analyzePokemonImage } from './api-client';
+import { generatePokemonImage as generateImage, analyzePokemonImage, fetchImageAsBase64 } from './api-client';
 import { AI_IMAGE_PROMPT_TEMPLATE } from '../utils/constants';
 
 /**
@@ -127,14 +127,12 @@ export async function generatePokemonImageWithVision(
       throw new Error('No image URL returned from image generation');
     }
 
-    // Step 5: Convert the generated image URL back to base64 for processing
+    // Step 5: Fetch the generated image via server-side proxy to avoid CORS
     console.log('Converting generated image to base64...');
-    const generatedImageResponse = await fetch(imageResponse.imageUrl);
-    const generatedImageBlob = await generatedImageResponse.blob();
-    const generatedBase64 = await blobToBase64(generatedImageBlob);
+    const fetchResponse = await fetchImageAsBase64(imageResponse.imageUrl);
 
-    // Return just the base64 data (without the data URL prefix)
-    return generatedBase64.split(',')[1] || generatedBase64;
+    // The response already contains base64 data
+    return fetchResponse.base64Data;
 
   } catch (error: any) {
     console.error('Error analyzing Pokémon image:', {
@@ -170,17 +168,6 @@ async function fileToBase64(file: File): Promise<string> {
   });
 }
 
-/**
- * Helper function to convert Blob to base64 data URL
- */
-async function blobToBase64(blob: Blob): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(blob);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
-}
 
 /**
  * Build the AI prompt for image generation

@@ -36,6 +36,20 @@ export interface AnalyzeImageResponse {
 }
 
 /**
+ * Request to fetch an image via proxy
+ */
+export interface FetchImageRequest {
+  imageUrl: string;
+}
+
+/**
+ * Response from image fetch proxy endpoint
+ */
+export interface FetchImageResponse {
+  base64Data: string;
+}
+
+/**
  * Error response format for all endpoints
  */
 export interface ErrorResponse {

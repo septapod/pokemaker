@@ -10,6 +10,8 @@ import type {
   GenerateImageResponse,
   AnalyzeImageRequest,
   AnalyzeImageResponse,
+  FetchImageRequest,
+  FetchImageResponse,
   ErrorResponse,
 } from '../types/api';
 
@@ -92,5 +94,37 @@ export async function analyzePokemonImage(
       throw error;
     }
     throw new Error('Failed to analyze image');
+  }
+}
+
+/**
+ * Fetch an external image via server-side proxy to avoid CORS issues
+ * @param imageUrl - URL of the image to fetch
+ * @returns Promise with base64-encoded image data
+ */
+export async function fetchImageAsBase64(imageUrl: string): Promise<FetchImageResponse> {
+  try {
+    const response = await fetch(`${API_BASE_URL}/fetch-image`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        imageUrl,
+      } as FetchImageRequest),
+    });
+
+    const data = (await response.json()) as FetchImageResponse | ErrorResponse;
+
+    if (!response.ok) {
+      throw new Error(parseErrorResponse(data));
+    }
+
+    return data as FetchImageResponse;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error('Failed to fetch image');
   }
 }
