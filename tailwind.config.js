@@ -6,6 +6,10 @@ export default {
   ],
   theme: {
     extend: {
+      // IBM Plex Sans font family
+      fontFamily: {
+        sans: ['IBM Plex Sans', 'sans-serif'],
+      },
       // Custom colors for Pokemon theme
       colors: {
         pokemon: {

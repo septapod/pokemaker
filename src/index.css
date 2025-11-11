@@ -7,7 +7,7 @@
 @layer base {
   body {
     @apply bg-gradient-to-br from-blue-100 to-purple-100 min-h-screen;
-    font-family: system-ui, -apple-system, sans-serif;
+    font-family: 'IBM Plex Sans', sans-serif;
   }
 }
 
