@@ -558,9 +558,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
-                  onClick={() => setValue('typeSecondary', '')}
+                  onClick={() => setValue('typeSecondary', undefined)}
                   className={`px-3 py-2 rounded-lg font-semibold text-sm transition-all ${
-                    watch('typeSecondary') === ''
+                    !watch('typeSecondary')
                       ? 'bg-blue-500 text-white shadow-lg'
                       : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                   }`}
