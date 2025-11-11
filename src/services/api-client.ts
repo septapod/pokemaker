@@ -15,7 +15,10 @@ import type {
   ErrorResponse,
 } from '../types/api';
 
-const API_BASE_URL = '/api';
+// Use production API when running locally (Vite dev server), otherwise use relative path
+const API_BASE_URL = window.location.hostname === 'localhost'
+  ? 'https://pokemaker.vercel.app/api'
+  : '/api';
 
 /**
  * Parse error response from API
