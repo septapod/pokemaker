@@ -50,10 +50,10 @@ export default async function handler(
       });
     }
 
-    if (description.length > 500) {
+    if (description.length > 4000) {
       return response.status(400).json({
         error: {
-          message: 'Description must not exceed 500 characters',
+          message: 'Description must not exceed 4000 characters (DALL-E 3 limit)',
           code: 'INVALID_REQUEST',
         },
       });
