@@ -53,15 +53,15 @@ export default async function handler(
     // Build Vision prompt with user description inline (from working version)
     const visionPrompt = `This is a child's drawing for a family-friendly creature creation app. Analyze this cute creature drawing and describe what you see in a positive, child-appropriate way.
 
-Focus on these family-friendly aspects:
-- Body shape and features (cute, friendly characteristics)
-- Colors (bright, cheerful)
-- Elemental type it might be (fire/water/grass/electric/nature/etc)
-- Personality/mood (friendly, playful, cheerful)
-- Unique characteristics that make it special
-${userDescription ? `The young creator says: "${userDescription}"` : ''}
+              Focus on these family-friendly aspects:
+              - Body shape and features (cute, friendly characteristics)
+              - Colors (bright, cheerful)
+              - Elemental type it might be (fire/water/grass/electric/nature/etc)
+              - Personality/mood (friendly, playful, cheerful)
+              - Unique characteristics that make it special
+              ${userDescription ? `The young creator says: "${userDescription}"` : ''}
 
-Provide a concise 2-3 sentence description (maximum 250 characters) for creating a professional, kid-friendly fantasy creature illustration suitable for all ages in an anime/manga art style. Be brief and direct.`;
+              Provide a detailed, positive description for creating a professional, kid-friendly fantasy creature illustration suitable for all ages in an anime/manga art style.`;
 
     // Call GPT-4o with Vision to analyze the Pokémon image
     const analysisResponse = await openai.chat.completions.create({
@@ -83,7 +83,7 @@ Provide a concise 2-3 sentence description (maximum 250 characters) for creating
           ],
         },
       ],
-      max_tokens: 150,
+      max_tokens: 500,
     });
 
     const content = analysisResponse.choices[0]?.message?.content;
@@ -91,10 +91,10 @@ Provide a concise 2-3 sentence description (maximum 250 characters) for creating
       throw new Error('No response from GPT-4o Vision');
     }
 
-    // Truncate to 250 chars to prevent overly long descriptions
+    // Truncate if necessary to prevent overly long descriptions
     let description = content.trim();
-    if (description.length > 250) {
-      description = description.substring(0, 247) + '...';
+    if (description.length > 400) {
+      description = description.substring(0, 397) + '...';
     }
 
     // Return plain text description (not JSON format - from working version)
