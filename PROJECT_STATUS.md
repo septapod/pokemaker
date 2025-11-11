@@ -1,8 +1,38 @@
 # PokéMaker - Project Status
 
-**Last Updated**: November 10, 2025 (Late Evening)
-**Current Phase**: Phase 5 - Final Testing
-**Overall Progress**: 99%
+**Last Updated**: November 11, 2025 (Evening)
+**Current Phase**: Awaiting Deployment (Vercel Quota Reset)
+**Overall Progress**: 99% (Code Complete, Deployment Blocked)
+
+---
+
+## 🚨 CURRENT STATUS - READ THIS FIRST
+
+### Deployment Blocker
+**Vercel Free Tier Limit Hit**: 100 deployments/day exceeded. Reset in ~3 hours from 7:30 PM.
+
+### Latest Commits (READY BUT NOT DEPLOYED)
+- `1bd3fd8` - Trigger Vercel deployment (latest)
+- `772072f` - Fix image restoration from localStorage
+- `dab0452` - Fix TypeScript build error blocking deployments
+- `e53a5e5` - Updated prompts (reverted to this base)
+
+### Production vs Code State
+- **Production (pokemaker.vercel.app)**: Running commit `babfe7e` (old, has broken API from text-to-pokemon attempt)
+- **GitHub main branch**: Commit `1bd3fd8` (has all fixes, ready to deploy)
+- **Working Directory**: Clean, up to date with GitHub
+
+### What Works Now
+✅ Local code has all fixes (TypeScript error, localStorage)
+❌ Production API is broken (404 from text-to-pokemon model)
+❌ Local dev can't test (calls broken production API)
+
+### Next Steps When Resuming
+1. **Wait for Vercel limit reset** (~3 hours from 7:30 PM)
+2. **Manually trigger deployment** in Vercel dashboard OR push any commit
+3. **Verify deployment** shows commit `1bd3fd8` or later
+4. **Test production** - image generation should work with DALL-E 3
+5. **Test localStorage** - images should persist after page refresh
 
 ---
 
@@ -11,7 +41,7 @@
 PokéMaker is a web application for creating custom Pokémon with comprehensive details, upload drawings, and generate AI-powered Pokémon artwork. The app stores all creations in a Supabase database and provides an intuitive, child-friendly interface.
 
 **Target User**: Child who loves Pokémon
-**Tech Stack**: React + TypeScript + Vite + Supabase + OpenAI GPT-4o
+**Tech Stack**: React + TypeScript + Vite + Supabase + OpenAI DALL-E 3 + GPT-4o Vision
 
 ---
 
@@ -300,6 +330,75 @@ VITE_OPENAI_API_KEY=<your_openai_api_key>
   - Created `src/vite-env.d.ts` with TypeScript definitions for Vite env variables
   - Created `vercel.json` with build settings and SPA routing configuration
   - Created `VERCEL_DEPLOYMENT.md` with comprehensive deployment guide
+
+### Recently Fixed (November 11, 2025)
+
+#### Session Summary: Model Migration Attempt & Recovery
+**Timeline**: Started with working DALL-E 3 setup → Attempted FLUX/Replicate migration → Hit multiple issues → Reverted to stable base
+
+#### Issues Encountered & Fixed
+
+**1. Initial Problem: Misleading References**
+- User noticed old "OpenAI/DALL-E" references in comments despite backend using DALL-E 3
+- Request: "bring the entire file system up to date around this new model"
+- **Action Taken**: Comprehensive audit showed backend WAS using DALL-E 3 correctly
+- Updated 6 comments across 4 files to clarify model usage
+
+**2. CRITICAL: 3+ Hours of Failed Deployments**
+- ✅ **Root Cause**: Unused variable `formImageDescription` at CreatePokemon.tsx:68
+- TypeScript error TS6133 blocking ALL Vercel builds: `'formImageDescription' is declared but its value is never read`
+- **Impact**: Every commit for 3+ hours failed to deploy
+- **Solution**: Removed unused variable (commit dab0452)
+- **Lesson**: Always run `npm run build` locally before claiming fixes work
+
+**3. Attempted Migration to Replicate FLUX.1-schnell**
+- Created new Vercel serverless functions for Replicate
+- Updated backend API to use black-forest-labs/flux-schnell
+- Migrated API keys from client-side (VITE_) to server-side (secure)
+- **Result**: Build passed, but decided to test further before deploying
+
+**4. Attempted Migration to text-to-pokemon Model**
+- User requested Pokemon-specific model: lambdal/text-to-pokemon
+- Switched from FLUX to text-to-pokemon with versioned identifier
+- **Result**: 404 errors - model API calls failed in production
+- **Commits Created**: babfe7e, 8986095 (these broke production)
+
+**5. DECISION: Revert to Stable DALL-E 3 Base**
+- User requested: "revert to commit e53a5e5 and fix only the TypeScript error"
+- ✅ Hard reset to commit e53a5e5 (last known working state)
+- ✅ Applied ONLY the critical fix (removed unused variable)
+- ✅ Tested build locally - SUCCESS
+- **Commits**: dab0452 (revert + fix), 772072f (localStorage fix)
+
+**6. localStorage Blob URL Issue**
+- ✅ **Problem**: App storing temporary blob URLs in localStorage
+- Blob URLs (blob:https://...) don't survive page refresh
+- Users saw broken image previews after returning to page
+- **Solution**: Store permanent Supabase URL instead of blob URL
+- Updated localStorage save/restore logic to use `originalDrawingUrl` field
+- **Commit**: 772072f
+
+**7. Vercel Deployment Quota Limit Hit**
+- ❌ **BLOCKER**: Hit Vercel free tier limit (100 deployments/day)
+- Multiple failed deployments during troubleshooting exhausted quota
+- **Current State**: Code fixes complete but can't deploy
+- **Resolution**: Wait ~3 hours for quota reset, then trigger deployment
+- **Next Deploy Will Include**: Commits dab0452, 772072f, 1bd3fd8
+
+#### Files Modified This Session
+1. `src/pages/CreatePokemon.tsx` - Removed unused variable, fixed localStorage
+2. `src/services/openai.ts` → `src/services/ai-services.ts` - Renamed (in abandoned branch)
+3. `src/services/api-client.ts` - Updated comments (in abandoned branch)
+4. `src/types/api.ts` - Updated comments (in abandoned branch)
+5. `api/generate-image.ts` - Created for Replicate (in abandoned branch)
+6. `api/_lib/replicate-client.ts` - Created for Replicate (in abandoned branch)
+
+#### Key Learnings
+1. **Always test builds locally** before claiming deployment fixes
+2. **Force pushes confuse Vercel webhooks** - may need manual trigger
+3. **Blob URLs in localStorage are temporary** - use permanent URLs
+4. **Free tier limits matter** - 100 deployments/day with failed builds counts
+5. **Revert to stable, fix incrementally** - better than chasing multiple issues
 
 ### Current Known Issues
 - ✅ **RESOLVED**: CORS error blocking AI image generation (fixed Nov 10)
