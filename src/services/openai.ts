@@ -110,7 +110,14 @@ export async function generatePokemonImageWithVision(
     }
 
     // Step 4: Generate a new Pokémon image using DALL-E based on the analysis
+    // IMPORTANT: Backend has 500 char limit, so we need to trim the prompt
+    if (generationPrompt.length > 500) {
+      console.warn('Generation prompt too long, truncating:', generationPrompt.length);
+      generationPrompt = generationPrompt.substring(0, 497) + '...';
+    }
+
     console.log('Generating new Pokémon image from analyzed drawing...');
+    console.log('Final prompt length:', generationPrompt.length);
     const imageResponse = await generateImage(generationPrompt);
 
     if (!imageResponse.imageUrl) {
