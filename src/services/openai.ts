@@ -102,8 +102,8 @@ export async function generatePokemonImageWithVision(
       finalPrompt += ` The creator says: ${userDescription}`;
     }
 
-    // Add style guidance using soft watercolor anime aesthetic
-    finalPrompt += ` Watercolor anime style with soft, organic linework. Simple, accessible creature design inspired by Japanese folklore spirits. Clean, gentle rendering on white background. Character ONLY, no clothing, no accessories, no extras, no text.`;
+    // Add style guidance - simple creature illustration ONLY
+    finalPrompt += ` Simple creature illustration, watercolor anime style, soft organic linework. Plain white background. JUST the creature character, NOTHING ELSE. No backgrounds, no effects, no speed lines, no stars, no decorations, no text, no labels, no clothing, no accessories.`;
 
     // Safety check - should never exceed now, but just in case
     if (finalPrompt.length > 500) {
