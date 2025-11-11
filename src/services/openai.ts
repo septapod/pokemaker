@@ -102,8 +102,8 @@ export async function generatePokemonImageWithVision(
       finalPrompt += ` The creator says: ${userDescription}`;
     }
 
-    // Add essential style guidance with optimized descriptors
-    finalPrompt += ` Trading card illustration: cel-shaded, chibi-leaning, sticker-ready character art ONLY. Toyetic design, vibrant colors, bold outlines, white background. NO extras, NO text, NO decorative elements.`;
+    // Add style guidance using soft watercolor anime aesthetic
+    finalPrompt += ` Watercolor anime style with soft, organic linework. Simple, accessible creature design inspired by Japanese folklore spirits. Clean, gentle rendering on white background. Character ONLY, no clothing, no accessories, no extras, no text.`;
 
     // Safety check - should never exceed now, but just in case
     if (finalPrompt.length > 500) {
