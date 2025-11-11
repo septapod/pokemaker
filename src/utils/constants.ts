@@ -148,7 +148,7 @@ export const TYPE_ICONS: Record<PokemonType, string> = {
   'Fighting': 'ri-boxing-line',
   'Poison': 'ri-flask-line',
   'Ground': 'ri-earth-line',
-  'Flying': 'ri-flight-takeoff-line',
+  'Flying': 'ri-dove-line',
   'Psychic': 'ri-brain-line',
   'Bug': 'ri-bug-line',
   'Rock': 'ri-stone-line',
