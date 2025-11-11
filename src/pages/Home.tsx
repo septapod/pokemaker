@@ -49,42 +49,6 @@ function Home() {
         </Link>
       </div>
 
-      {/* Features Section */}
-      <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-        <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center gap-2">
-          What Can You Do? <i className="ri-star-line text-yellow-500"></i>
-        </h3>
-
-        <div className="grid md:grid-cols-3 gap-6">
-          {/* Feature 1 */}
-          <div className="text-center">
-            <div className="text-4xl mb-3"><i className="ri-palette-line text-blue-600"></i></div>
-            <h4 className="font-bold text-lg mb-2">Draw & Upload</h4>
-            <p className="text-gray-600 text-sm">
-              Draw your Pokémon on paper, take a photo, and upload it!
-            </p>
-          </div>
-
-          {/* Feature 2 */}
-          <div className="text-center">
-            <div className="text-4xl mb-3"><i className="ri-magic-line text-purple-600"></i></div>
-            <h4 className="font-bold text-lg mb-2">The Magic Touch</h4>
-            <p className="text-gray-600 text-sm">
-              Watch your sketch transform into awesome Pokémon art!
-            </p>
-          </div>
-
-          {/* Feature 3 */}
-          <div className="text-center">
-            <div className="text-4xl mb-3"><i className="ri-save-line text-green-600"></i></div>
-            <h4 className="font-bold text-lg mb-2">Save Everything</h4>
-            <p className="text-gray-600 text-sm">
-              All your Pokémon are saved forever so you can come back anytime!
-            </p>
-          </div>
-        </div>
-      </div>
-
       {/* How It Works Section */}
       <div className="bg-gradient-to-r from-pink-100 to-yellow-100 rounded-2xl shadow-xl p-8">
         <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center gap-2">
