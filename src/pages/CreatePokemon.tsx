@@ -521,29 +521,17 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               <label className="block font-bold text-gray-700 mb-2">
                 Primary Type *
               </label>
-              <div className="relative">
-                <select
-                  {...register('typePrimary')}
-                  className="input-field pr-10"
-                />
-                {watch('typePrimary') && (
-                  <div className="absolute right-3 top-2 pointer-events-none text-2xl">
-                    <i className={`${TYPE_ICONS[watch('typePrimary') as any]}`}></i>
-                  </div>
-                )}
-                <datalist id="primaryTypes">
-                  {POKEMON_TYPES.map((type) => (
-                    <option key={type} value={type} />
-                  ))}
-                </datalist>
-              </div>
-              <div className="mt-3 flex flex-wrap gap-2">
+              <input
+                type="hidden"
+                {...register('typePrimary')}
+              />
+              <div className="flex flex-wrap gap-2">
                 {POKEMON_TYPES.map((type) => (
                   <button
                     key={type}
                     type="button"
                     onClick={() => setValue('typePrimary', type)}
-                    className={`px-3 py-1 rounded-lg font-semibold text-sm flex items-center gap-1 transition-all ${
+                    className={`px-3 py-2 rounded-lg font-semibold text-sm flex items-center gap-1 transition-all ${
                       watch('typePrimary') === type
                         ? 'bg-blue-500 text-white shadow-lg'
                         : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -563,22 +551,15 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               <label className="block font-bold text-gray-700 mb-2">
                 Secondary Type
               </label>
-              <div className="relative">
-                <select
-                  {...register('typeSecondary')}
-                  className="input-field pr-10"
-                />
-                {watch('typeSecondary') && (
-                  <div className="absolute right-3 top-2 pointer-events-none text-2xl">
-                    <i className={`${TYPE_ICONS[watch('typeSecondary') as any]}`}></i>
-                  </div>
-                )}
-              </div>
-              <div className="mt-3 flex flex-wrap gap-2">
+              <input
+                type="hidden"
+                {...register('typeSecondary')}
+              />
+              <div className="flex flex-wrap gap-2">
                 <button
                   type="button"
                   onClick={() => setValue('typeSecondary', '')}
-                  className={`px-3 py-1 rounded-lg font-semibold text-sm transition-all ${
+                  className={`px-3 py-2 rounded-lg font-semibold text-sm transition-all ${
                     watch('typeSecondary') === ''
                       ? 'bg-blue-500 text-white shadow-lg'
                       : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
@@ -591,7 +572,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                     key={type}
                     type="button"
                     onClick={() => setValue('typeSecondary', type)}
-                    className={`px-3 py-1 rounded-lg font-semibold text-sm flex items-center gap-1 transition-all ${
+                    className={`px-3 py-2 rounded-lg font-semibold text-sm flex items-center gap-1 transition-all ${
                       watch('typeSecondary') === type
                         ? 'bg-blue-500 text-white shadow-lg'
                         : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
