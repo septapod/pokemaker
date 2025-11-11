@@ -65,12 +65,19 @@ export default async function handler(
             },
             {
               type: 'text',
-              text: `Describe ONLY what you see in this drawing visually in 2-3 concise sentences (max 200 characters). Focus on physical appearance, shapes, and proportions. Return ONLY valid JSON:
+              text: `This is a child's drawing for a family-friendly creature creation app. Analyze this cute creature drawing and describe what you see in a positive, child-appropriate way.
+
+Focus on these family-friendly aspects:
+- Body shape and features (cute, friendly characteristics)
+- Colors (bright, cheerful)
+- Unique characteristics that make it special
+
+Provide a detailed, positive description for creating a professional, kid-friendly fantasy creature illustration. Return ONLY valid JSON:
 {
-  "description": "brief visual description"
+  "visualDescription": "detailed positive description of the creature's appearance"
 }
 
-Be concise but specific about: body shape, prominent features, stance, texture. Do NOT create names or backstories - just describe what you see visually.`,
+Be descriptive but keep it under 300 characters.`,
             },
           ],
         },
@@ -98,13 +105,13 @@ Be concise but specific about: body shape, prominent features, stance, texture. 
     }
 
     // Validate the response structure
-    if (!analysis.description) {
-      throw new Error('Invalid response structure from GPT-4o Vision - missing description');
+    if (!analysis.visualDescription) {
+      throw new Error('Invalid response structure from GPT-4o Vision - missing visualDescription');
     }
 
     // Truncate description to ensure it doesn't exceed limits
-    if (analysis.description.length > 400) {
-      analysis.description = analysis.description.substring(0, 400) + '...';
+    if (analysis.visualDescription.length > 300) {
+      analysis.visualDescription = analysis.visualDescription.substring(0, 297) + '...';
     }
 
     return response.status(200).json(analysis);

@@ -90,35 +90,30 @@ export async function generatePokemonImageWithVision(
     console.log('Analyzing image via backend API...');
     const analysis = await analyzePokemonImage(base64Data, mediaType);
 
-    // Step 3: Build prompt combining visual analysis + user description
-    console.log('Visual analysis from drawing:', analysis.description);
+    // Step 3: Build simplified prompt like the old working version
+    console.log('Visual analysis from drawing:', analysis.visualDescription);
 
-    // Build a comprehensive prompt for DALL-E
-    let generationPrompt = AI_IMAGE_PROMPT_TEMPLATE;
+    // Build final prompt combining analysis and user description
+    let finalPrompt = `Create a cute fantasy creature character with these specific visual characteristics:
 
-    // Combine the visual analysis with user's description for the best result
-    if (analysis.description && userDescription) {
-      // Both visual analysis and user description available
-      generationPrompt += `\n\nCreature details: ${userDescription}`;
-      generationPrompt += `\n\nVisual appearance from drawing: ${analysis.description}`;
-    } else if (userDescription) {
-      // Only user description available
-      generationPrompt += `\n\nCreature description: ${userDescription}`;
-    } else if (analysis.description) {
-      // Only visual analysis available
-      generationPrompt += `\n\nBased on this drawing description: ${analysis.description}`;
+${analysis.visualDescription}`;
+
+    // Add user's custom description if provided
+    if (userDescription) {
+      finalPrompt += `\n\nAdditional details: ${userDescription}`;
     }
 
-    // Step 4: Generate a new Pokémon image using DALL-E based on the analysis
-    // IMPORTANT: Backend has 500 char limit, so we need to trim the prompt
-    if (generationPrompt.length > 500) {
-      console.warn('Generation prompt too long, truncating:', generationPrompt.length);
-      generationPrompt = generationPrompt.substring(0, 497) + '...';
+    finalPrompt += `\n\nStyle: Anime/manga art style with bold outlines, vibrant colors, white background, front-facing view. IMPORTANT: Generate ONLY the character illustration. Do NOT include any text, labels, or watermarks.`;
+
+    // Ensure we don't exceed backend limit
+    if (finalPrompt.length > 500) {
+      console.warn('Prompt too long, truncating from', finalPrompt.length);
+      finalPrompt = finalPrompt.substring(0, 497) + '...';
     }
 
     console.log('Generating new Pokémon image from analyzed drawing...');
-    console.log('Final prompt length:', generationPrompt.length);
-    const imageResponse = await generateImage(generationPrompt);
+    console.log('Final prompt length:', finalPrompt.length);
+    const imageResponse = await generateImage(finalPrompt);
 
     if (!imageResponse.imageUrl) {
       throw new Error('No image URL returned from image generation');
