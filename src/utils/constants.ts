@@ -104,8 +104,9 @@ export const AI_IMAGE_PROMPT_TEMPLATE = `Create a cute, family-friendly fantasy 
 
 This is for a kid-friendly monster creation app. 
 Follow the visual description and analysis. 
-Style: In the style of Pokemon creatures. Anime/manga/Japanese art style with bold outlines, Soft watercolor anime aesthetic with Japanese folklore creatures, vibrant colors, white background, front-facing view. 
-IMPORTANT: Generate ONLY the character illustration. Do NOT include any text, labels, watermarks, or written words in the image.`;
+Style: In the style of Pokemon creatures. Anime/manga/Japanese art style with bold outlines, Soft watercolor anime aesthetic with Japanese folklore creatures, vibrant colors, white background, front-facing view. Keep it simple and cute.
+IMPORTANT: Generate ONLY the character illustration. Do NOT include any text, labels, watermarks, or written words in the image. NOT realistic anatomy, NOT technical, NOT
+  detailed rendering`;
 
 // Type colors for visual display (matches official Pokémon type colors)
 export const TYPE_COLORS: Record<PokemonType, string> = {

@@ -97,7 +97,7 @@ export async function generatePokemonImageWithVision(
 
 ${analysis.visualDescription}
 
-Style: In the style of Pokemon creatures. Anime/manga/Japanese art style with bold outlines, Soft watercolor anime aesthetic with Japanese folklore creatures, vibrant colors, white background, front-facing view. 
+Style: In the style of Pokemon creatures. Anime/manga/Japanese art style with bold outlines, Soft watercolor anime aesthetic with Japanese folklore creatures, vibrant colors, white background, front-facing view. Keep it simple and cute.
 
 IMPORTANT: Generate ONLY the character illustration. Do NOT include any text, labels, watermarks, or written words in the image.`;
 
