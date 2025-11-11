@@ -243,26 +243,6 @@ function Gallery() {
                 {p.name}
               </h3>
 
-              {/* Type Badges */}
-              <div className="flex gap-2 flex-wrap">
-                <span
-                  className="px-3 py-1 rounded-full text-white text-sm font-bold flex items-center gap-1"
-                  style={{ backgroundColor: TYPE_COLORS[p.typePrimary] }}
-                >
-                  <i className={`${TYPE_ICONS[p.typePrimary]}`}></i>
-                  {p.typePrimary}
-                </span>
-                {p.typeSecondary && (
-                  <span
-                    className="px-3 py-1 rounded-full text-white text-sm font-bold flex items-center gap-1"
-                    style={{ backgroundColor: TYPE_COLORS[p.typeSecondary] }}
-                  >
-                    <i className={`${TYPE_ICONS[p.typeSecondary]}`}></i>
-                    {p.typeSecondary}
-                  </span>
-                )}
-              </div>
-
               {/* Stats Preview */}
               <div className="mt-3 pt-3 border-t border-gray-200">
                 <div className="flex justify-between text-sm text-gray-600">
