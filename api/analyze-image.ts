@@ -51,7 +51,7 @@ export default async function handler(
     }
 
     // Build Vision prompt with user description inline (from working version)
-    const visionPrompt = `This is a child's drawing for a family-friendly creature creation app. Analyze this drawing and describe what you see in a positive, child-appropriate way.
+    const visionPrompt = `This is a child's drawing for a family-friendly creature creation app.
 
               Describe exactly what you see, literally. DO NOT INCLUDE THE CREATURE'S NAME. Do not add anything that is not captured in the visual. It is a child's drawing, so will almost always be a simple line-drawing. You don't need to describe that. Just provide a literal visual description of what you see.  Do not include anything but visual characteristics. Keep it simple.
               ${userDescription ? `The young creator says: "${userDescription}"` : ''}
