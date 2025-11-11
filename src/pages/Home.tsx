@@ -75,6 +75,16 @@ function Home() {
               <p className="text-gray-700">Draw it, snap a photo, and upload it to transform into art.</p>
             </div>
           </div>
+
+          <div className="flex items-start gap-4">
+            <div className="bg-green-500 text-white font-bold text-xl w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
+              3
+            </div>
+            <div>
+              <h4 className="font-bold text-lg">Save & Show Off!</h4>
+              <p className="text-gray-700">Your Pokémon is saved and ready to share with friends!</p>
+            </div>
+          </div>
         </div>
 
         {/* Big Start Button */}
