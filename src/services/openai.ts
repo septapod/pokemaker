@@ -103,6 +103,7 @@ IMPORTANT: Generate ONLY the character illustration. Do NOT include any text, la
 
     console.log('Generating new Pokémon image from analyzed drawing...');
     console.log('Final prompt length:', finalPrompt.length);
+    console.log('Full prompt sent to DALL-E:', finalPrompt);
     const imageResponse = await generateImage(finalPrompt);
 
     if (!imageResponse.imageUrl) {
