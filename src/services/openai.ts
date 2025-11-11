@@ -87,30 +87,25 @@ export async function generatePokemonImageWithVision(
     const mediaType = imageFile.type || 'image/png';
 
     // Step 2: Send to backend for Vision analysis
+    // Include user description inline like the old working version
     console.log('Analyzing image via backend API...');
-    const analysis = await analyzePokemonImage(base64Data, mediaType);
+    const analysis = await analyzePokemonImage(base64Data, mediaType, userDescription);
 
-    // Step 3: Build simplified prompt like the old working version
+    // Step 3: Build final prompt exactly like the old working version
     console.log('Visual analysis from drawing:', analysis.visualDescription);
 
-    // Build final prompt using the old working structure
-    // User description comes FIRST if provided, then Vision description
-    let finalPrompt = 'Create a cute fantasy creature';
+    const finalPrompt = `Create a cute fantasy creature with these exact physical features:
 
-    if (userDescription) {
-      finalPrompt += ` that ${userDescription}`;
-    }
+${analysis.visualDescription}
 
-    finalPrompt += `\n\nPhysical features from drawing: ${analysis.visualDescription}`;
-
-    // Add style and absolute requirements (matching old working format)
-    finalPrompt += `\n\nArt style: Anime/manga style, bold outlines, vibrant colors, white background, front-facing view.
+Art style: Anime/manga style, bold outlines, vibrant colors, white background, front-facing view.
 
 ABSOLUTE REQUIREMENTS - NO EXCEPTIONS:
 - ZERO text anywhere in the image
 - ZERO words, letters, or labels of any kind
-- ZERO decorative elements or backgrounds
-- ZERO speed lines, stars, or effects
+- ZERO title or name text
+- ZERO annotation boxes or descriptions
+- ZERO watermarks or signatures
 - ONLY draw the creature itself - nothing else
 - Pure visual illustration with no written content whatsoever`;
 

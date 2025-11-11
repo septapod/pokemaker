@@ -67,11 +67,13 @@ export async function generatePokemonImage(description: string): Promise<Generat
  * Analyze a Pokémon image using GPT-4o Vision
  * @param imageBase64 - Base64-encoded image data
  * @param imageMediaType - MIME type of the image (e.g., 'image/png', 'image/jpeg')
+ * @param userDescription - Optional user description to guide analysis
  * @returns Promise with analyzed Pokémon data
  */
 export async function analyzePokemonImage(
   imageBase64: string,
-  imageMediaType: string
+  imageMediaType: string,
+  userDescription?: string
 ): Promise<AnalyzeImageResponse> {
   try {
     const response = await fetch(`${API_BASE_URL}/analyze-image`, {
@@ -82,6 +84,7 @@ export async function analyzePokemonImage(
       body: JSON.stringify({
         imageBase64,
         imageMediaType,
+        userDescription,
       } as AnalyzeImageRequest),
     });
 

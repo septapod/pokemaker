@@ -26,6 +26,7 @@ export interface GenerateImageResponse {
 export interface AnalyzeImageRequest {
   imageBase64: string;
   imageMediaType: string;
+  userDescription?: string;
 }
 
 /**
