@@ -97,20 +97,20 @@ export async function generatePokemonImageWithVision(
 
 ${analysis.visualDescription}
 
-Style: Anime/manga/Japanese art style with bold outlines, Soft watercolor anime aesthetic with Japanese folklore creatures, vibrant colors, white background, front-facing view.
+Style: Anime/manga/Japanese art style with bold outlines, Soft watercolor anime aesthetic with Japanese folklore creatures, vibrant colors, white background, front-facing view. In the style of Pokemon.
+
+IMPORTANT: Generate ONLY the character illustration. Do NOT include any text, labels, watermarks, or written words in the image.
 
 Other style elements include:
 - Linework: Clean, thick black outlines; rounded corners; minimal internal hatching. Organic linework with medium weight that slightly fluctuates.
 
 - Proportions: Chibi-leaning bodies with oversized heads, big eyes, tiny hands/feet; toy-like symmetry.
 
-- Coloring: High-saturation palettes with flat cel-shading, Cel-shaded with three distinct tonal sections: white highlights, mid-tones, and dark shadows, Watercolor rendering with soft, irregular highlights, crisp highlight pops.
+- Coloring: Colorful, High-saturation palettes with flat cel-shading, Cel-shaded with three distinct tonal sections: small white highlights (like reflections), color mid-tones, and darker shadows, Watercolor rendering with soft, irregular highlights, crisp highlight pops.
 
 - Materials: Smooth, plastic-like surfaces; glossy specular dots on cheeks, eyes, and key forms.
 
-- Shapes & silhouettes: Built from simple geometry (circles, ovals, wedges); instantly readable silhouettes.
-
-IMPORTANT: Generate ONLY the character illustration. Do NOT include any text, labels, watermarks, or written words in the image.`;
+- Shapes & silhouettes: Built from simple geometry (circles, ovals, wedges); instantly readable silhouettes.`;
 
     console.log('Generating new Pokémon image from analyzed drawing...');
     console.log('Final prompt length:', finalPrompt.length);
