@@ -222,10 +222,11 @@ function Gallery() {
               {/* Type Badge */}
               {p.typePrimary && (
                 <div
-                  className="absolute bottom-2 left-2 text-white px-2 py-1 rounded-full text-sm font-bold flex items-center gap-1 shadow-lg"
+                  className="absolute bottom-2 left-2 text-white px-3 py-1 rounded-full text-sm font-bold flex items-center gap-1 shadow-lg"
                   style={{ backgroundColor: TYPE_COLORS[p.typePrimary] }}
                 >
                   <i className={`${TYPE_ICONS[p.typePrimary]} text-base`}></i>
+                  {p.typePrimary}
                 </div>
               )}
               {/* Pokédex Number Badge */}
