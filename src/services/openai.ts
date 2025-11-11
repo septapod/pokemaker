@@ -93,18 +93,18 @@ export async function generatePokemonImageWithVision(
     // Step 3: Build final prompt using the working version format
     console.log('Visual analysis from drawing:', analysis.visualDescription);
 
-    const finalPrompt = `Create a cute fantasy creature character with these specific visual characteristics:
+    const finalPrompt = `Create a cute fantasy creature character with these specific visual characteristics... follow the description very very closely:
 
 ${analysis.visualDescription}
 
 Style: Anime/manga/Japanese art style with bold outlines, Soft watercolor anime aesthetic with Japanese folklore creatures, vibrant colors, white background, front-facing view.
 
 Other style elements include:
-- Linework: Clean, thick black outlines; rounded corners; minimal internal hatching.
+- Linework: Clean, thick black outlines; rounded corners; minimal internal hatching. Organic linework with medium weight that slightly fluctuates.
 
 - Proportions: Chibi-leaning bodies with oversized heads, big eyes, tiny hands/feet; toy-like symmetry.
 
-- Coloring: High-saturation palettes with flat cel-shading (usually 1 to 2 shadows), crisp highlight pops.
+- Coloring: High-saturation palettes with flat cel-shading, Cel-shaded with three distinct tonal sections: white highlights, mid-tones, and dark shadows, Watercolor rendering with soft, irregular highlights, crisp highlight pops.
 
 - Materials: Smooth, plastic-like surfaces; glossy specular dots on cheeks, eyes, and key forms.
 
