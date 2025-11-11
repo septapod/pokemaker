@@ -32,18 +32,7 @@ export interface AnalyzeImageRequest {
  * Response from image analysis endpoint
  */
 export interface AnalyzeImageResponse {
-  name: string;
-  type: string;
-  stats: {
-    hp: number;
-    attack: number;
-    defense: number;
-    spAtk: number;
-    spDef: number;
-    speed: number;
-  };
-  abilities: string[];
-  description: string;
+  visualDescription: string;
 }
 
 /**
