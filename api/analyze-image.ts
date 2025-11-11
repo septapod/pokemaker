@@ -53,10 +53,10 @@ export default async function handler(
     // Build Vision prompt with user description inline (from working version)
     const visionPrompt = `This is a child's drawing for a family-friendly creature creation app. Analyze this drawing and describe what you see in a positive, child-appropriate way.
 
-              Describe exactly what you see very diagnostically, literally. Do not add anything that is not captured in the visual. It is a child's drawing, so will almost always be a simple line-drawing. You don't need to describe that. Just provide a literal visual description of what you see. 
+              Describe exactly what you see very diagnostically, literally. Do not add anything that is not captured in the visual. It is a child's drawing, so will almost always be a simple line-drawing. You don't need to describe that. Just provide a literal visual description of what you see. Do not include the creatures name. Do not include anything but visual characteristics. 
               ${userDescription ? `The young creator says: "${userDescription}"` : ''}
 
-              Provide a detailed, positive description for creating a professional, kid-friendly fantasy creature illustration suitable for all ages in an anime/manga/ Japanese creature art style.`;
+              Provide a detailed, positive description for creating a professional, kid-friendly fantasy creature illustration suitable for all ages in an anime/manga/ Japanese creature art style. Do not add any of your own interpretation`;
 
     // Call GPT-4o with Vision to analyze the Pokémon image
     const analysisResponse = await openai.chat.completions.create({
