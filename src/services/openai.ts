@@ -93,48 +93,26 @@ export async function generatePokemonImageWithVision(
     // Step 3: Build simplified prompt like the old working version
     console.log('Visual analysis from drawing:', analysis.visualDescription);
 
-    // Build final prompt - user description FIRST (most important), then Vision details
-    let finalPrompt = '';
+    // Build final prompt using the old working structure
+    // User description comes FIRST if provided, then Vision description
+    let finalPrompt = 'Create a cute fantasy creature';
 
     if (userDescription) {
-      // User's explicit description is the PRIMARY directive
-      finalPrompt = `${userDescription}
-
-Visual reference from drawing: ${analysis.visualDescription}
-
-Create a cute, family-friendly fantasy creature character illustration for a children's game.
-
-This is for a kid-friendly monster creation app. The character should be:
-- Appropriate for all ages
-- Cute and friendly-looking
-- Colorful and cheerful
-- Anime/manga art style with bold outlines
-- Clean, polished design
-- Vibrant, saturated colors
-- White or simple background
-- Front-facing or 3/4 view
-- Japanese monster-collecting game aesthetic
-
-Make it professional, polished, and completely safe for children.`;
-    } else {
-      // No user description - Vision analysis is primary
-      finalPrompt = `Physical appearance from drawing: ${analysis.visualDescription}
-
-Create a cute, family-friendly fantasy creature character illustration for a children's game.
-
-This is for a kid-friendly monster creation app. The character should be:
-- Appropriate for all ages
-- Cute and friendly-looking
-- Colorful and cheerful
-- Anime/manga art style with bold outlines
-- Clean, polished design
-- Vibrant, saturated colors
-- White or simple background
-- Front-facing or 3/4 view
-- Japanese monster-collecting game aesthetic
-
-Make it professional, polished, and completely safe for children.`;
+      finalPrompt += ` that ${userDescription}`;
     }
+
+    finalPrompt += `\n\nPhysical features from drawing: ${analysis.visualDescription}`;
+
+    // Add style and absolute requirements (matching old working format)
+    finalPrompt += `\n\nArt style: Anime/manga style, bold outlines, vibrant colors, white background, front-facing view.
+
+ABSOLUTE REQUIREMENTS - NO EXCEPTIONS:
+- ZERO text anywhere in the image
+- ZERO words, letters, or labels of any kind
+- ZERO decorative elements or backgrounds
+- ZERO speed lines, stars, or effects
+- ONLY draw the creature itself - nothing else
+- Pure visual illustration with no written content whatsoever`;
 
     console.log('Generating new Pokémon image from analyzed drawing...');
     console.log('Final prompt length:', finalPrompt.length);
