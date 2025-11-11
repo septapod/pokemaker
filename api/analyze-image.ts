@@ -29,7 +29,7 @@ export default async function handler(
   }
 
   try {
-    const { imageBase64, imageMediaType } = request.body as AnalyzeImageRequest;
+    const { imageBase64, imageMediaType, userDescription } = request.body as AnalyzeImageRequest;
 
     // Validate request
     if (!imageBase64 || typeof imageBase64 !== 'string') {
@@ -50,6 +50,19 @@ export default async function handler(
       });
     }
 
+    // Build Vision prompt with user description inline (from working version)
+    const visionPrompt = `This is a child's drawing for a family-friendly creature creation app. Analyze this cute creature drawing and describe what you see in a positive, child-appropriate way.
+
+Focus on these family-friendly aspects:
+- Body shape and features (cute, friendly characteristics)
+- Colors (bright, cheerful)
+- Elemental type it might be (fire/water/grass/electric/nature/etc)
+- Personality/mood (friendly, playful, cheerful)
+- Unique characteristics that make it special
+${userDescription ? `The young creator says: "${userDescription}"` : ''}
+
+Provide a detailed, positive description for creating a professional, kid-friendly fantasy creature illustration suitable for all ages in an anime/manga art style.`;
+
     // Call GPT-4o with Vision to analyze the Pokémon image
     const analysisResponse = await openai.chat.completions.create({
       model: 'gpt-4o',
@@ -65,25 +78,7 @@ export default async function handler(
             },
             {
               type: 'text',
-              text: `Describe ONLY the physical, visual characteristics of this creature drawing. Focus on what you can SEE, not concepts or personality.
-
-Describe these VISUAL details:
-- Overall body shape (round, oval, angular, etc.)
-- Size proportions (head to body ratio, limb sizes)
-- Physical features (number and shape of eyes, limbs, appendages)
-- Colors (specific shades, where each color appears)
-- Surface texture (smooth, fuzzy, scaly, rough)
-- Patterns or markings (stripes, spots, gradients)
-- Facial features (eye shape, mouth shape, nose if any)
-
-Provide a purely visual, physical description with NO personality traits, NO elemental types, NO mood descriptions, NO abstract concepts. Just describe what the creature physically looks like.
-
-Return ONLY valid JSON:
-{
-  "visualDescription": "detailed physical visual description"
-}
-
-Keep under 200 characters but be thorough about physical details.`,
+              text: visionPrompt,
             },
           ],
         },
@@ -96,29 +91,10 @@ Keep under 200 characters but be thorough about physical details.`,
       throw new Error('No response from GPT-4o Vision');
     }
 
-    // Parse the JSON response
-    let analysis: AnalyzeImageResponse;
-    try {
-      // Extract JSON from response (in case there's extra text)
-      const jsonMatch = content.match(/\{[\s\S]*\}/);
-      if (!jsonMatch) {
-        throw new Error('No JSON found in response');
-      }
-      analysis = JSON.parse(jsonMatch[0]);
-    } catch (parseError) {
-      console.error('Failed to parse GPT-4o response:', content);
-      throw new Error('Failed to parse image analysis result');
-    }
-
-    // Validate the response structure
-    if (!analysis.visualDescription) {
-      throw new Error('Invalid response structure from GPT-4o Vision - missing visualDescription');
-    }
-
-    // Truncate description to ensure it doesn't exceed limits (keep under 200 for combined prompt)
-    if (analysis.visualDescription.length > 200) {
-      analysis.visualDescription = analysis.visualDescription.substring(0, 197) + '...';
-    }
+    // Return plain text description (not JSON format - from working version)
+    const analysis: AnalyzeImageResponse = {
+      visualDescription: content.trim(),
+    };
 
     return response.status(200).json(analysis);
   } catch (error) {
