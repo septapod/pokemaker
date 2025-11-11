@@ -83,7 +83,7 @@ Return ONLY valid JSON:
   "visualDescription": "detailed physical visual description"
 }
 
-Keep under 200 characters but be thorough about physical details.`,
+Be thorough and detailed about physical characteristics. Aim for 300-800 characters to provide rich detail.`,
             },
           ],
         },
@@ -115,9 +115,10 @@ Keep under 200 characters but be thorough about physical details.`,
       throw new Error('Invalid response structure from GPT-4o Vision - missing visualDescription');
     }
 
-    // Truncate description to ensure it doesn't exceed limits (keep under 200 for combined prompt)
-    if (analysis.visualDescription.length > 200) {
-      analysis.visualDescription = analysis.visualDescription.substring(0, 197) + '...';
+    // Truncate description if it's excessively long (allow up to 1500 chars since DALL-E 3 supports 4000)
+    if (analysis.visualDescription.length > 1500) {
+      console.warn('Visual description too long, truncating from', analysis.visualDescription.length);
+      analysis.visualDescription = analysis.visualDescription.substring(0, 1497) + '...';
     }
 
     return response.status(200).json(analysis);

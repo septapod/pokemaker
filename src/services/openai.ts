@@ -114,16 +114,25 @@ ABSOLUTE REQUIREMENTS - NO EXCEPTIONS:
 - ONLY draw the creature itself - nothing else
 - Pure visual illustration with no written content whatsoever`;
 
-    // Safety check - should never exceed now, but just in case
-    if (finalPrompt.length > 500) {
-      console.warn('Prompt too long, truncating from', finalPrompt.length);
+    // DALL-E 3 supports up to 4,000 characters - only truncate if we exceed that
+    if (finalPrompt.length > 4000) {
+      console.warn('Prompt exceeds DALL-E 3 limit, truncating from', finalPrompt.length);
       // Truncate the visual description portion only, preserve style ending
-      const styleEnding = ` Anime/manga art style with bold outlines, vibrant saturated colors, white background, front-facing view. NO text, NO labels, NO watermarks.`;
-      const maxDescLength = 480 - styleEnding.length - (userDescription ? userDescription.length + 18 : 0);
+      const styleEnding = `\n\nArt style: Anime/manga style, bold outlines, vibrant colors, white background, front-facing view.
+
+ABSOLUTE REQUIREMENTS - NO EXCEPTIONS:
+- ZERO text anywhere in the image
+- ZERO words, letters, or labels of any kind
+- ZERO decorative elements or backgrounds
+- ZERO speed lines, stars, or effects
+- ONLY draw the creature itself - nothing else
+- Pure visual illustration with no written content whatsoever`;
+      const prefix = `Create a cute fantasy creature with these exact physical features:\n\n`;
+      const maxDescLength = 4000 - styleEnding.length - prefix.length - (userDescription ? userDescription.length + 2 : 0);
       const truncatedDesc = analysis.visualDescription.substring(0, maxDescLength);
-      finalPrompt = `Cute, friendly fantasy creature: ${truncatedDesc}`;
+      finalPrompt = prefix + truncatedDesc;
       if (userDescription) {
-        finalPrompt += ` The creator says: ${userDescription}`;
+        finalPrompt += `\n${userDescription}`;
       }
       finalPrompt += styleEnding;
     }
