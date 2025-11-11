@@ -102,8 +102,8 @@ export async function generatePokemonImageWithVision(
       finalPrompt += ` The creator says: ${userDescription}`;
     }
 
-    // Add essential style guidance for clean trading card illustration style
-    finalPrompt += ` Official trading card illustration style: clean character art ONLY. Vibrant colors, bold outlines, white background, front-facing. NO art supplies, NO paint palettes, NO decorative elements, NO artist materials, NO backgrounds, NO text, NO labels.`;
+    // Add essential style guidance with optimized descriptors
+    finalPrompt += ` Trading card illustration: cel-shaded, chibi-leaning, sticker-ready character art ONLY. Toyetic design, vibrant colors, bold outlines, white background. NO extras, NO text, NO decorative elements.`;
 
     // Safety check - should never exceed now, but just in case
     if (finalPrompt.length > 500) {
