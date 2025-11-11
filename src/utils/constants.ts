@@ -102,18 +102,10 @@ export const DEFAULT_EGG_CYCLES = 20;
 // Image generation prompt template for OpenAI
 export const AI_IMAGE_PROMPT_TEMPLATE = `Create a cute, family-friendly fantasy creature character illustration for a children's game.
 
-This is for a kid-friendly monster creation app. The character should be:
-- Appropriate for all ages
-- Cute and friendly-looking
-- Colorful and cheerful
-- Anime/manga art style with bold outlines
-- Clean, polished design
-- Vibrant, saturated colors
-- White or simple background
-- Front-facing or 3/4 view
-- Japanese monster-collecting game aesthetic
-
-Make it professional, polished, and completely safe for children.`;
+This is for a kid-friendly monster creation app. 
+Follow the visual description and analysis. 
+Style: In the style of Pokemon creatures. Anime/manga/Japanese art style with bold outlines, Soft watercolor anime aesthetic with Japanese folklore creatures, vibrant colors, white background, front-facing view. 
+IMPORTANT: Generate ONLY the character illustration. Do NOT include any text, labels, watermarks, or written words in the image.`;
 
 // Type colors for visual display (matches official Pokémon type colors)
 export const TYPE_COLORS: Record<PokemonType, string> = {
