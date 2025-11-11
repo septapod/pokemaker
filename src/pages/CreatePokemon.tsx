@@ -439,15 +439,33 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
 
       {/* Progress Indicator */}
       <div className="mb-8">
-        <div className="flex justify-between items-center mb-2">
+        <div className="flex justify-between items-center mb-4">
           {[1, 2, 3, 4, 5, 6].map((step) => (
-            <div
+            <button
               key={step}
+              type="button"
+              onClick={() => setCurrentStep(step)}
               className={`
-                flex-1 h-2 mx-1 rounded-full transition-colors
-                ${step <= currentStep ? 'bg-blue-500' : 'bg-gray-300'}
+                flex-1 h-3 mx-1 rounded-full transition-all cursor-pointer hover:scale-105
+                ${step === currentStep ? 'bg-blue-600 shadow-lg' : step < currentStep ? 'bg-blue-400' : 'bg-gray-300'}
               `}
+              title={`Go to step ${step}`}
             />
+          ))}
+        </div>
+        <div className="flex justify-between text-xs text-gray-600 mb-2 px-1">
+          {['Basic', 'Physical', 'Stats', 'Abilities', 'Evolution', 'Image'].map((label, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => setCurrentStep(idx + 1)}
+              className={`
+                flex-1 text-center font-semibold hover:text-blue-600 transition-colors cursor-pointer
+                ${currentStep === idx + 1 ? 'text-blue-600' : ''}
+              `}
+            >
+              {label}
+            </button>
           ))}
         </div>
         <p className="text-center text-gray-600 font-bold">
