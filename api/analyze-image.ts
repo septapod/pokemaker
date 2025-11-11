@@ -65,12 +65,12 @@ export default async function handler(
             },
             {
               type: 'text',
-              text: `Describe ONLY what you see in this drawing visually. Focus on physical appearance, shapes, proportions, and any notable features. Return ONLY valid JSON with this structure:
+              text: `Describe ONLY what you see in this drawing visually in 2-3 concise sentences (max 200 characters). Focus on physical appearance, shapes, and proportions. Return ONLY valid JSON:
 {
-  "description": "detailed visual description of what's in the drawing (shapes, features, proportions, etc.)"
+  "description": "brief visual description"
 }
 
-Be specific about visual details like: body shape, size of features, stance, any appendages, texture suggestions, etc. Do NOT create names, stats, or abilities - just describe what you see.`,
+Be concise but specific about: body shape, prominent features, stance, texture. Do NOT create names or backstories - just describe what you see visually.`,
             },
           ],
         },
@@ -100,6 +100,11 @@ Be specific about visual details like: body shape, size of features, stance, any
     // Validate the response structure
     if (!analysis.description) {
       throw new Error('Invalid response structure from GPT-4o Vision - missing description');
+    }
+
+    // Truncate description to ensure it doesn't exceed limits
+    if (analysis.description.length > 400) {
+      analysis.description = analysis.description.substring(0, 400) + '...';
     }
 
     return response.status(200).json(analysis);
