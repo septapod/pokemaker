@@ -61,13 +61,12 @@ export default async function handler(
 
     // Call DALL-E 3 to generate image
     // Pass the description directly - it's already properly formatted by the frontend
-    // Use HD quality like the old working version
     const imageResponse = await openai.images.generate({
       model: 'dall-e-3',
       prompt: description,
       n: 1,
       size: '1024x1024',
-      quality: 'hd',
+      quality: 'standard',
     });
 
     const imageUrl = imageResponse.data[0]?.url;
