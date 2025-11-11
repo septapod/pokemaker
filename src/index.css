@@ -27,4 +27,24 @@
   .input-field {
     @apply w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none transition-colors;
   }
+
+  /* Remix Icon animations */
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+
+  /* Step badge for form steps */
+  .step-number {
+    @apply inline-flex items-center justify-center w-8 h-8 bg-blue-500 text-white rounded-full font-bold text-lg;
+  }
+}
+
+/* Spin animation keyframes */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

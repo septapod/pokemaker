@@ -49,7 +49,7 @@ function Gallery() {
   if (loading) {
     return (
       <div className="text-center py-12">
-        <div className="text-6xl mb-4">⚡</div>
+        <i className="ri-loader-4-line animate-spin text-6xl block mb-4 text-blue-500"></i>
         <p className="text-2xl font-bold text-gray-700">Loading your Pokémon...</p>
       </div>
     );
@@ -59,7 +59,7 @@ function Gallery() {
   if (error) {
     return (
       <div className="text-center py-12">
-        <div className="text-6xl mb-4">😢</div>
+        <i className="ri-emotion-sad-line text-6xl block mb-4 text-red-500"></i>
         <p className="text-2xl font-bold text-red-600 mb-4">{error}</p>
         <button
           onClick={loadPokemon}
@@ -75,7 +75,7 @@ function Gallery() {
   if (pokemon.length === 0) {
     return (
       <div className="text-center py-12">
-        <div className="text-6xl mb-4">📝</div>
+        <i className="ri-file-add-line text-6xl block mb-4 text-purple-500"></i>
         <h2 className="text-3xl font-bold text-gray-800 mb-4">
           No Pokémon Yet!
         </h2>
@@ -190,7 +190,7 @@ function Gallery() {
       {/* Show message if no results found */}
       {filteredAndSortedPokemon.length === 0 && (
         <div className="text-center py-12">
-          <div className="text-6xl mb-4">🔍</div>
+          <i className="ri-search-line text-6xl block mb-4 text-gray-400"></i>
           <p className="text-xl text-gray-600">
             No Pokémon found matching "{searchQuery}"
           </p>
@@ -215,8 +215,8 @@ function Gallery() {
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-400 text-6xl">
-                  🎨
+                <div className="w-full h-full flex items-center justify-center text-gray-300">
+                  <i className="ri-image-line text-6xl"></i>
                 </div>
               )}
               {/* Pokédex Number Badge */}

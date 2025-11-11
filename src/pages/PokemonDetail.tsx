@@ -96,7 +96,7 @@ function PokemonDetail() {
   if (loading) {
     return (
       <div className="text-center py-12">
-        <div className="text-6xl mb-4">⚡</div>
+        <i className="ri-loader-4-line animate-spin text-6xl block mb-4 text-blue-500"></i>
         <p className="text-2xl font-bold text-gray-700">Loading Pokémon...</p>
       </div>
     );
@@ -106,7 +106,7 @@ function PokemonDetail() {
   if (error || !pokemon) {
     return (
       <div className="text-center py-12">
-        <div className="text-6xl mb-4">😢</div>
+        <i className="ri-emotion-sad-line text-6xl block mb-4 text-red-500"></i>
         <p className="text-2xl font-bold text-red-600 mb-4">{error || 'Pokémon not found'}</p>
         <Link to="/gallery" className="btn-pokemon inline-block">
           Back to Gallery
@@ -167,8 +167,8 @@ function PokemonDetail() {
                         className="w-full h-full object-contain bg-white p-4"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400 text-6xl">
-                        🎨
+                      <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                        <i className="ri-image-line text-6xl text-gray-300"></i>
                       </div>
                     )}
                   </div>
@@ -189,8 +189,8 @@ function PokemonDetail() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400 text-6xl">
-                    🎨
+                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                    <i className="ri-image-line text-6xl text-gray-300"></i>
                   </div>
                 )}
               </div>
@@ -492,15 +492,15 @@ function PokemonDetail() {
           <div className="flex gap-4 pt-6 border-t border-gray-200">
             <Link
               to={`/pokemon/${id}/edit`}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-center transition-colors"
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-center transition-colors flex items-center justify-center gap-2"
             >
-              ✏️ Edit Pokémon
+              <i className="ri-edit-line"></i> Edit Pokémon
             </Link>
             <button
               onClick={() => setShowDeleteConfirm(true)}
-              className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+              className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
             >
-              🗑️ Delete Pokémon
+              <i className="ri-delete-bin-line"></i> Delete Pokémon
             </button>
           </div>
         </div>

@@ -12,8 +12,8 @@ function Home() {
     <div className="max-w-4xl mx-auto">
       {/* Welcome Section */}
       <div className="text-center mb-12">
-        <h2 className="text-4xl md:text-6xl font-bold text-gray-800 mb-4">
-          Welcome to PokéMaker! 🎨
+        <h2 className="text-4xl md:text-6xl font-bold text-gray-800 mb-4 flex items-center justify-center gap-3">
+          Welcome to PokéMaker! <i className="ri-palette-line text-5xl text-blue-600"></i>
         </h2>
         <p className="text-xl md:text-2xl text-gray-600">
           Create your very own Pokémon with magical art transformation!
@@ -26,7 +26,7 @@ function Home() {
         <Link to="/create">
           <div className="bg-gradient-to-br from-blue-400 to-purple-500 rounded-3xl p-8 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 cursor-pointer">
             <div className="text-center text-white">
-              <div className="text-6xl mb-4">✨</div>
+              <div className="text-6xl mb-4"><i className="ri-magic-line text-white"></i></div>
               <h3 className="text-3xl font-bold mb-2">Create New</h3>
               <p className="text-lg opacity-90">
                 Start making your own Pokémon from scratch!
@@ -39,7 +39,7 @@ function Home() {
         <Link to="/gallery">
           <div className="bg-gradient-to-br from-green-400 to-teal-500 rounded-3xl p-8 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 cursor-pointer">
             <div className="text-center text-white">
-              <div className="text-6xl mb-4">📚</div>
+              <div className="text-6xl mb-4"><i className="ri-book-line text-white"></i></div>
               <h3 className="text-3xl font-bold mb-2">My Pokémon</h3>
               <p className="text-lg opacity-90">
                 See all the amazing Pokémon you've created!
@@ -51,14 +51,14 @@ function Home() {
 
       {/* Features Section */}
       <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-        <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-          What Can You Do? 🌟
+        <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center gap-2">
+          What Can You Do? <i className="ri-star-line text-yellow-500"></i>
         </h3>
 
         <div className="grid md:grid-cols-3 gap-6">
           {/* Feature 1 */}
           <div className="text-center">
-            <div className="text-4xl mb-3">🎨</div>
+            <div className="text-4xl mb-3"><i className="ri-palette-line text-blue-600"></i></div>
             <h4 className="font-bold text-lg mb-2">Draw & Upload</h4>
             <p className="text-gray-600 text-sm">
               Draw your Pokémon on paper, take a photo, and upload it!
@@ -67,7 +67,7 @@ function Home() {
 
           {/* Feature 2 */}
           <div className="text-center">
-            <div className="text-4xl mb-3">✨</div>
+            <div className="text-4xl mb-3"><i className="ri-magic-line text-purple-600"></i></div>
             <h4 className="font-bold text-lg mb-2">The Magic Touch</h4>
             <p className="text-gray-600 text-sm">
               Watch your sketch transform into awesome Pokémon art!
@@ -76,7 +76,7 @@ function Home() {
 
           {/* Feature 3 */}
           <div className="text-center">
-            <div className="text-4xl mb-3">💾</div>
+            <div className="text-4xl mb-3"><i className="ri-save-line text-green-600"></i></div>
             <h4 className="font-bold text-lg mb-2">Save Everything</h4>
             <p className="text-gray-600 text-sm">
               All your Pokémon are saved forever so you can come back anytime!
@@ -87,8 +87,8 @@ function Home() {
 
       {/* How It Works Section */}
       <div className="bg-gradient-to-r from-pink-100 to-yellow-100 rounded-2xl shadow-xl p-8">
-        <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-          How It Works 📝
+        <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center gap-2">
+          How It Works <i className="ri-draft-line"></i>
         </h3>
 
         <div className="space-y-4">
@@ -137,9 +137,9 @@ function Home() {
         <div className="mt-8 text-center">
           <Link
             to="/create"
-            className="inline-block bg-gradient-to-r from-red-500 to-yellow-400 text-white font-bold text-2xl px-12 py-4 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300"
+            className="inline-block bg-gradient-to-r from-red-500 to-yellow-400 text-white font-bold text-2xl px-12 py-4 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 flex items-center justify-center gap-2"
           >
-            Let's Create! 🚀
+            Let's Create! <i className="ri-rocket-line"></i>
           </Link>
         </div>
       </div>

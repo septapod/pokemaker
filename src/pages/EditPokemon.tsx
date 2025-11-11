@@ -38,7 +38,7 @@ function EditPokemon() {
   if (loading) {
     return (
       <div className="text-center py-12">
-        <div className="text-6xl mb-4">⚡</div>
+        <i className="ri-loader-4-line animate-spin text-6xl block mb-4 text-blue-500"></i>
         <p className="text-2xl font-bold text-gray-700">Loading...</p>
       </div>
     );

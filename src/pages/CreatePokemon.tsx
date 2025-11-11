@@ -107,7 +107,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
         // Update form with the permanent URL
         setValue('originalDrawingUrl', permanentUrl);
 
-        console.log('✅ Original drawing uploaded successfully:', permanentUrl);
+        console.log('Original drawing uploaded successfully:', permanentUrl);
       } catch (error) {
         console.error('Error uploading image:', error);
         setSaveError('Failed to upload image. Please try again.');
@@ -188,17 +188,17 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
         // Editing an existing Pokemon
         await updatePokemon(existingPokemon.id, pokemonData);
         finalPokemonId = existingPokemon.id;
-        alert(`✨ ${data.name} has been updated successfully!`);
+        alert(`${data.name} has been updated successfully!`);
       } else if (savedPokemonId) {
         // Finalizing a draft that was auto-saved
         await updatePokemon(savedPokemonId, pokemonData);
         finalPokemonId = savedPokemonId;
-        alert(`🎉 Congratulations! ${data.name} has been created!`);
+        alert(`Congratulations! ${data.name} has been created!`);
       } else {
         // Creating brand new Pokemon (no prior auto-save)
         const newPokemon = await createPokemon(pokemonData);
         finalPokemonId = newPokemon.id!;
-        alert(`🎉 Congratulations! ${data.name} has been created!`);
+        alert(`Congratulations! ${data.name} has been created!`);
       }
 
       // Link evolutions (create/find related Pokemon and link them)
@@ -242,13 +242,13 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
         // Update existing Pokemon (either from edit mode or previously saved draft)
         await updatePokemon(savedPokemonId, pokemonData);
         draftPokemonId = savedPokemonId;
-        alert(`✅ Draft saved! You can continue editing ${allFormData.name || 'your Pokemon'}.`);
+        alert(`Draft saved! You can continue editing ${allFormData.name || 'your Pokemon'}.`);
       } else {
         // Create new Pokemon for the first time
         const newPokemon = await createPokemon(pokemonData);
         draftPokemonId = newPokemon.id!;
         setSavedPokemonId(newPokemon.id); // Track ID for future saves
-        alert(`✅ Draft saved! You can continue editing ${allFormData.name || 'your Pokemon'}.`);
+        alert(`Draft saved! You can continue editing ${allFormData.name || 'your Pokemon'}.`);
       }
 
       // Link evolutions (create/find related Pokemon and link them)
@@ -384,8 +384,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
     <div className="max-w-3xl mx-auto">
       {/* Page Header */}
       <div className="text-center mb-6">
-        <h1 className="text-4xl font-bold text-gray-800 mb-2">
-          {editMode ? '✏️ Edit Your Pokémon' : '✨ Create Your Pokémon'}
+        <h1 className="text-4xl font-bold text-gray-800 mb-2 flex items-center justify-center gap-3">
+          {editMode ? <><i className="ri-edit-line text-4xl"></i> Edit Your Pokémon</> : <><i className="ri-magic-line text-4xl"></i> Create Your Pokémon</>}
         </h1>
         <p className="text-xl text-gray-600">
           {editMode ? 'Make changes to your Pokémon' : "Let's bring your creation to life!"}
@@ -400,14 +400,14 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
           ${autoSaveStatus === 'saved' ? 'bg-green-100 text-green-700' : ''}
           ${autoSaveStatus === 'error' ? 'bg-red-100 text-red-700' : ''}
         `}>
-          {autoSaveStatus === 'saving' && '💾 Saving...'}
+          {autoSaveStatus === 'saving' && <><i className="ri-save-line"></i> Saving...</>}
           {autoSaveStatus === 'saved' && lastAutoSave && (
-            <>✅ All changes saved at {lastAutoSave.toLocaleTimeString()}</>
+            <><i className="ri-checkbox-circle-line"></i> All changes saved at {lastAutoSave.toLocaleTimeString()}</>
           )}
           {autoSaveStatus === 'saved' && !lastAutoSave && (
-            <>✅ Auto-save enabled</>
+            <><i className="ri-checkbox-circle-line"></i> Auto-save enabled</>
           )}
-          {autoSaveStatus === 'error' && '⚠️ Auto-save failed - use Save Draft button'}
+          {autoSaveStatus === 'error' && <><i className="ri-alert-line"></i> Auto-save failed - use Save Draft button</>}
         </div>
       </div>
 
@@ -425,14 +425,14 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
             }
           `}
         >
-          {isSaving ? '💾 Saving...' : '💾 Save Draft'}
+          <i className="ri-save-line"></i> {isSaving ? 'Saving...' : 'Save Draft'}
         </button>
       </div>
 
       {/* Error Message Display */}
       {saveError && (
-        <div className="mb-6 bg-red-50 border-2 border-red-400 rounded-lg p-4 text-red-700">
-          ⚠️ {saveError}
+        <div className="mb-6 bg-red-50 border-2 border-red-400 rounded-lg p-4 text-red-700 flex items-center gap-2">
+          <i className="ri-alert-line"></i> {saveError}
         </div>
       )}
 
@@ -461,7 +461,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
         {currentStep === 1 && (
           <div className="space-y-6">
             <h2 className="text-3xl font-bold text-gray-800 mb-6">
-              1️⃣ Basic Information
+              <span className="step-number">1</span> Basic Information
             </h2>
 
             {/* Name */}
@@ -562,7 +562,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
         {currentStep === 2 && (
           <div className="space-y-6">
             <h2 className="text-3xl font-bold text-gray-800 mb-6">
-              2️⃣ Physical Characteristics
+              <span className="step-number">2</span> Physical Characteristics
             </h2>
 
             {/* Height */}
@@ -659,12 +659,12 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
         {currentStep === 3 && (
           <div className="space-y-6">
             <h2 className="text-3xl font-bold text-gray-800 mb-6">
-              3️⃣ Battle Stats
+              <span className="step-number">3</span> Battle Stats
             </h2>
 
             <div className="bg-blue-50 p-4 rounded-lg mb-6">
-              <p className="font-bold text-blue-800">
-                💡 Stats range from 1-255. Higher numbers = stronger!
+              <p className="font-bold text-blue-800 flex items-center gap-2">
+                <i className="ri-lightbulb-line"></i> Stats range from 1-255. Higher numbers = stronger!
               </p>
               <p className="text-sm text-blue-700 mt-1">
                 Total Stats: <span className="font-bold text-xl">{totalStats}</span>
@@ -815,12 +815,12 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
         {currentStep === 4 && (
           <div className="space-y-6">
             <h2 className="text-3xl font-bold text-gray-800 mb-6">
-              4️⃣ Abilities
+              <span className="step-number">4</span> Abilities
             </h2>
 
             <div className="bg-purple-50 p-4 rounded-lg mb-6">
-              <p className="font-bold text-purple-800">
-                💡 Abilities are special powers your Pokémon has!
+              <p className="font-bold text-purple-800 flex items-center gap-2">
+                <i className="ri-lightbulb-line"></i> Abilities are special powers your Pokémon has!
               </p>
               <p className="text-sm text-purple-700">
                 Give your Pokémon 1-3 abilities. Each ability needs a name and what it does.
@@ -887,12 +887,12 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
         {currentStep === 5 && (
           <div className="space-y-6">
             <h2 className="text-3xl font-bold text-gray-800 mb-6">
-              5️⃣ Evolution & Breeding
+              <span className="step-number">5</span> Evolution & Breeding
             </h2>
 
             <div className="bg-green-50 p-4 rounded-lg mb-6">
-              <p className="font-bold text-green-800">
-                💡 These fields are all optional!
+              <p className="font-bold text-green-800 flex items-center gap-2">
+                <i className="ri-lightbulb-line"></i> These fields are all optional!
               </p>
               <p className="text-sm text-green-700">
                 Fill in if your Pokémon evolves or you want to add breeding details.
@@ -1071,13 +1071,13 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
         {/* STEP 6: CREATE YOUR POKÉMON ART */}
         {currentStep === 6 && (
           <div className="space-y-6">
-            <h2 className="text-3xl font-bold text-gray-800 mb-6">
-              6️⃣ Create Your Pokémon Art! 🎨
+            <h2 className="text-3xl font-bold text-gray-800 mb-6 flex items-center justify-center gap-2">
+              <span className="step-number">6</span> Create Your Pokémon Art! <i className="ri-palette-line text-3xl text-blue-600"></i>
             </h2>
 
             <div className="bg-yellow-50 p-4 rounded-lg mb-6">
-              <p className="font-bold text-yellow-800">
-                🖍️ Draw your Pokémon on paper, take a photo, and upload it here!
+              <p className="font-bold text-yellow-800 flex items-center gap-2">
+                <i className="ri-pencil-line"></i> Draw your Pokémon on paper, take a photo, and upload it here!
               </p>
               <p className="text-sm text-yellow-700">
                 Your drawing will transform into amazing Pokémon art!
@@ -1086,7 +1086,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
 
             {/* Image Upload */}
             <div className="border-4 border-dashed border-blue-300 rounded-lg p-8 text-center bg-blue-50">
-              <div className="text-6xl mb-4">📸</div>
+              <div className="text-6xl mb-4"><i className="ri-camera-line text-blue-500"></i></div>
               <label className="btn-pokemon inline-block cursor-pointer">
                 {uploadedImage ? 'Change Drawing' : 'Upload Your Drawing'}
                 <input
@@ -1098,8 +1098,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 />
               </label>
               {uploadedImage && (
-                <p className="mt-4 text-green-600 font-bold">
-                  ✅ Drawing uploaded: {uploadedImage.name}
+                <p className="mt-4 text-green-600 font-bold flex items-center justify-center gap-2">
+                  <i className="ri-checkbox-circle-line"></i> Drawing uploaded: {uploadedImage.name}
                 </p>
               )}
             </div>
@@ -1107,8 +1107,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
             {/* Preview of uploaded drawing */}
             {uploadedImagePreview && (
               <div className="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-6">
-                <h3 className="font-bold text-xl text-yellow-800 mb-4 text-center">
-                  🎨 Your Original Drawing
+                <h3 className="font-bold text-xl text-yellow-800 mb-4 text-center flex items-center justify-center gap-2">
+                  <i className="ri-palette-line"></i> Your Original Drawing
                 </h3>
                 <div className="bg-white rounded-lg p-4 shadow-lg">
                   <img
@@ -1117,8 +1117,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                     className="w-full max-w-md mx-auto rounded-lg"
                   />
                 </div>
-                <p className="text-center text-yellow-700 mt-4 text-sm">
-                  This drawing will be saved and shown alongside your magical new Pokémon! 📸
+                <p className="text-center text-yellow-700 mt-4 text-sm flex items-center justify-center gap-2">
+                  This drawing will be saved and shown alongside your magical new Pokémon! <i className="ri-camera-line"></i>
                 </p>
               </div>
             )}
@@ -1133,8 +1133,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 className="input-field min-h-24"
                 placeholder="Describe colors, patterns, textures, markings, body features... (e.g., 'bright orange body with yellow lightning bolt stripes, fuzzy texture, large round eyes')"
               />
-              <p className="text-sm text-gray-500 mt-1">
-                💡 Tip: Focus on cool visual details - colors, shapes, patterns, textures
+              <p className="text-sm text-gray-500 mt-1 flex items-center gap-2">
+                <i className="ri-lightbulb-line"></i> Tip: Focus on cool visual details - colors, shapes, patterns, textures
               </p>
             </div>
 
@@ -1148,8 +1148,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 className="input-field min-h-24"
                 placeholder="How should it feel? (e.g., 'friendly and cheerful', 'mysterious and wise', 'energetic and playful')"
               />
-              <p className="text-sm text-gray-500 mt-1">
-                💡 Tip: Describe the creature's personality or the mood you want to convey
+              <p className="text-sm text-gray-500 mt-1 flex items-center gap-2">
+                <i className="ri-lightbulb-line"></i> Tip: Describe the creature's personality or the mood you want to convey
               </p>
             </div>
 
@@ -1166,7 +1166,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                 }
               `}
             >
-              {isGeneratingImage ? '⚡ Creating Magic... (This takes 30-60 seconds)' : '✨ Transform My Drawing!'}
+              {isGeneratingImage ? <><i className="ri-sparkling-line"></i> Creating Magic... (This takes 30-60 seconds)</> : <><i className="ri-magic-line"></i> Transform My Drawing!</>}
             </button>
 
             {/* Loading Indicator */}
@@ -1181,8 +1181,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
 
                   {/* Loading Text */}
                   <div className="text-center">
-                    <p className="text-xl font-bold text-purple-800 mb-2 animate-pulse">
-                      ✨ Creating Your Creature Art ✨
+                    <p className="text-xl font-bold text-purple-800 mb-2 animate-pulse flex items-center justify-center gap-2">
+                      <i className="ri-magic-line"></i> Creating Your Creature Art <i className="ri-magic-line"></i>
                     </p>
                     <p className="text-md text-purple-600">
                       Analyzing your drawing and generating professional artwork...
@@ -1198,8 +1198,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
             {/* Your New Pokémon Preview with Side-by-Side Comparison */}
             {aiGeneratedImage && (
               <div className="border-4 border-green-400 rounded-lg p-6 bg-green-50">
-                <h3 className="font-bold text-2xl text-green-800 mb-6 text-center">
-                  🎉 Amazing! See the Transformation! 🎉
+                <h3 className="font-bold text-2xl text-green-800 mb-6 text-center flex items-center justify-center gap-2">
+                  <i className="ri-trophy-line"></i> Amazing! See the Transformation! <i className="ri-trophy-line"></i>
                 </h3>
 
                 {/* Side-by-side comparison */}
@@ -1207,8 +1207,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                   <div className="grid md:grid-cols-2 gap-6 mb-6">
                     {/* Original Drawing */}
                     <div className="bg-white rounded-lg overflow-hidden shadow-lg">
-                      <div className="bg-yellow-400 px-4 py-2 text-center">
-                        <span className="font-bold text-gray-800">🎨 Your Drawing</span>
+                      <div className="bg-yellow-400 px-4 py-2 text-center flex items-center justify-center gap-2">
+                        <i className="ri-palette-line"></i> <span className="font-bold text-gray-800">Your Drawing</span>
                       </div>
                       <div className="p-4">
                         <img
@@ -1221,8 +1221,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
 
                     {/* Your New Pokémon */}
                     <div className="bg-white rounded-lg overflow-hidden shadow-lg">
-                      <div className="bg-green-400 px-4 py-2 text-center">
-                        <span className="font-bold text-gray-800">✨ Your Creation</span>
+                      <div className="bg-green-400 px-4 py-2 text-center flex items-center justify-center gap-2">
+                        <i className="ri-magic-line"></i> <span className="font-bold text-gray-800">Your Creation</span>
                       </div>
                       <div className="p-4">
                         <img
@@ -1244,8 +1244,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                   />
                 )}
 
-                <p className="text-center text-green-800 font-bold mb-4">
-                  ✨ Both images will be saved so you can see your creative journey! ✨
+                <p className="text-center text-green-800 font-bold mb-4 flex items-center justify-center gap-2">
+                  <i className="ri-magic-line"></i> Both images will be saved so you can see your creative journey! <i className="ri-magic-line"></i>
                 </p>
 
                 <div className="flex gap-4 justify-center">
@@ -1253,9 +1253,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                     type="button"
                     onClick={handleGenerateImage}
                     disabled={isGeneratingImage}
-                    className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                    className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
                   >
-                    🔄 Try Again
+                    <i className="ri-refresh-line"></i> Try Again
                   </button>
                   <button
                     type="button"
@@ -1263,17 +1263,17 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
                       // Scroll to the bottom to show the Create Pokemon button
                       window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
                     }}
-                    className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
+                    className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
                   >
-                    ✅ Accept & Continue
+                    <i className="ri-checkbox-circle-line"></i> Accept & Continue
                   </button>
                 </div>
               </div>
             )}
 
             {saveError && (
-              <div className="bg-red-50 border-2 border-red-400 rounded-lg p-4 text-red-700">
-                ⚠️ {saveError}
+              <div className="bg-red-50 border-2 border-red-400 rounded-lg p-4 text-red-700 flex items-center gap-2">
+                <i className="ri-alert-line"></i> {saveError}
               </div>
             )}
           </div>
@@ -1306,14 +1306,14 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               type="submit"
               disabled={isSaving}
               className={`
-                flex-1 font-bold py-3 px-6 rounded-lg transition-all
+                flex-1 font-bold py-3 px-6 rounded-lg transition-all flex items-center justify-center gap-2
                 ${!isSaving
                   ? 'bg-gradient-to-r from-green-500 to-blue-500 text-white hover:shadow-xl transform hover:scale-105'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }
               `}
             >
-              {isSaving ? '💾 Saving...' : `${editMode ? '💾 Update' : '🎉 Create'} Pokémon!`}
+              {isSaving ? <><i className="ri-save-line"></i> Saving...</> : <>{editMode ? <><i className="ri-save-line"></i> Update</> : <><i className="ri-trophy-line"></i> Create</>} Pokémon!</>}
             </button>
           )}
         </div>

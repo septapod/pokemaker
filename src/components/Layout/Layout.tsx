@@ -57,13 +57,14 @@ function Layout({ children }: LayoutProps) {
                     className={`
                       px-4 py-2 rounded-full font-bold text-sm md:text-base
                       transition-all duration-200 transform hover:scale-105
+                      flex items-center gap-2
                       ${isActive('/')
                         ? 'bg-white text-red-500 shadow-lg'
                         : 'bg-red-600 text-white hover:bg-red-700'
                       }
                     `}
                   >
-                    🏠 Home
+                    <i className="ri-home-line"></i> Home
                   </Link>
                 </li>
 
@@ -74,13 +75,14 @@ function Layout({ children }: LayoutProps) {
                     className={`
                       px-4 py-2 rounded-full font-bold text-sm md:text-base
                       transition-all duration-200 transform hover:scale-105
+                      flex items-center gap-2
                       ${isActive('/create')
                         ? 'bg-white text-blue-500 shadow-lg'
                         : 'bg-blue-600 text-white hover:bg-blue-700'
                       }
                     `}
                   >
-                    ✨ Create
+                    <i className="ri-magic-line"></i> Create
                   </Link>
                 </li>
 
@@ -91,13 +93,14 @@ function Layout({ children }: LayoutProps) {
                     className={`
                       px-4 py-2 rounded-full font-bold text-sm md:text-base
                       transition-all duration-200 transform hover:scale-105
+                      flex items-center gap-2
                       ${isActive('/gallery')
                         ? 'bg-white text-green-500 shadow-lg'
                         : 'bg-green-600 text-white hover:bg-green-700'
                       }
                     `}
                   >
-                    📚 My Pokémon
+                    <i className="ri-book-line"></i> My Pokémon
                   </Link>
                 </li>
 
@@ -105,9 +108,9 @@ function Layout({ children }: LayoutProps) {
                 <li>
                   <button
                     onClick={handleLogout}
-                    className="px-4 py-2 rounded-full font-bold text-sm md:text-base bg-gray-600 text-white hover:bg-gray-700 transition-all duration-200 transform hover:scale-105"
+                    className="px-4 py-2 rounded-full font-bold text-sm md:text-base bg-gray-600 text-white hover:bg-gray-700 transition-all duration-200 transform hover:scale-105 flex items-center gap-2"
                   >
-                    🚪 Log Out
+                    <i className="ri-logout-box-line"></i> Log Out
                   </button>
                 </li>
               </ul>
@@ -124,8 +127,8 @@ function Layout({ children }: LayoutProps) {
       {/* FOOTER */}
       <footer className="bg-gray-800 text-white py-6 mt-auto">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-sm">
-            Made with ❤️
+          <p className="text-sm flex items-center justify-center gap-2">
+            Made with <i className="ri-heart-line text-red-500"></i>
           </p>
           <p className="text-xs text-gray-400 mt-2">
             PokéMaker - Create your own Pokémon adventures!

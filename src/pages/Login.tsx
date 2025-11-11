@@ -87,25 +87,26 @@ function Login() {
 
             {/* Error Message */}
             {error && (
-              <div className="bg-red-50 border-2 border-red-400 rounded-lg p-4 text-red-700 text-center">
-                <span className="font-bold">⚠️ {error}</span>
+              <div className="bg-red-50 border-2 border-red-400 rounded-lg p-4 text-red-700 text-center flex items-center justify-center gap-2">
+                <i className="ri-alert-line"></i>
+                <span className="font-bold">{error}</span>
               </div>
             )}
 
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full btn-pokemon text-xl py-4"
+              className="w-full btn-pokemon text-xl py-4 flex items-center justify-center gap-2"
             >
-              🚀 Log In
+              <i className="ri-rocket-line"></i> Log In
             </button>
           </form>
 
           {/* Helpful Message */}
           <div className="mt-8 text-center">
             <div className="bg-blue-50 rounded-lg p-4">
-              <p className="text-sm text-blue-800">
-                💡 <strong>First time?</strong> Use your username and password!
+              <p className="text-sm text-blue-800 flex items-center justify-center gap-2">
+                <i className="ri-lightbulb-line"></i> <strong>First time?</strong> Use your username and password!
               </p>
             </div>
           </div>
