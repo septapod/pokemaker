@@ -97,14 +97,16 @@ export async function generatePokemonImageWithVision(
     // Combine the analyzed visual description with any user-provided description
     let generationPrompt = AI_IMAGE_PROMPT_TEMPLATE;
 
-    // Add physical appearance from vision analysis
+    // Add physical appearance from vision analysis (truncate if needed)
     if (analysis.description) {
-      generationPrompt += `\n\nVisual appearance and characteristics: ${analysis.description}`;
+      const truncatedDescription = analysis.description.substring(0, 300);
+      generationPrompt += `\n\nVisual appearance: ${truncatedDescription}`;
     }
 
     // Add/emphasize user's custom description
     if (userDescription) {
-      generationPrompt += `\n\nAdditional details from user: ${userDescription}`;
+      const truncatedUserDesc = userDescription.substring(0, 200);
+      generationPrompt += `\n\nUser description: ${truncatedUserDesc}`;
     }
 
     // Step 4: Generate a new Pokémon image using DALL-E based on the analysis
