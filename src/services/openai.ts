@@ -93,17 +93,26 @@ export async function generatePokemonImageWithVision(
     // Step 3: Build simplified prompt like the old working version
     console.log('Visual analysis from drawing:', analysis.visualDescription);
 
-    // Build final prompt combining analysis and user description
-    // Keep it concise to stay well under 500 char limit
-    let finalPrompt = `Cute, friendly fantasy creature: ${analysis.visualDescription}`;
+    // Build final prompt using the old working structure
+    let finalPrompt = `Create a cute fantasy creature with these exact physical features:
 
-    // Add user's custom description if provided (with space management)
-    if (userDescription && finalPrompt.length + userDescription.length < 350) {
-      finalPrompt += ` The creator says: ${userDescription}`;
+${analysis.visualDescription}`;
+
+    // Add user's custom description if provided
+    if (userDescription) {
+      finalPrompt += `\n${userDescription}`;
     }
 
-    // Add style guidance - simple creature illustration ONLY
-    finalPrompt += ` Simple creature illustration, watercolor anime style, soft organic linework. Plain white background. JUST the creature character, NOTHING ELSE. No backgrounds, no effects, no speed lines, no stars, no decorations, no text, no labels, no clothing, no accessories.`;
+    // Add style and absolute requirements (matching old working format)
+    finalPrompt += `\n\nArt style: Anime/manga style, bold outlines, vibrant colors, white background, front-facing view.
+
+ABSOLUTE REQUIREMENTS - NO EXCEPTIONS:
+- ZERO text anywhere in the image
+- ZERO words, letters, or labels of any kind
+- ZERO decorative elements or backgrounds
+- ZERO speed lines, stars, or effects
+- ONLY draw the creature itself - nothing else
+- Pure visual illustration with no written content whatsoever`;
 
     // Safety check - should never exceed now, but just in case
     if (finalPrompt.length > 500) {

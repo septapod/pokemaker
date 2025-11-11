@@ -65,36 +65,25 @@ export default async function handler(
             },
             {
               type: 'text',
-              text: `This is a drawing for a family-friendly creature creation app. Analyze this drawing and describe what you see LITERALLY and ACCURATELY, using positive, whimsical language.
+              text: `Describe ONLY the physical, visual characteristics of this creature drawing. Focus on what you can SEE, not concepts or personality.
 
-CRITICAL: If the drawing looks like a BODY PART (nose, ear, eye, mouth, etc.), describe it as that body part literally. Be accurate first, whimsical second.
+Describe these VISUAL details:
+- Overall body shape (round, oval, angular, etc.)
+- Size proportions (head to body ratio, limb sizes)
+- Physical features (number and shape of eyes, limbs, appendages)
+- Colors (specific shades, where each color appears)
+- Surface texture (smooth, fuzzy, scaly, rough)
+- Patterns or markings (stripes, spots, gradients)
+- Facial features (eye shape, mouth shape, nose if any)
 
-Focus on:
-- Accurate identification of shapes (if it looks like a nose, call it a nose)
-- Colors (bright, cheerful)
-- Key features (feet, legs, wings, tail, etc.)
-- Use positive, friendly language
-
-CRITICAL RULES:
-- NEVER mention what is missing ("no eyes", "without arms")
-- ONLY describe what IS visible
-- Be LITERAL about unusual shapes (giant nose = "giant nose", not "bean-shaped")
-
-GOOD examples:
-- "Giant nose with tiny feet" ✓
-- "Large ear with stubby legs" ✓
-- "Oval body with playful feet" ✓
-
-BAD examples:
-- "Bean-shaped creature with big nose" ❌ (should be "giant nose with feet")
-- "Round body, no eyes or arms" ❌ (never mention what's missing)
+Provide a purely visual, physical description with NO personality traits, NO elemental types, NO mood descriptions, NO abstract concepts. Just describe what the creature physically looks like.
 
 Return ONLY valid JSON:
 {
-  "visualDescription": "concise, accurate, positive description"
+  "visualDescription": "detailed physical visual description"
 }
 
-Keep under 120 characters. Be accurate and literal while staying positive.`,
+Keep under 200 characters but be thorough about physical details.`,
             },
           ],
         },
@@ -126,9 +115,9 @@ Keep under 120 characters. Be accurate and literal while staying positive.`,
       throw new Error('Invalid response structure from GPT-4o Vision - missing visualDescription');
     }
 
-    // Truncate description to ensure it doesn't exceed limits (keep under 120 for combined prompt)
-    if (analysis.visualDescription.length > 120) {
-      analysis.visualDescription = analysis.visualDescription.substring(0, 117) + '...';
+    // Truncate description to ensure it doesn't exceed limits (keep under 200 for combined prompt)
+    if (analysis.visualDescription.length > 200) {
+      analysis.visualDescription = analysis.visualDescription.substring(0, 197) + '...';
     }
 
     return response.status(200).json(analysis);
