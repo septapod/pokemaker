@@ -61,7 +61,7 @@ Focus on these family-friendly aspects:
 - Unique characteristics that make it special
 ${userDescription ? `The young creator says: "${userDescription}"` : ''}
 
-Provide a detailed, positive description for creating a professional, kid-friendly fantasy creature illustration suitable for all ages in an anime/manga art style.`;
+Provide a concise 2-3 sentence description (maximum 250 characters) for creating a professional, kid-friendly fantasy creature illustration suitable for all ages in an anime/manga art style. Be brief and direct.`;
 
     // Call GPT-4o with Vision to analyze the Pokémon image
     const analysisResponse = await openai.chat.completions.create({
@@ -83,7 +83,7 @@ Provide a detailed, positive description for creating a professional, kid-friend
           ],
         },
       ],
-      max_tokens: 500,
+      max_tokens: 150,
     });
 
     const content = analysisResponse.choices[0]?.message?.content;
@@ -91,9 +91,15 @@ Provide a detailed, positive description for creating a professional, kid-friend
       throw new Error('No response from GPT-4o Vision');
     }
 
+    // Truncate to 250 chars to prevent overly long descriptions
+    let description = content.trim();
+    if (description.length > 250) {
+      description = description.substring(0, 247) + '...';
+    }
+
     // Return plain text description (not JSON format - from working version)
     const analysis: AnalyzeImageResponse = {
-      visualDescription: content.trim(),
+      visualDescription: description,
     };
 
     return response.status(200).json(analysis);
