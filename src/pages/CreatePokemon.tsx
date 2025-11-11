@@ -64,9 +64,6 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
-  // Watch imageDescription from form
-  const formImageDescription = watch('imageDescription') || '';
-
   // Load image state from localStorage on mount
   useEffect(() => {
     const savedImageState = localStorage.getItem('pokemonImageState');
