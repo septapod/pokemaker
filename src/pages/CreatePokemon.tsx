@@ -1246,10 +1246,10 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
             <button
               type="button"
               onClick={handleGenerateImage}
-              disabled={!uploadedImage || isGeneratingImage}
+              disabled={(!uploadedImage && !uploadedImagePreview) || isGeneratingImage}
               className={`
                 w-full py-4 rounded-lg font-bold text-xl transition-all
-                ${uploadedImage && !isGeneratingImage
+                ${(uploadedImage || uploadedImagePreview) && !isGeneratingImage
                   ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:shadow-xl transform hover:scale-105'
                   : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }
