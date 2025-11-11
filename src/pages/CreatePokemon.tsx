@@ -25,6 +25,7 @@ import {
   STAT_MIN,
   STAT_MAX,
   DEFAULT_EGG_CYCLES,
+  TYPE_ICONS,
 } from '../utils/constants';
 
 // Props for this component
@@ -520,17 +521,39 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               <label className="block font-bold text-gray-700 mb-2">
                 Primary Type *
               </label>
-              <select
-                {...register('typePrimary')}
-                className="input-field"
-              >
+              <div className="relative">
+                <select
+                  {...register('typePrimary')}
+                  className="input-field pr-10"
+                />
+                {watch('typePrimary') && (
+                  <div className="absolute right-3 top-2 pointer-events-none text-2xl">
+                    <i className={`${TYPE_ICONS[watch('typePrimary') as any]}`}></i>
+                  </div>
+                )}
+                <datalist id="primaryTypes">
+                  {POKEMON_TYPES.map((type) => (
+                    <option key={type} value={type} />
+                  ))}
+                </datalist>
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
                 {POKEMON_TYPES.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
+                  <button
+                    key={type}
+                    type="button"
+                    onClick={() => setValue('typePrimary', type)}
+                    className={`px-3 py-1 rounded-lg font-semibold text-sm flex items-center gap-1 transition-all ${
+                      watch('typePrimary') === type
+                        ? 'bg-blue-500 text-white shadow-lg'
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                  >
+                    <i className={`${TYPE_ICONS[type]} text-lg`}></i> {type}
+                  </button>
                 ))}
-              </select>
-              <p className="text-sm text-gray-500 mt-1">
+              </div>
+              <p className="text-sm text-gray-500 mt-2">
                 The main elemental type that determines battle mechanics. Example: Fairy, Fire, Water, Grass, Electric. Required.
               </p>
             </div>
@@ -540,18 +563,45 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               <label className="block font-bold text-gray-700 mb-2">
                 Secondary Type
               </label>
-              <select
-                {...register('typeSecondary')}
-                className="input-field"
-              >
-                <option value="">None</option>
+              <div className="relative">
+                <select
+                  {...register('typeSecondary')}
+                  className="input-field pr-10"
+                />
+                {watch('typeSecondary') && (
+                  <div className="absolute right-3 top-2 pointer-events-none text-2xl">
+                    <i className={`${TYPE_ICONS[watch('typeSecondary') as any]}`}></i>
+                  </div>
+                )}
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setValue('typeSecondary', '')}
+                  className={`px-3 py-1 rounded-lg font-semibold text-sm transition-all ${
+                    watch('typeSecondary') === ''
+                      ? 'bg-blue-500 text-white shadow-lg'
+                      : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                  }`}
+                >
+                  None
+                </button>
                 {POKEMON_TYPES.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
+                  <button
+                    key={type}
+                    type="button"
+                    onClick={() => setValue('typeSecondary', type)}
+                    className={`px-3 py-1 rounded-lg font-semibold text-sm flex items-center gap-1 transition-all ${
+                      watch('typeSecondary') === type
+                        ? 'bg-blue-500 text-white shadow-lg'
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                  >
+                    <i className={`${TYPE_ICONS[type]} text-lg`}></i> {type}
+                  </button>
                 ))}
-              </select>
-              <p className="text-sm text-gray-500 mt-1">
+              </div>
+              <p className="text-sm text-gray-500 mt-2">
                 An optional second elemental type some Pokémon have. Example: Charizard is Fire/Flying, Gyarados is Water/Flying. Optional.
               </p>
             </div>

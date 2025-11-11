@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getAllPokemon } from '../services/supabase';
 import type { Pokemon } from '../types/pokemon.types';
-import { TYPE_COLORS } from '../utils/constants';
+import { TYPE_COLORS, TYPE_ICONS } from '../utils/constants';
 
 type SortOption = 'alphabetical' | 'newest' | 'oldest';
 
@@ -236,16 +236,18 @@ function Gallery() {
               {/* Type Badges */}
               <div className="flex gap-2 flex-wrap">
                 <span
-                  className="px-3 py-1 rounded-full text-white text-sm font-bold"
+                  className="px-3 py-1 rounded-full text-white text-sm font-bold flex items-center gap-1"
                   style={{ backgroundColor: TYPE_COLORS[p.typePrimary] }}
                 >
+                  <i className={`${TYPE_ICONS[p.typePrimary]}`}></i>
                   {p.typePrimary}
                 </span>
                 {p.typeSecondary && (
                   <span
-                    className="px-3 py-1 rounded-full text-white text-sm font-bold"
+                    className="px-3 py-1 rounded-full text-white text-sm font-bold flex items-center gap-1"
                     style={{ backgroundColor: TYPE_COLORS[p.typeSecondary] }}
                   >
+                    <i className={`${TYPE_ICONS[p.typeSecondary]}`}></i>
                     {p.typeSecondary}
                   </span>
                 )}

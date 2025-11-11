@@ -9,7 +9,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getPokemonById, deletePokemon, getPokemonByName } from '../services/supabase';
 import type { Pokemon } from '../types/pokemon.types';
-import { TYPE_COLORS } from '../utils/constants';
+import { TYPE_COLORS, TYPE_ICONS } from '../utils/constants';
 
 function PokemonDetail() {
   // Get the Pokémon ID from the URL (e.g., /pokemon/123)
@@ -210,16 +210,18 @@ function PokemonDetail() {
             {/* Types */}
             <div className="flex gap-3 mb-4 justify-center md:justify-start">
               <span
-                className="px-4 py-2 rounded-full text-white font-bold text-lg shadow-lg"
+                className="px-4 py-2 rounded-full text-white font-bold text-lg shadow-lg flex items-center gap-2"
                 style={{ backgroundColor: TYPE_COLORS[pokemon.typePrimary] }}
               >
+                <i className={`${TYPE_ICONS[pokemon.typePrimary]} text-xl`}></i>
                 {pokemon.typePrimary}
               </span>
               {pokemon.typeSecondary && (
                 <span
-                  className="px-4 py-2 rounded-full text-white font-bold text-lg shadow-lg"
+                  className="px-4 py-2 rounded-full text-white font-bold text-lg shadow-lg flex items-center gap-2"
                   style={{ backgroundColor: TYPE_COLORS[pokemon.typeSecondary] }}
                 >
+                  <i className={`${TYPE_ICONS[pokemon.typeSecondary]} text-xl`}></i>
                   {pokemon.typeSecondary}
                 </span>
               )}

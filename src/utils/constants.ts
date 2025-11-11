@@ -136,3 +136,25 @@ export const TYPE_COLORS: Record<PokemonType, string> = {
   'Steel': '#B8B8D0',
   'Fairy': '#EE99AC'
 };
+
+// Type icons for visual display (Remix Icons)
+export const TYPE_ICONS: Record<PokemonType, string> = {
+  'Normal': 'ri-circle-line',
+  'Fire': 'ri-fire-line',
+  'Water': 'ri-drop-line',
+  'Electric': 'ri-flashlight-line',
+  'Grass': 'ri-leaf-line',
+  'Ice': 'ri-snowy-line',
+  'Fighting': 'ri-boxing-line',
+  'Poison': 'ri-flask-line',
+  'Ground': 'ri-earth-line',
+  'Flying': 'ri-flight-takeoff-line',
+  'Psychic': 'ri-brain-line',
+  'Bug': 'ri-bug-line',
+  'Rock': 'ri-stone-line',
+  'Ghost': 'ri-ghost-line',
+  'Dragon': 'ri-dragon-line',
+  'Dark': 'ri-moon-line',
+  'Steel': 'ri-hammer-line',
+  'Fairy': 'ri-star-smile-line'
+};
