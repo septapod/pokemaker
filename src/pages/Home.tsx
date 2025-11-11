@@ -24,7 +24,7 @@ function Home() {
       <div className="grid md:grid-cols-2 gap-6 mb-12">
         {/* Create New Pokémon Button */}
         <Link to="/create">
-          <div className="bg-gradient-to-br from-blue-400 to-purple-500 rounded-3xl p-8 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 cursor-pointer">
+          <div className="bg-gradient-to-br from-blue-400 to-purple-500 rounded-3xl p-8 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 cursor-pointer min-h-64 flex items-center justify-center">
             <div className="text-center text-white">
               <div className="text-6xl mb-4"><i className="ri-magic-line text-white"></i></div>
               <h3 className="text-3xl font-bold mb-2">Create New</h3>
@@ -37,7 +37,7 @@ function Home() {
 
         {/* View Gallery Button */}
         <Link to="/gallery">
-          <div className="bg-gradient-to-br from-green-400 to-teal-500 rounded-3xl p-8 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 cursor-pointer">
+          <div className="bg-gradient-to-br from-green-400 to-teal-500 rounded-3xl p-8 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 cursor-pointer min-h-64 flex items-center justify-center">
             <div className="text-center text-white">
               <div className="text-6xl mb-4"><i className="ri-book-line text-white"></i></div>
               <h3 className="text-3xl font-bold mb-2">My Pokémon</h3>
