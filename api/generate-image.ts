@@ -60,9 +60,10 @@ export default async function handler(
     }
 
     // Call DALL-E 3 to generate image
+    // Pass the description directly - it's already properly formatted by the frontend
     const imageResponse = await openai.images.generate({
       model: 'dall-e-3',
-      prompt: `Generate a detailed, creative Pokémon character design based on this description: ${description}. The design should be original, colorful, and suitable as a Pokémon. Include clear features that distinguish it from other Pokémon.`,
+      prompt: description,
       n: 1,
       size: '1024x1024',
       quality: 'standard',

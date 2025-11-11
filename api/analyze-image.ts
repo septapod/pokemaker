@@ -65,16 +65,20 @@ export default async function handler(
             },
             {
               type: 'text',
-              text: `This is a child's drawing for a Pokemon-style creature. Describe ONLY the visual features you see in a concise, positive way.
+              text: `This is a drawing for a family-friendly creature creation app. Analyze this cute creature drawing and describe what you see in a whimsical, positive way that emphasizes charm.
 
-Focus on: body shape, colors, key features (wings, tail, ears, etc).
+Focus on these friendly aspects:
+- Overall shape (cute, friendly characteristics like "round", "bean-shaped", "oval")
+- Colors (bright, cheerful)
+- Key features (ears, tail, wings, feet, etc.) described positively
+- Cheerful personality traits
 
 Return ONLY valid JSON:
 {
-  "visualDescription": "concise visual description"
+  "visualDescription": "concise, positive visual description using whimsical language"
 }
 
-Keep under 200 characters. Be specific but brief.`,
+Keep under 180 characters. Use friendly, imaginative language that emphasizes cuteness. Describe what IS present, not what's missing.`,
             },
           ],
         },
@@ -106,9 +110,9 @@ Keep under 200 characters. Be specific but brief.`,
       throw new Error('Invalid response structure from GPT-4o Vision - missing visualDescription');
     }
 
-    // Truncate description to ensure it doesn't exceed limits (keep under 200 for combined prompt)
-    if (analysis.visualDescription.length > 200) {
-      analysis.visualDescription = analysis.visualDescription.substring(0, 197) + '...';
+    // Truncate description to ensure it doesn't exceed limits (keep under 180 for combined prompt)
+    if (analysis.visualDescription.length > 180) {
+      analysis.visualDescription = analysis.visualDescription.substring(0, 177) + '...';
     }
 
     return response.status(200).json(analysis);

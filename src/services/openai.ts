@@ -95,27 +95,28 @@ export async function generatePokemonImageWithVision(
 
     // Build final prompt combining analysis and user description
     // Keep it concise to stay well under 500 char limit
-    let finalPrompt = `Cute fantasy creature: ${analysis.visualDescription}`;
+    let finalPrompt = `Cute, friendly fantasy creature: ${analysis.visualDescription}`;
 
     // Add user's custom description if provided (with space management)
-    if (userDescription && finalPrompt.length + userDescription.length < 420) {
-      finalPrompt += ` ${userDescription}`;
+    if (userDescription && finalPrompt.length + userDescription.length < 350) {
+      finalPrompt += ` The creator says: ${userDescription}`;
     }
 
-    // Add essential style guidance (keep very brief)
-    finalPrompt += ` Pokemon anime style, bold outlines, vibrant colors, white background.`;
+    // Add essential style guidance with anti-text instructions
+    finalPrompt += ` Anime/manga art style with bold outlines, vibrant saturated colors, white background, front-facing view. NO text, NO labels, NO watermarks.`;
 
     // Safety check - should never exceed now, but just in case
     if (finalPrompt.length > 500) {
       console.warn('Prompt too long, truncating from', finalPrompt.length);
       // Truncate the visual description portion only, preserve style ending
-      const maxDescLength = 400 - (userDescription ? userDescription.length : 0);
+      const styleEnding = ` Anime/manga art style with bold outlines, vibrant saturated colors, white background, front-facing view. NO text, NO labels, NO watermarks.`;
+      const maxDescLength = 480 - styleEnding.length - (userDescription ? userDescription.length + 18 : 0);
       const truncatedDesc = analysis.visualDescription.substring(0, maxDescLength);
-      finalPrompt = `Cute fantasy creature: ${truncatedDesc}`;
+      finalPrompt = `Cute, friendly fantasy creature: ${truncatedDesc}`;
       if (userDescription) {
-        finalPrompt += ` ${userDescription}`;
+        finalPrompt += ` The creator says: ${userDescription}`;
       }
-      finalPrompt += ` Pokemon anime style, bold outlines, vibrant colors, white background.`;
+      finalPrompt += styleEnding;
     }
 
     console.log('Generating new Pokémon image from analyzed drawing...');
