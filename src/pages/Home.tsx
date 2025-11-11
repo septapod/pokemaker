@@ -61,8 +61,8 @@ function Home() {
               1
             </div>
             <div>
-              <h4 className="font-bold text-lg">Give Your Pokémon a Name</h4>
-              <p className="text-gray-700">Choose a cool name and pick its types (Fire, Water, Grass, etc.)</p>
+              <h4 className="font-bold text-lg">Create Your Pokémon</h4>
+              <p className="text-gray-700">Name it, pick types, set stats, and add details.</p>
             </div>
           </div>
 
@@ -71,28 +71,8 @@ function Home() {
               2
             </div>
             <div>
-              <h4 className="font-bold text-lg">Add Stats & Details</h4>
-              <p className="text-gray-700">Set its HP, Attack, Defense, and special abilities!</p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-4">
-            <div className="bg-green-500 text-white font-bold text-xl w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
-              3
-            </div>
-            <div>
               <h4 className="font-bold text-lg">Upload Your Drawing</h4>
-              <p className="text-gray-700">Take a photo of your drawing and let the magic create amazing art!</p>
-            </div>
-          </div>
-
-          <div className="flex items-start gap-4">
-            <div className="bg-purple-500 text-white font-bold text-xl w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0">
-              4
-            </div>
-            <div>
-              <h4 className="font-bold text-lg">Save & Show Off!</h4>
-              <p className="text-gray-700">Your Pokémon is saved and ready to share with friends!</p>
+              <p className="text-gray-700">Draw it, snap a photo, and upload it to transform into art.</p>
             </div>
           </div>
         </div>
