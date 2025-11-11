@@ -97,7 +97,7 @@ export async function generatePokemonImageWithVision(
 
 ${analysis.visualDescription}
 
-Style: Anime/manga/Japanese art style with bold outlines, vibrant colors, white background, front-facing view.
+Style: Anime/manga/Japanese art style with bold outlines, Soft watercolor anime aesthetic with Japanese folklore creatures, vibrant colors, white background, front-facing view.
 
 Other style elements include:
 - Linework: Clean, thick black outlines; rounded corners; minimal internal hatching.
