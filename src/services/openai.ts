@@ -94,21 +94,28 @@ export async function generatePokemonImageWithVision(
     console.log('Visual analysis from drawing:', analysis.visualDescription);
 
     // Build final prompt combining analysis and user description
-    let finalPrompt = `Create a cute fantasy creature character with these specific visual characteristics:
+    // Keep it concise to stay well under 500 char limit
+    let finalPrompt = `Cute fantasy creature: ${analysis.visualDescription}`;
 
-${analysis.visualDescription}`;
-
-    // Add user's custom description if provided
-    if (userDescription) {
-      finalPrompt += `\n\nAdditional details: ${userDescription}`;
+    // Add user's custom description if provided (with space management)
+    if (userDescription && finalPrompt.length + userDescription.length < 420) {
+      finalPrompt += ` ${userDescription}`;
     }
 
-    finalPrompt += `\n\nStyle: Anime/manga art style with bold outlines, vibrant colors, white background, front-facing view. IMPORTANT: Generate ONLY the character illustration. Do NOT include any text, labels, or watermarks.`;
+    // Add essential style guidance (keep very brief)
+    finalPrompt += ` Pokemon anime style, bold outlines, vibrant colors, white background.`;
 
-    // Ensure we don't exceed backend limit
+    // Safety check - should never exceed now, but just in case
     if (finalPrompt.length > 500) {
       console.warn('Prompt too long, truncating from', finalPrompt.length);
-      finalPrompt = finalPrompt.substring(0, 497) + '...';
+      // Truncate the visual description portion only, preserve style ending
+      const maxDescLength = 400 - (userDescription ? userDescription.length : 0);
+      const truncatedDesc = analysis.visualDescription.substring(0, maxDescLength);
+      finalPrompt = `Cute fantasy creature: ${truncatedDesc}`;
+      if (userDescription) {
+        finalPrompt += ` ${userDescription}`;
+      }
+      finalPrompt += ` Pokemon anime style, bold outlines, vibrant colors, white background.`;
     }
 
     console.log('Generating new Pokémon image from analyzed drawing...');

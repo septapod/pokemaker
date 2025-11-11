@@ -65,19 +65,16 @@ export default async function handler(
             },
             {
               type: 'text',
-              text: `This is a child's drawing for a family-friendly creature creation app. Analyze this cute creature drawing and describe what you see in a positive, child-appropriate way.
+              text: `This is a child's drawing for a Pokemon-style creature. Describe ONLY the visual features you see in a concise, positive way.
 
-Focus on these family-friendly aspects:
-- Body shape and features (cute, friendly characteristics)
-- Colors (bright, cheerful)
-- Unique characteristics that make it special
+Focus on: body shape, colors, key features (wings, tail, ears, etc).
 
-Provide a detailed, positive description for creating a professional, kid-friendly fantasy creature illustration. Return ONLY valid JSON:
+Return ONLY valid JSON:
 {
-  "visualDescription": "detailed positive description of the creature's appearance"
+  "visualDescription": "concise visual description"
 }
 
-Be descriptive but keep it under 300 characters.`,
+Keep under 200 characters. Be specific but brief.`,
             },
           ],
         },
@@ -109,9 +106,9 @@ Be descriptive but keep it under 300 characters.`,
       throw new Error('Invalid response structure from GPT-4o Vision - missing visualDescription');
     }
 
-    // Truncate description to ensure it doesn't exceed limits
-    if (analysis.visualDescription.length > 300) {
-      analysis.visualDescription = analysis.visualDescription.substring(0, 297) + '...';
+    // Truncate description to ensure it doesn't exceed limits (keep under 200 for combined prompt)
+    if (analysis.visualDescription.length > 200) {
+      analysis.visualDescription = analysis.visualDescription.substring(0, 197) + '...';
     }
 
     return response.status(200).json(analysis);
