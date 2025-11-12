@@ -1,38 +1,44 @@
 # PokéMaker - Project Status
 
-**Last Updated**: November 11, 2025 (Evening)
-**Current Phase**: Awaiting Deployment (Vercel Quota Reset)
-**Overall Progress**: 99% (Code Complete, Deployment Blocked)
+**Last Updated**: November 12, 2025 (Early Morning)
+**Current Phase**: ✅ FULLY OPERATIONAL
+**Overall Progress**: 100% (MVP Complete & Deployed)
 
 ---
 
 ## 🚨 CURRENT STATUS - READ THIS FIRST
 
-### Deployment Blocker
-**Vercel Free Tier Limit Hit**: 100 deployments/day exceeded. Reset in ~3 hours from 7:30 PM.
+### ✅ FULLY WORKING - ALL SYSTEMS OPERATIONAL
 
-### Latest Commits (READY BUT NOT DEPLOYED)
-- `1bd3fd8` - Trigger Vercel deployment (latest)
-- `772072f` - Fix image restoration from localStorage
-- `dab0452` - Fix TypeScript build error blocking deployments
-- `e53a5e5` - Updated prompts (reverted to this base)
+### Latest Deployment
+- **Production URL**: https://pokemaker.vercel.app
+- **Latest Commit**: `8962917` - Fix gpt-image-1 model integration
+- **Deployment Status**: ✅ Successfully deployed and tested
+- **Image Generation**: ✅ Working with GPT-4o (gpt-image-1 model)
 
-### Production vs Code State
-- **Production (pokemaker.vercel.app)**: Running commit `babfe7e` (old, has broken API from text-to-pokemon attempt)
-- **GitHub main branch**: Commit `1bd3fd8` (has all fixes, ready to deploy)
-- **Working Directory**: Clean, up to date with GitHub
+### Recent Commits (ALL DEPLOYED)
+- `8962917` - Fix gpt-image-1 model integration for image generation (LATEST)
+- `33cf0b1` - Fix GPT-4o image generation to handle b64_json response
+- `9560b06` - Add debug logging to image generation endpoint
+- `6784623` - Fix image generation model: Use gpt-image-1 instead of gpt-4o
+- `286010d` - Previous working state (DALL-E 3)
 
 ### What Works Now
-✅ Local code has all fixes (TypeScript error, localStorage)
-❌ Production API is broken (404 from text-to-pokemon model)
-❌ Local dev can't test (calls broken production API)
+✅ GPT-4o image generation with gpt-image-1 model
+✅ Base64 image response handling (no CORS issues)
+✅ Image upload to Supabase Storage
+✅ Full Pokémon creation workflow
+✅ Gallery view with all images
+✅ localStorage persistence
+✅ All TypeScript errors resolved
 
-### Next Steps When Resuming
-1. **Wait for Vercel limit reset** (~3 hours from 7:30 PM)
-2. **Manually trigger deployment** in Vercel dashboard OR push any commit
-3. **Verify deployment** shows commit `1bd3fd8` or later
-4. **Test production** - image generation should work with DALL-E 3
-5. **Test localStorage** - images should persist after page refresh
+### System Status
+- **Frontend**: ✅ Working perfectly
+- **Backend API**: ✅ All endpoints operational
+- **Database**: ✅ Supabase connected
+- **Image Generation**: ✅ GPT-4o working
+- **Storage**: ✅ Supabase Storage working
+- **Deployment**: ✅ Vercel production stable
 
 ---
 
@@ -41,7 +47,7 @@
 PokéMaker is a web application for creating custom Pokémon with comprehensive details, upload drawings, and generate AI-powered Pokémon artwork. The app stores all creations in a Supabase database and provides an intuitive, child-friendly interface.
 
 **Target User**: Child who loves Pokémon
-**Tech Stack**: React + TypeScript + Vite + Supabase + OpenAI DALL-E 3 + GPT-4o Vision
+**Tech Stack**: React + TypeScript + Vite + Supabase + OpenAI GPT-4o Image Generation (gpt-image-1) + GPT-4o Vision
 
 ---
 
@@ -93,7 +99,7 @@ PokéMaker is a web application for creating custom Pokémon with comprehensive 
 - [x] Upload and store images in Supabase Storage
 
 ### Phase 5: Bug Fixes & Polish
-- [x] Fixed DALL-E 3 model name (was "gpt-image-1")
+- [x] Fixed image generation model (now using GPT-4o with gpt-image-1)
 - [x] Made AI image generation optional to prevent data loss
 - [x] Removed blocking validation preventing saves without AI image
 - [x] Fixed content policy violations (removed trademarked terms from prompts)
@@ -107,12 +113,17 @@ PokéMaker is a web application for creating custom Pokémon with comprehensive 
 - [x] Added loading states and animations
 - [x] Added success/error messages with specific details
 - [x] Mobile-responsive design
+- [x] Fixed CORS issues with base64 image delivery
+- [x] Fixed duplicate Pokémon creation bug
+- [x] Fixed localStorage blob URL restoration
+- [x] Migrated to GPT-4o image generation (gpt-image-1 model)
 
 ---
 
 ## 🚧 In Progress
 
-- [x] User testing - Creating "Egglet" Pokemon to test image generation and save functionality
+- [x] User testing completed - All core features working
+- [x] GPT-4o image generation integration complete
 
 ---
 
@@ -330,6 +341,42 @@ VITE_OPENAI_API_KEY=<your_openai_api_key>
   - Created `src/vite-env.d.ts` with TypeScript definitions for Vite env variables
   - Created `vercel.json` with build settings and SPA routing configuration
   - Created `VERCEL_DEPLOYMENT.md` with comprehensive deployment guide
+
+### Recently Fixed (November 12, 2025)
+
+#### GPT-4o Image Generation Model Integration (gpt-image-1)
+- ✅ **CRITICAL**: Fixed incorrect model usage for GPT-4o image generation
+  - **Root Cause**: Tried to use DALL-E 3 model, but user wanted GPT-4o image generation
+  - **Discovery**: GPT-4o image generation uses `gpt-image-1` model through OpenAI API
+  - **Issue 1**: Model parameter `gpt-4o` not valid for images endpoint (400 error)
+  - **Issue 2**: Unsupported `response_format` parameter caused 400 errors
+  - **Issue 3**: Frontend tried to fetch data URLs through server proxy (would fail)
+
+- ✅ **Technical Implementation**:
+  1. **api/generate-image.ts**: Changed model from `'gpt-4o'` to `'gpt-image-1'`
+  2. **api/generate-image.ts**: Removed unsupported `response_format` parameter
+  3. **api/generate-image.ts**: Extract `b64_json` from response (default format)
+  4. **api/generate-image.ts**: Convert base64 to data URL for frontend
+  5. **src/services/openai.ts**: Remove `fetchImageAsBase64()` proxy call
+  6. **src/services/openai.ts**: Extract base64 directly from data URL string
+  7. **src/services/openai.ts**: Fixed variable naming conflict (`generatedBase64Data`)
+  8. **src/services/openai.ts**: Removed unused import
+
+- ✅ **How gpt-image-1 Works**:
+  - Model returns images as `b64_json` by default (not `url`)
+  - Response format: `{ data: [{ b64_json: "iVBORw0KG..." }] }`
+  - Backend converts to data URL: `data:image/png;base64,<base64data>`
+  - Frontend receives data URL and extracts base64 for Supabase upload
+  - No external fetching needed = no CORS issues
+
+- ✅ **Impact**:
+  - GPT-4o image generation now works end-to-end
+  - Better image quality than DALL-E 3 (autoregressive model)
+  - Enhanced text rendering capabilities
+  - Better style transfer and reference image handling
+  - All images stored permanently in Supabase
+
+- **Commits**: `6784623`, `9560b06`, `33cf0b1`, `8962917`
 
 ### Recently Fixed (November 11, 2025)
 
