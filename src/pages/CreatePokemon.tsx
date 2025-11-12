@@ -59,7 +59,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
 
   // State for image upload and AI generation
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
-  const [uploadedImagePreview, setUploadedImagePreview] = useState<string>('');
+  const [uploadedImagePreview, setUploadedImagePreview] = useState<string>(existingPokemon?.originalDrawingUrl || '');
   const [aiGeneratedImage, setAiGeneratedImage] = useState<string>(existingPokemon?.aiGeneratedImageUrl || '');
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
 
@@ -68,11 +68,20 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
   const [saveError, setSaveError] = useState<string | null>(null);
 
   // Load image state from localStorage on mount
-  // Only restore if continuing an existing draft or editing an existing Pokemon
+  // Only restore if continuing a draft (NOT for edit mode - use database data for edits)
   useEffect(() => {
     const savedImageState = localStorage.getItem('pokemonImageState');
     console.log('Loading from localStorage:', savedImageState ? 'Found saved state' : 'No saved state');
     console.log('Edit mode:', editMode, 'Saved Pokemon ID:', savedPokemonId, 'Fresh creation:', isFreshCreation);
+
+    // If in edit mode, clear localStorage and trust database data
+    if (editMode && existingPokemon) {
+      console.log('Edit mode detected - clearing localStorage and using database data');
+      localStorage.removeItem('pokemonImageState');
+      // Use existingPokemon data which is already set in the initial state
+      // No need to restore from localStorage - trust the database
+      return;
+    }
 
     // If this is a fresh creation, clear localStorage and any stale state
     if (isFreshCreation) {
@@ -84,11 +93,11 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       return; // Don't restore anything
     }
 
-    // Only restore if in edit mode or if we have a savedPokemonId (continuing a draft)
-    if (savedImageState && (editMode || savedPokemonId)) {
+    // Only restore from localStorage for continuing a draft (NOT edit mode)
+    if (savedImageState && !editMode && savedPokemonId) {
       try {
         const { permanentUrl, generated } = JSON.parse(savedImageState);
-        console.log('Restoring images - Edit mode or continuing draft');
+        console.log('Restoring images - continuing draft');
         console.log('Restored permanent URL:', permanentUrl ? `${permanentUrl.substring(0, 50)}...` : 'none');
         console.log('Restored generated:', generated ? 'yes' : 'no');
         // Use permanent Supabase URL for preview (survives page refresh)
@@ -101,13 +110,19 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
         console.error('Failed to restore image state from localStorage', e);
       }
     }
-  }, [setValue, editMode, savedPokemonId, isFreshCreation]);
+  }, [setValue, editMode, savedPokemonId, isFreshCreation, existingPokemon]);
 
   // Save image state to localStorage whenever it changes
   // Store permanent Supabase URL, not blob URL, so it survives page refresh
-  // Only save if NOT a fresh creation, or if user has actually uploaded/generated images
+  // Only save for draft mode (new Pokemon), NOT for edit mode
   useEffect(() => {
     const originalDrawingUrl = watch('originalDrawingUrl');
+
+    // Don't save to localStorage when editing existing Pokemon (trust database)
+    if (editMode) {
+      console.log('Edit mode - not saving to localStorage (using database as source of truth)');
+      return;
+    }
 
     // Don't save if it's a fresh creation with no user-uploaded content
     if (isFreshCreation && !originalDrawingUrl && !aiGeneratedImage) {
@@ -127,7 +142,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
     };
     console.log('Saving to localStorage:', imageState);
     localStorage.setItem('pokemonImageState', JSON.stringify(imageState));
-  }, [watch('originalDrawingUrl'), aiGeneratedImage, watch, isFreshCreation]);
+  }, [watch('originalDrawingUrl'), aiGeneratedImage, watch, isFreshCreation, editMode]);
 
   // State for auto-save functionality
   const [autoSaveStatus, setAutoSaveStatus] = useState<'saved' | 'saving' | 'error'>('saved');
