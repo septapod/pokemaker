@@ -61,23 +61,23 @@ export default async function handler(
 
     // Call GPT-4o image generation via OpenAI API (uses gpt-image-1 model)
     // Pass the description directly - it's already properly formatted by the frontend
-    console.log('Calling OpenAI images.generate with model: gpt-image-1');
+    // Note: gpt-image-1 returns b64_json by default, not url
     const imageResponse = await openai.images.generate({
       model: 'gpt-image-1',
       prompt: description,
       n: 1,
       size: '1024x1024',
+      response_format: 'b64_json', // Explicitly request base64 format
     });
 
-    console.log('OpenAI response:', JSON.stringify(imageResponse, null, 2));
-    console.log('Response data array:', imageResponse.data);
-    console.log('First data item:', imageResponse.data[0]);
-
-    const imageUrl = imageResponse.data[0]?.url;
-    if (!imageUrl) {
-      console.error('No URL in response. Full response:', JSON.stringify(imageResponse, null, 2));
-      throw new Error('No image URL returned from image generation');
+    // GPT-4o image generation returns b64_json, not url
+    const base64Image = imageResponse.data[0]?.b64_json;
+    if (!base64Image) {
+      throw new Error('No image data returned from image generation');
     }
+
+    // Convert base64 to data URL for frontend
+    const imageUrl = `data:image/png;base64,${base64Image}`;
 
     return response.status(200).json({
       imageUrl,
