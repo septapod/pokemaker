@@ -50,22 +50,27 @@ export default async function handler(
       });
     }
 
-    // Build Vision prompt with user description inline (from working version)
-    const visionPrompt = `You are analyzing a simple line drawing. Your job is to describe ONLY 
-  what you literally see in the image - nothing more.
+    // Build Vision prompt optimized for DALL-E 3
+    // DALL-E 3 works well with character-based descriptions (NOT geometric)
+    const visionPrompt = `You are analyzing a drawing of a creature that will become a Pokemon. Describe what you see as a CHARACTER with features and body parts, NOT as geometric shapes.
 
   RULES:
-  - NO names, NO creative labels
-  - NO interpretive words like "delightful", "whimsical", "playful" 
-  - NO assumptions about what it represents
-  - ONLY describe: shapes, lines, curves, positions
-  - Keep it under 3 sentences
-  - Example: "A large curved shape with two thin lines extending downward, each ending in an 
-  oval."
+  - Target 15-20 words total
+  - Format as: "A [creature-type] Pokemon with [feature 1], [feature 2], and [feature 3]"
+  - Describe it as a CREATURE with body parts (head, body, legs, tail, wings, ears, eyes, mouth, etc.)
+  - Use natural language: "bird-like", "cat-like", "dragon-like", "hamster-like", "nose-shaped", etc.
+  - Mention 2-3 specific distinguishing features
+  - NO negative descriptions (don't say "lacks", "without", "missing", "no visible")
+  - NO geometric terms like "curved shape", "oval", "lines", "circular"
+  - NO interpretive words like "delightful", "whimsical", "playful"
+  - NO drawing style descriptions like "minimalist", "monochrome", "simple sketch"
+  - DO NOT describe HOW it's drawn, only WHAT the creature is
+  - Include the word "Pokemon" in your description
+  - Example: "A hamster-like Pokemon with oversized round glasses, large expressive eyes, and a chubby body"
 
   ${userDescription ? `Context from artist: "${userDescription}"` : ''}
 
-  Describe ONLY the visual you see:`;
+  Describe the Pokemon creature you see:`;
 
     // Call GPT-4o with Vision to analyze the Pokémon image
     const analysisResponse = await openai.chat.completions.create({

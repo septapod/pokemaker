@@ -90,31 +90,30 @@ export async function generatePokemonImageWithVision(
     console.log('Analyzing image via backend API...');
     const analysis = await analyzePokemonImage(base64Data, mediaType, userDescription);
 
-    // Step 3: Build final prompt using the working version format
+    // Step 3: Build final prompt for DALL-E 3
+    // DALL-E 3 can handle detailed prompts with style instructions
     console.log('Visual analysis from drawing:', analysis.visualDescription);
 
-    const finalPrompt = `Create a cute fantasy creature character with these specific visual characteristics... follow the description very very closely:
+    const finalPrompt = `Create a Pokemon character: ${analysis.visualDescription}
 
-${analysis.visualDescription}
+Style: Anime/manga art style, vibrant colors, cute and friendly design, white background, front-facing view.
 
-Style: In the style of Pokemon creatures. Anime/manga/Japanese art style with bold outlines, Soft watercolor anime aesthetic with Japanese folklore creatures, vibrant colors, white background, front-facing view. Keep it simple and cute.
-
-IMPORTANT: Generate ONLY the character illustration. Do NOT include any text, labels, watermarks, or written words in the image.`;
+IMPORTANT: Generate ONLY the character illustration. DO NOT include any text, labels, numbers, or watermarks in the image.`;
 
     console.log('Generating new Pokémon image from analyzed drawing...');
     console.log('Final prompt length:', finalPrompt.length);
-    console.log('Full prompt sent to DALL-E:', finalPrompt);
+    console.log('Sending to DALL-E 3:', finalPrompt);
     const imageResponse = await generateImage(finalPrompt);
 
     if (!imageResponse.imageUrl) {
       throw new Error('No image URL returned from image generation');
     }
 
-    // Step 5: Fetch the generated image via server-side proxy to avoid CORS
+    // Step 4: Fetch the generated image via server-side proxy to avoid CORS
     console.log('Converting generated image to base64...');
     const fetchResponse = await fetchImageAsBase64(imageResponse.imageUrl);
 
-    // The response already contains base64 data
+    // The response contains base64 data
     return fetchResponse.base64Data;
 
   } catch (error: any) {
