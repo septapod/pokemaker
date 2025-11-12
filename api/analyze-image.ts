@@ -57,6 +57,7 @@ export default async function handler(
   RULES:
   - Start with "A creature with..." to establish context
   - Use body part terms: head, body, eyes, legs, arms, tail, wings, antennae, mouth, teeth, etc.
+  - Describe colors if visible: green body, blue wings, red eyes, purple spots, etc.
   - Describe features accurately: large eyes, thin legs, round body, pointy ears, etc.
   - Allow simple visual metaphors when obvious: nose-shaped, egg-shaped, teardrop body, etc.
   - Target 25-35 words for clarity
