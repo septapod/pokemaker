@@ -53,17 +53,11 @@ export default async function handler(
     // Build Vision prompt - focus on ONLY physical, visual characteristics
     const visionPrompt = `Describe ONLY the physical, visual characteristics of this creature drawing. Focus on what you can SEE, not concepts or personality.
 
-  Describe these VISUAL details:
-  - Overall body shape (round, oval, angular, etc.)
-  - Size proportions (head to body ratio, limb sizes)
-  - Physical features (number and shape of eyes, limbs, appendages)
-  - Colors (specific shades, where each color appears)
-  - Surface texture (smooth, fuzzy, scaly, rough)
-  - Patterns or markings (stripes, spots, gradients)
-  - Facial features (eye shape, mouth shape, nose if any)
+  In 2-3 sentences, describe: the body shape and proportions, the physical features (eyes, limbs, appendages), the colors (specific shades and where they appear), any texture or patterns, and the facial features.
+
   ${userDescription ? `Creator's note: "${userDescription}"` : ''}
 
-  Provide a purely visual, physical description with NO personality traits, NO elemental types, NO mood descriptions, NO abstract concepts. Just describe what the creature physically looks like.`;
+  Provide a clear, flowing description with NO personality traits, NO elemental types, NO mood descriptions, NO abstract concepts. Just describe what the creature physically looks like.`;
 
     // Call GPT-4o with Vision to analyze the Pokémon image
     const analysisResponse = await openai.chat.completions.create({
