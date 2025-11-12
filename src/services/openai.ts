@@ -97,6 +97,7 @@ export async function generatePokemonImageWithVision(
     const finalPrompt = `Create a cute, family-friendly fantasy creature for a children's game with these exact physical features:
 
 ${analysis.visualDescription}
+${userDescription ? `User specified: ${userDescription}` : ''}
 
 Art style: Anime/manga style with bold outlines, Japanese monster-collecting game aesthetic (like Pokemon), vibrant saturated colors, white background, front-facing view.
 
