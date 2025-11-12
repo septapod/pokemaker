@@ -65,12 +65,17 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
   const [saveError, setSaveError] = useState<string | null>(null);
 
   // Load image state from localStorage on mount
+  // Only restore if continuing an existing draft or editing an existing Pokemon
   useEffect(() => {
     const savedImageState = localStorage.getItem('pokemonImageState');
     console.log('Loading from localStorage:', savedImageState ? 'Found saved state' : 'No saved state');
-    if (savedImageState) {
+    console.log('Edit mode:', editMode, 'Saved Pokemon ID:', savedPokemonId);
+
+    // Only restore if in edit mode or if we have a savedPokemonId (continuing a draft)
+    if (savedImageState && (editMode || savedPokemonId)) {
       try {
         const { permanentUrl, generated } = JSON.parse(savedImageState);
+        console.log('Restoring images - Edit mode or continuing draft');
         console.log('Restored permanent URL:', permanentUrl ? `${permanentUrl.substring(0, 50)}...` : 'none');
         console.log('Restored generated:', generated ? 'yes' : 'no');
         // Use permanent Supabase URL for preview (survives page refresh)
@@ -82,8 +87,10 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       } catch (e) {
         console.error('Failed to restore image state from localStorage', e);
       }
+    } else if (savedImageState && !editMode && !savedPokemonId) {
+      console.log('Skipping localStorage restore - starting fresh Pokemon creation');
     }
-  }, [setValue]);
+  }, [setValue, editMode, savedPokemonId]);
 
   // Save image state to localStorage whenever it changes
   // Store permanent Supabase URL, not blob URL, so it survives page refresh
@@ -245,6 +252,10 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
 
       // Link evolutions (create/find related Pokemon and link them)
       await linkEvolutions(finalPokemonId, pokemonData);
+
+      // Clear localStorage so next creation starts fresh
+      console.log('Pokemon saved successfully, clearing localStorage');
+      localStorage.removeItem('pokemonImageState');
 
       // Navigate to the Pokemon detail page
       navigate(`/pokemon/${finalPokemonId}`);

@@ -5,9 +5,18 @@
  * It welcomes Aza and provides big, colorful buttons to start creating!
  */
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Home() {
+  const navigate = useNavigate();
+
+  // Clear localStorage and navigate to create page
+  const handleCreateNew = () => {
+    console.log('Clearing localStorage before creating new Pokemon');
+    localStorage.removeItem('pokemonImageState');
+    navigate('/create');
+  };
+
   return (
     <div className="max-w-4xl mx-auto">
       {/* Welcome Section */}
@@ -23,17 +32,18 @@ function Home() {
       {/* Main Action Buttons */}
       <div className="grid md:grid-cols-2 gap-6 mb-12">
         {/* Create New Pokémon Button */}
-        <Link to="/create">
-          <div className="bg-gradient-to-br from-blue-400 to-purple-500 rounded-3xl p-8 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 cursor-pointer min-h-64 flex items-center justify-center">
-            <div className="text-center text-white">
-              <div className="text-6xl mb-4"><i className="ri-magic-line text-white"></i></div>
-              <h3 className="text-3xl font-bold mb-2">Create New</h3>
-              <p className="text-lg opacity-90">
-                Start making your own Pokémon from scratch!
-              </p>
-            </div>
+        <div
+          onClick={handleCreateNew}
+          className="bg-gradient-to-br from-blue-400 to-purple-500 rounded-3xl p-8 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 cursor-pointer min-h-64 flex items-center justify-center"
+        >
+          <div className="text-center text-white">
+            <div className="text-6xl mb-4"><i className="ri-magic-line text-white"></i></div>
+            <h3 className="text-3xl font-bold mb-2">Create New</h3>
+            <p className="text-lg opacity-90">
+              Start making your own Pokémon from scratch!
+            </p>
           </div>
-        </Link>
+        </div>
 
         {/* View Gallery Button */}
         <Link to="/gallery">
@@ -89,12 +99,12 @@ function Home() {
 
         {/* Big Start Button */}
         <div className="mt-8 text-center">
-          <Link
-            to="/create"
+          <button
+            onClick={handleCreateNew}
             className="inline-block bg-gradient-to-r from-red-500 to-yellow-400 text-white font-bold text-2xl px-12 py-4 rounded-full shadow-2xl hover:shadow-3xl transform hover:scale-110 transition-all duration-300 flex items-center justify-center gap-2"
           >
             Let's Create! <i className="ri-rocket-line"></i>
-          </Link>
+          </button>
         </div>
       </div>
     </div>
