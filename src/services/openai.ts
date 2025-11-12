@@ -6,7 +6,7 @@
  * secure, server-side API key management. The API key is NEVER exposed to the browser.
  *
  * Backend endpoints:
- * - POST /api/generate-image - Generate a Pokémon image using DALL-E 3
+ * - POST /api/generate-image - Generate a Pokémon image using GPT-4o image generation
  * - POST /api/analyze-image - Analyze a Pokémon image using GPT-4o Vision
  */
 
@@ -30,7 +30,7 @@ export async function generatePokemonImage(
 
     console.log('Generating Pokémon image via backend API...');
 
-    // Call backend API for image generation (uses DALL-E 3 server-side)
+    // Call backend API for image generation (uses GPT-4o image generation server-side)
     const response = await generateImage(prompt);
 
     if (!response.imageUrl) {
@@ -90,8 +90,8 @@ export async function generatePokemonImageWithVision(
     console.log('Analyzing image via backend API...');
     const analysis = await analyzePokemonImage(base64Data, mediaType, userDescription);
 
-    // Step 3: Build final prompt for DALL-E 3
-    // DALL-E 3 can handle detailed prompts with style instructions
+    // Step 3: Build final prompt for GPT-4o image generation
+    // GPT-4o can handle detailed prompts with style instructions
     console.log('Visual analysis from drawing:', analysis.visualDescription);
 
     const finalPrompt = `Create a cute, family-friendly fantasy creature for a children's game with these exact physical features:
@@ -119,7 +119,7 @@ ABSOLUTE REQUIREMENTS - NO EXCEPTIONS:
 
     console.log('Generating new Pokémon image from analyzed drawing...');
     console.log('Final prompt length:', finalPrompt.length);
-    console.log('Sending to DALL-E 3:', finalPrompt);
+    console.log('Sending to GPT-4o image generation:', finalPrompt);
     const imageResponse = await generateImage(finalPrompt);
 
     if (!imageResponse.imageUrl) {

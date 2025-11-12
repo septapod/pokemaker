@@ -59,10 +59,10 @@ export default async function handler(
       });
     }
 
-    // Call GPT-4o to generate image
+    // Call GPT-4o image generation via OpenAI API (uses gpt-image-1 model)
     // Pass the description directly - it's already properly formatted by the frontend
     const imageResponse = await openai.images.generate({
-      model: 'gpt-4o',
+      model: 'gpt-image-1',
       prompt: description,
       n: 1,
       size: '1024x1024',
@@ -70,7 +70,7 @@ export default async function handler(
 
     const imageUrl = imageResponse.data[0]?.url;
     if (!imageUrl) {
-      throw new Error('No image URL returned from GPT-4o');
+      throw new Error('No image URL returned from image generation');
     }
 
     return response.status(200).json({

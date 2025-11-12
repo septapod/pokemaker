@@ -99,7 +99,7 @@ export const DEFAULT_CATCH_RATE = 45;
 export const DEFAULT_BASE_FRIENDSHIP = 70;
 export const DEFAULT_EGG_CYCLES = 20;
 
-// Image generation prompt template for OpenAI
+// Image generation prompt template for OpenAI (GPT-4o image generation)
 export const AI_IMAGE_PROMPT_TEMPLATE = `Create a finished Pokemon-style creature character for a family-friendly game.
 
 Style: Cute anime creature in the style of Pokemon characters. Soft, rounded design with smooth shading and a cheerful appearance. Front-facing view on a clean white background.
