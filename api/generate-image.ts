@@ -66,7 +66,7 @@ export default async function handler(
       prompt: description,
       n: 1,
       size: '1024x1024',
-      quality: 'standard',
+      quality: 'hd',
     });
 
     const imageUrl = imageResponse.data[0]?.url;

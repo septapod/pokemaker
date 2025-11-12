@@ -94,11 +94,18 @@ export async function generatePokemonImageWithVision(
     // DALL-E 3 can handle detailed prompts with style instructions
     console.log('Visual analysis from drawing:', analysis.visualDescription);
 
-    const finalPrompt = `Create a cute fantasy creature with these exact physical features:
+    const finalPrompt = `Create a cute, family-friendly fantasy creature for a children's game with these exact physical features:
 
 ${analysis.visualDescription}
 
-Art style: Anime/manga style, bold outlines, vibrant colors, white background, front-facing view.
+Art style: Anime/manga style with bold outlines, Japanese monster-collecting game aesthetic (like Pokemon), vibrant saturated colors, white background, front-facing view.
+
+Design requirements:
+- Cute and friendly-looking
+- Professional, polished, and clean
+- Colorful and cheerful
+- Appropriate for all ages
+- Safe for children
 
 ABSOLUTE REQUIREMENTS - NO EXCEPTIONS:
 - ZERO text anywhere in the image
