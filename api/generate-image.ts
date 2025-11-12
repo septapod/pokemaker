@@ -61,6 +61,7 @@ export default async function handler(
 
     // Call GPT-4o image generation via OpenAI API (uses gpt-image-1 model)
     // Pass the description directly - it's already properly formatted by the frontend
+    console.log('Calling OpenAI images.generate with model: gpt-image-1');
     const imageResponse = await openai.images.generate({
       model: 'gpt-image-1',
       prompt: description,
@@ -68,8 +69,13 @@ export default async function handler(
       size: '1024x1024',
     });
 
+    console.log('OpenAI response:', JSON.stringify(imageResponse, null, 2));
+    console.log('Response data array:', imageResponse.data);
+    console.log('First data item:', imageResponse.data[0]);
+
     const imageUrl = imageResponse.data[0]?.url;
     if (!imageUrl) {
+      console.error('No URL in response. Full response:', JSON.stringify(imageResponse, null, 2));
       throw new Error('No image URL returned from image generation');
     }
 
