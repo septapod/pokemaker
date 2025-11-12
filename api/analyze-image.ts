@@ -50,26 +50,20 @@ export default async function handler(
       });
     }
 
-    // Build Vision prompt optimized for DALL-E 3
-    // Balance literal description with creature context
-    const visionPrompt = `You are analyzing a child's drawing that will become a Pokemon creature. Describe what you see as a CREATURE with body parts and features.
+    // Build Vision prompt - focus on ONLY physical, visual characteristics
+    const visionPrompt = `Describe ONLY the physical, visual characteristics of this creature drawing. Focus on what you can SEE, not concepts or personality.
 
-  ${userDescription ? `IMPORTANT: The artist describes this as: "${userDescription}"\nIncorporate these details (especially colors and features) into your description.` : ''}
+  Describe these VISUAL details:
+  - Overall body shape (round, oval, angular, etc.)
+  - Size proportions (head to body ratio, limb sizes)
+  - Physical features (number and shape of eyes, limbs, appendages)
+  - Colors (specific shades, where each color appears)
+  - Surface texture (smooth, fuzzy, scaly, rough)
+  - Patterns or markings (stripes, spots, gradients)
+  - Facial features (eye shape, mouth shape, nose if any)
+  ${userDescription ? `Creator's note: "${userDescription}"` : ''}
 
-  RULES:
-  - Start with "A creature with..." to establish context
-  - Use body part terms: head, body, eyes, legs, arms, tail, wings, antennae, mouth, teeth, etc.
-  - Describe colors if visible: green body, blue wings, red eyes, purple spots, etc.
-  - Describe features accurately: large eyes, thin legs, round body, pointy ears, etc.
-  - Allow simple visual metaphors when obvious: nose-shaped, egg-shaped, teardrop body, etc.
-  - Target 25-35 words for clarity
-  - NO animal species names unless extremely obvious
-  - NO geometric abstraction ("curved shape" → use "body" or "head" instead)
-  - NO made-up details not in the drawing
-  - NO drawing style descriptions
-  - Example: "A creature with a large nose-shaped body, two round spots on the front, and two thin legs with oval feet"
-
-  Describe the creature you see:`;
+  Provide a purely visual, physical description with NO personality traits, NO elemental types, NO mood descriptions, NO abstract concepts. Just describe what the creature physically looks like.`;
 
     // Call GPT-4o with Vision to analyze the Pokémon image
     const analysisResponse = await openai.chat.completions.create({
