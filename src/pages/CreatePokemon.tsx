@@ -839,151 +839,145 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
             {/* HP */}
             <div>
               <label className="block font-bold text-gray-700 mb-2">
-                HP (Hit Points)
+                HP (Hit Points): <span className="text-blue-600 text-xl">{watch('hp') || 'Not set'}</span>
               </label>
+
               <input
-                type="number"
+                type="range"
                 min={STAT_MIN}
                 max={STAT_MAX}
-                {...register('hp', {
-                  min: { value: STAT_MIN, message: `Min HP is ${STAT_MIN}` },
-                  max: { value: STAT_MAX, message: `Max HP is ${STAT_MAX}` },
-                  valueAsNumber: true
-                })}
-                className="input-field"
-                placeholder="Leave blank if unsure"
+                {...register('hp', { valueAsNumber: true })}
+                className="w-full h-3 bg-gradient-to-r from-red-200 via-yellow-200 to-green-300 rounded-lg appearance-none cursor-pointer slider"
               />
-              <p className="text-sm text-gray-500 mt-1">
-                Determines how much damage a Pokémon can take before fainting. Example: Blissey has 255 base HP, Shedinja has 1. Optional.
+
+              <div className="flex justify-between text-sm text-gray-600 mt-1 mb-2">
+                <span>1 (Weakest)</span>
+                <span>255 (Strongest)</span>
+              </div>
+
+              <p className="text-sm text-gray-500">
+                Determines how much damage a Pokémon can take before fainting. Example: Blissey has 255 base HP, Shedinja has 1.
               </p>
-              {errors.hp && (
-                <p className="text-red-600 text-sm mt-1">{errors.hp.message}</p>
-              )}
             </div>
 
             {/* Attack */}
             <div>
               <label className="block font-bold text-gray-700 mb-2">
-                Attack
+                Attack: <span className="text-red-600 text-xl">{watch('attack') || 'Not set'}</span>
               </label>
+
               <input
-                type="number"
+                type="range"
                 min={STAT_MIN}
                 max={STAT_MAX}
-                {...register('attack', {
-                  min: { value: STAT_MIN, message: `Min Attack is ${STAT_MIN}` },
-                  max: { value: STAT_MAX, message: `Max Attack is ${STAT_MAX}` },
-                  valueAsNumber: true
-                })}
-                className="input-field"
-                placeholder="Leave blank if unsure"
+                {...register('attack', { valueAsNumber: true })}
+                className="w-full h-3 bg-gradient-to-r from-red-200 via-orange-200 to-red-400 rounded-lg appearance-none cursor-pointer slider"
               />
-              <p className="text-sm text-gray-500 mt-1">
-                Determines physical move damage output. Example: Mega Mewtwo X has 190 base Attack, Chansey has 5. Optional.
+
+              <div className="flex justify-between text-sm text-gray-600 mt-1 mb-2">
+                <span>1 (Weakest)</span>
+                <span>255 (Strongest)</span>
+              </div>
+
+              <p className="text-sm text-gray-500">
+                Determines physical move damage output. Example: Mega Mewtwo X has 190 base Attack, Chansey has 5.
               </p>
-              {errors.attack && (
-                <p className="text-red-600 text-sm mt-1">{errors.attack.message}</p>
-              )}
             </div>
 
             {/* Defense */}
             <div>
               <label className="block font-bold text-gray-700 mb-2">
-                Defense
+                Defense: <span className="text-yellow-600 text-xl">{watch('defense') || 'Not set'}</span>
               </label>
+
               <input
-                type="number"
+                type="range"
                 min={STAT_MIN}
                 max={STAT_MAX}
-                {...register('defense', {
-                  min: { value: STAT_MIN, message: `Min Defense is ${STAT_MIN}` },
-                  max: { value: STAT_MAX, message: `Max Defense is ${STAT_MAX}` },
-                  valueAsNumber: true
-                })}
-                className="input-field"
-                placeholder="Leave blank if unsure"
+                {...register('defense', { valueAsNumber: true })}
+                className="w-full h-3 bg-gradient-to-r from-yellow-200 via-amber-200 to-yellow-400 rounded-lg appearance-none cursor-pointer slider"
               />
-              <p className="text-sm text-gray-500 mt-1">
-                Determines resistance to physical move damage. Example: Shuckle has 230 base Defense, Chansey has 5. Optional.
+
+              <div className="flex justify-between text-sm text-gray-600 mt-1 mb-2">
+                <span>1 (Weakest)</span>
+                <span>255 (Strongest)</span>
+              </div>
+
+              <p className="text-sm text-gray-500">
+                Determines resistance to physical move damage. Example: Shuckle has 230 base Defense, Chansey has 5.
               </p>
-              {errors.defense && (
-                <p className="text-red-600 text-sm mt-1">{errors.defense.message}</p>
-              )}
             </div>
 
             {/* Special Attack */}
             <div>
               <label className="block font-bold text-gray-700 mb-2">
-                Special Attack
+                Special Attack: <span className="text-purple-600 text-xl">{watch('specialAttack') || 'Not set'}</span>
               </label>
+
               <input
-                type="number"
+                type="range"
                 min={STAT_MIN}
                 max={STAT_MAX}
-                {...register('specialAttack', {
-                  min: { value: STAT_MIN, message: `Min Special Attack is ${STAT_MIN}` },
-                  max: { value: STAT_MAX, message: `Max Special Attack is ${STAT_MAX}` },
-                  valueAsNumber: true
-                })}
-                className="input-field"
-                placeholder="Leave blank if unsure"
+                {...register('specialAttack', { valueAsNumber: true })}
+                className="w-full h-3 bg-gradient-to-r from-purple-200 via-pink-200 to-purple-400 rounded-lg appearance-none cursor-pointer slider"
               />
-              <p className="text-sm text-gray-500 mt-1">
-                Determines special move damage output. Example: Mega Mewtwo Y has 194 base Special Attack. Optional.
+
+              <div className="flex justify-between text-sm text-gray-600 mt-1 mb-2">
+                <span>1 (Weakest)</span>
+                <span>255 (Strongest)</span>
+              </div>
+
+              <p className="text-sm text-gray-500">
+                Determines special move damage output. Example: Mega Mewtwo Y has 194 base Special Attack.
               </p>
-              {errors.specialAttack && (
-                <p className="text-red-600 text-sm mt-1">{errors.specialAttack.message}</p>
-              )}
             </div>
 
             {/* Special Defense */}
             <div>
               <label className="block font-bold text-gray-700 mb-2">
-                Special Defense
+                Special Defense: <span className="text-green-600 text-xl">{watch('specialDefense') || 'Not set'}</span>
               </label>
+
               <input
-                type="number"
+                type="range"
                 min={STAT_MIN}
                 max={STAT_MAX}
-                {...register('specialDefense', {
-                  min: { value: STAT_MIN, message: `Min Special Defense is ${STAT_MIN}` },
-                  max: { value: STAT_MAX, message: `Max Special Defense is ${STAT_MAX}` },
-                  valueAsNumber: true
-                })}
-                className="input-field"
-                placeholder="Leave blank if unsure"
+                {...register('specialDefense', { valueAsNumber: true })}
+                className="w-full h-3 bg-gradient-to-r from-green-200 via-emerald-200 to-green-400 rounded-lg appearance-none cursor-pointer slider"
               />
-              <p className="text-sm text-gray-500 mt-1">
-                Determines resistance to special move damage. Example: Shuckle has 230 base Special Defense. Optional.
+
+              <div className="flex justify-between text-sm text-gray-600 mt-1 mb-2">
+                <span>1 (Weakest)</span>
+                <span>255 (Strongest)</span>
+              </div>
+
+              <p className="text-sm text-gray-500">
+                Determines resistance to special move damage. Example: Shuckle has 230 base Special Defense.
               </p>
-              {errors.specialDefense && (
-                <p className="text-red-600 text-sm mt-1">{errors.specialDefense.message}</p>
-              )}
             </div>
 
             {/* Speed */}
             <div>
               <label className="block font-bold text-gray-700 mb-2">
-                Speed
+                Speed: <span className="text-cyan-600 text-xl">{watch('speed') || 'Not set'}</span>
               </label>
+
               <input
-                type="number"
+                type="range"
                 min={STAT_MIN}
                 max={STAT_MAX}
-                {...register('speed', {
-                  min: { value: STAT_MIN, message: `Min Speed is ${STAT_MIN}` },
-                  max: { value: STAT_MAX, message: `Max Speed is ${STAT_MAX}` },
-                  valueAsNumber: true
-                })}
-                className="input-field"
-                placeholder="Leave blank if unsure"
+                {...register('speed', { valueAsNumber: true })}
+                className="w-full h-3 bg-gradient-to-r from-cyan-200 via-sky-200 to-cyan-400 rounded-lg appearance-none cursor-pointer slider"
               />
-              <p className="text-sm text-gray-500 mt-1">
-                Determines turn order in battle. Example: Regieleki has 200 base Speed, Shuckle has 5. Optional.
+
+              <div className="flex justify-between text-sm text-gray-600 mt-1 mb-2">
+                <span>1 (Weakest)</span>
+                <span>255 (Strongest)</span>
+              </div>
+
+              <p className="text-sm text-gray-500">
+                Determines turn order in battle. Example: Regieleki has 200 base Speed, Shuckle has 5.
               </p>
-              {errors.speed && (
-                <p className="text-red-600 text-sm mt-1">{errors.speed.message}</p>
-              )}
             </div>
           </div>
         )}
