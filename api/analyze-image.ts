@@ -51,26 +51,24 @@ export default async function handler(
     }
 
     // Build Vision prompt optimized for DALL-E 3
-    // DALL-E 3 works well with character-based descriptions (NOT geometric)
-    const visionPrompt = `You are analyzing a drawing of a creature that will become a Pokemon. Describe what you see as a CHARACTER with features and body parts, NOT as geometric shapes.
+    // Describe accurately without over-interpreting
+    const visionPrompt = `You are analyzing a drawing of a creature. Describe what you see accurately using body part terms.
 
   RULES:
-  - Target 15-20 words total
-  - Format as: "A [creature-type] Pokemon with [feature 1], [feature 2], and [feature 3]"
-  - Describe it as a CREATURE with body parts (head, body, legs, tail, wings, ears, eyes, mouth, etc.)
-  - Use natural language: "bird-like", "cat-like", "dragon-like", "hamster-like", "nose-shaped", etc.
-  - Mention 2-3 specific distinguishing features
-  - NO negative descriptions (don't say "lacks", "without", "missing", "no visible")
-  - NO geometric terms like "curved shape", "oval", "lines", "circular"
-  - NO interpretive words like "delightful", "whimsical", "playful"
-  - NO drawing style descriptions like "minimalist", "monochrome", "simple sketch"
-  - DO NOT describe HOW it's drawn, only WHAT the creature is
-  - Include the word "Pokemon" in your description
-  - Example: "A hamster-like Pokemon with oversized round glasses, large expressive eyes, and a chubby body"
+  - Be accurate to what's actually drawn - don't interpret or assume
+  - Use body part terms: head, eyes, body, arms, legs, antennae, teeth, etc.
+  - Describe size relationships: large eyes, small body, thin legs, etc.
+  - Mention specific features: glasses, teeth, spikes, patterns, etc.
+  - Keep it concise and factual (20-30 words)
+  - NO animal comparisons unless extremely obvious
+  - NO geometric terms like "oval", "circle", "lines"
+  - NO negative descriptions ("lacks", "without", "missing")
+  - NO drawing style descriptions ("simple", "minimalist")
+  - Example: "A creature with a round head, oversized glasses covering large eyes, visible front teeth, small round body, and thin arms and legs"
 
   ${userDescription ? `Context from artist: "${userDescription}"` : ''}
 
-  Describe the Pokemon creature you see:`;
+  Describe the creature you see:`;
 
     // Call GPT-4o with Vision to analyze the Pokémon image
     const analysisResponse = await openai.chat.completions.create({
