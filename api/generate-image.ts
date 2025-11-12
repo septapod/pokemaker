@@ -59,19 +59,18 @@ export default async function handler(
       });
     }
 
-    // Call DALL-E 3 to generate image
+    // Call GPT-4o to generate image
     // Pass the description directly - it's already properly formatted by the frontend
     const imageResponse = await openai.images.generate({
-      model: 'dall-e-3',
+      model: 'gpt-4o',
       prompt: description,
       n: 1,
       size: '1024x1024',
-      quality: 'hd',
     });
 
     const imageUrl = imageResponse.data[0]?.url;
     if (!imageUrl) {
-      throw new Error('No image URL returned from DALL-E');
+      throw new Error('No image URL returned from GPT-4o');
     }
 
     return response.status(200).json({
