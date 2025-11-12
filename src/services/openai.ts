@@ -94,23 +94,21 @@ export async function generatePokemonImageWithVision(
     // DALL-E 3 can handle detailed prompts with style instructions
     console.log('Visual analysis from drawing:', analysis.visualDescription);
 
-    const finalPrompt = `Create a cute creature character based on these visual characteristics:
+    const finalPrompt = `Create a finished Pokemon-style creature character based on these characteristics:
 
 ${analysis.visualDescription}
 
-STYLE REQUIREMENTS:
-- Pokemon creature style (like Pikachu, Squirtle, Jigglypuff)
-- Soft, rounded, cute anime character design
-- Smooth gradients and soft shading
-- Vibrant, friendly colors
-- Simple, clean design on white background
+The character should be rendered in the cute anime style of Pokemon creatures like Pikachu, Squirtle, and Jigglypuff. It should have soft, rounded features with smooth shading, a cheerful appearance, and be shown front-facing on a plain white background with no additional elements.
 
-DO NOT CREATE:
-- Logos, stamps, or graphic design elements
-- Any text, kanji, labels, or written characters
-- Decorative borders or frames
-- Traditional art or woodblock print style
-- Realistic or detailed rendering`;
+IMPORTANT - Generate ONLY the finished character artwork. Do NOT include:
+- Color palette bars, swatches, or color reference strips at the bottom or sides
+- Design presentation elements, character sheets, or concept art layouts
+- Reference colors, color guides, or design mockup formats
+- Any text, labels, kanji, watermarks, or written characters
+- Logos, stamps, graphic design elements, or decorative borders
+- Traditional art style, woodblock prints, or realistic rendering
+
+This is a final character artwork, not a design concept or reference sheet.`;
 
     console.log('Generating new Pokémon image from analyzed drawing...');
     console.log('Final prompt length:', finalPrompt.length);

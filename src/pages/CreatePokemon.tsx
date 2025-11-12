@@ -265,9 +265,16 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       // Use the URL from form data (set by handleImageUpload)
       const originalDrawingUrl = data.originalDrawingUrl || existingPokemon?.originalDrawingUrl;
 
-      // Prepare Pokemon data
+      // Prepare Pokemon data with validated stats
       const pokemonData: Omit<Pokemon, 'id' | 'createdAt' | 'updatedAt'> = {
         ...data,
+        // Validate stats - default to 1 if invalid or undefined
+        hp: Math.max(1, Math.min(255, parseInt(data.hp?.toString() || '1') || 1)),
+        attack: Math.max(1, Math.min(255, parseInt(data.attack?.toString() || '1') || 1)),
+        defense: Math.max(1, Math.min(255, parseInt(data.defense?.toString() || '1') || 1)),
+        specialAttack: Math.max(1, Math.min(255, parseInt(data.specialAttack?.toString() || '1') || 1)),
+        specialDefense: Math.max(1, Math.min(255, parseInt(data.specialDefense?.toString() || '1') || 1)),
+        speed: Math.max(1, Math.min(255, parseInt(data.speed?.toString() || '1') || 1)),
         originalDrawingUrl,
         aiGeneratedImageUrl: aiGeneratedImage || undefined, // Optional now!
       };
@@ -323,9 +330,17 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       // Use the URL from form data (set by handleImageUpload)
       const originalDrawingUrl = allFormData.originalDrawingUrl || existingPokemon?.originalDrawingUrl;
 
-      // Prepare Pokemon data
+      // Prepare Pokemon data with validated stats
+      // Ensure all stats are within valid range (1-255)
       const pokemonData: Omit<Pokemon, 'id' | 'createdAt' | 'updatedAt'> = {
         ...allFormData,
+        // Validate stats - default to 1 if invalid or undefined
+        hp: Math.max(1, Math.min(255, parseInt(allFormData.hp?.toString() || '1') || 1)),
+        attack: Math.max(1, Math.min(255, parseInt(allFormData.attack?.toString() || '1') || 1)),
+        defense: Math.max(1, Math.min(255, parseInt(allFormData.defense?.toString() || '1') || 1)),
+        specialAttack: Math.max(1, Math.min(255, parseInt(allFormData.specialAttack?.toString() || '1') || 1)),
+        specialDefense: Math.max(1, Math.min(255, parseInt(allFormData.specialDefense?.toString() || '1') || 1)),
+        speed: Math.max(1, Math.min(255, parseInt(allFormData.speed?.toString() || '1') || 1)),
         originalDrawingUrl,
         aiGeneratedImageUrl: aiGeneratedImage || undefined,
       };
@@ -376,9 +391,17 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       // Use the URL from form data (set by handleImageUpload)
       const originalDrawingUrl = allFormData.originalDrawingUrl || existingPokemon?.originalDrawingUrl;
 
-      // Prepare Pokemon data
+      // Prepare Pokemon data with validated stats
+      // Ensure all stats are within valid range (1-255)
       const pokemonData: Omit<Pokemon, 'id' | 'createdAt' | 'updatedAt'> = {
         ...allFormData,
+        // Validate stats - default to 1 if invalid or undefined
+        hp: Math.max(1, Math.min(255, parseInt(allFormData.hp?.toString() || '1') || 1)),
+        attack: Math.max(1, Math.min(255, parseInt(allFormData.attack?.toString() || '1') || 1)),
+        defense: Math.max(1, Math.min(255, parseInt(allFormData.defense?.toString() || '1') || 1)),
+        specialAttack: Math.max(1, Math.min(255, parseInt(allFormData.specialAttack?.toString() || '1') || 1)),
+        specialDefense: Math.max(1, Math.min(255, parseInt(allFormData.specialDefense?.toString() || '1') || 1)),
+        speed: Math.max(1, Math.min(255, parseInt(allFormData.speed?.toString() || '1') || 1)),
         originalDrawingUrl,
         aiGeneratedImageUrl: aiGeneratedImage || undefined,
       };
