@@ -106,7 +106,6 @@ ABSOLUTE REQUIREMENTS - NO EXCEPTIONS:
 - ZERO title or name text
 - ZERO annotation boxes or descriptions
 - ZERO watermarks or signatures
-- ZERO COLOR PALLETS
 - ONLY draw the creature itself - nothing else
 - Pure visual illustration with no written content whatsoever`;
 
