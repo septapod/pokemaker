@@ -61,13 +61,12 @@ export default async function handler(
 
     // Call GPT-4o image generation via OpenAI API (uses gpt-image-1 model)
     // Pass the description directly - it's already properly formatted by the frontend
-    // Note: gpt-image-1 returns b64_json by default, not url
+    // Note: gpt-image-1 returns b64_json by default (doesn't accept response_format param)
     const imageResponse = await openai.images.generate({
       model: 'gpt-image-1',
       prompt: description,
       n: 1,
       size: '1024x1024',
-      response_format: 'b64_json', // Explicitly request base64 format
     });
 
     // GPT-4o image generation returns b64_json, not url

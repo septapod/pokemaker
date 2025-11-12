@@ -10,7 +10,7 @@
  * - POST /api/analyze-image - Analyze a Pokémon image using GPT-4o Vision
  */
 
-import { generatePokemonImage as generateImage, analyzePokemonImage, fetchImageAsBase64 } from './api-client';
+import { generatePokemonImage as generateImage, analyzePokemonImage } from './api-client';
 import { AI_IMAGE_PROMPT_TEMPLATE } from '../utils/constants';
 
 /**
@@ -126,12 +126,17 @@ ABSOLUTE REQUIREMENTS - NO EXCEPTIONS:
       throw new Error('No image URL returned from image generation');
     }
 
-    // Step 4: Fetch the generated image via server-side proxy to avoid CORS
-    console.log('Converting generated image to base64...');
-    const fetchResponse = await fetchImageAsBase64(imageResponse.imageUrl);
+    // Step 4: Extract base64 data from data URL
+    console.log('Extracting base64 data from data URL...');
+    // imageResponse.imageUrl is in format: "data:image/png;base64,<base64data>"
+    const generatedBase64Data = imageResponse.imageUrl.split(',')[1];
 
-    // The response contains base64 data
-    return fetchResponse.base64Data;
+    if (!generatedBase64Data) {
+      throw new Error('Invalid data URL format');
+    }
+
+    // Return the base64 data
+    return generatedBase64Data;
 
   } catch (error: any) {
     console.error('Error analyzing Pokémon image:', {
