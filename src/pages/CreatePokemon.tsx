@@ -843,6 +843,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               </label>
               <input
                 type="number"
+                min={STAT_MIN}
+                max={STAT_MAX}
                 {...register('hp', {
                   min: { value: STAT_MIN, message: `Min HP is ${STAT_MIN}` },
                   max: { value: STAT_MAX, message: `Max HP is ${STAT_MAX}` },
@@ -866,6 +868,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               </label>
               <input
                 type="number"
+                min={STAT_MIN}
+                max={STAT_MAX}
                 {...register('attack', {
                   min: { value: STAT_MIN, message: `Min Attack is ${STAT_MIN}` },
                   max: { value: STAT_MAX, message: `Max Attack is ${STAT_MAX}` },
@@ -889,6 +893,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               </label>
               <input
                 type="number"
+                min={STAT_MIN}
+                max={STAT_MAX}
                 {...register('defense', {
                   min: { value: STAT_MIN, message: `Min Defense is ${STAT_MIN}` },
                   max: { value: STAT_MAX, message: `Max Defense is ${STAT_MAX}` },
@@ -912,6 +918,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               </label>
               <input
                 type="number"
+                min={STAT_MIN}
+                max={STAT_MAX}
                 {...register('specialAttack', {
                   min: { value: STAT_MIN, message: `Min Special Attack is ${STAT_MIN}` },
                   max: { value: STAT_MAX, message: `Max Special Attack is ${STAT_MAX}` },
@@ -935,6 +943,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               </label>
               <input
                 type="number"
+                min={STAT_MIN}
+                max={STAT_MAX}
                 {...register('specialDefense', {
                   min: { value: STAT_MIN, message: `Min Special Defense is ${STAT_MIN}` },
                   max: { value: STAT_MAX, message: `Max Special Defense is ${STAT_MAX}` },
@@ -958,6 +968,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
               </label>
               <input
                 type="number"
+                min={STAT_MIN}
+                max={STAT_MAX}
                 {...register('speed', {
                   min: { value: STAT_MIN, message: `Min Speed is ${STAT_MIN}` },
                   max: { value: STAT_MAX, message: `Max Speed is ${STAT_MAX}` },
