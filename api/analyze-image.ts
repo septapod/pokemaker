@@ -54,6 +54,8 @@ export default async function handler(
     // Balance literal description with creature context
     const visionPrompt = `You are analyzing a child's drawing that will become a Pokemon creature. Describe what you see as a CREATURE with body parts and features.
 
+  ${userDescription ? `IMPORTANT: The artist describes this as: "${userDescription}"\nIncorporate these details (especially colors and features) into your description.` : ''}
+
   RULES:
   - Start with "A creature with..." to establish context
   - Use body part terms: head, body, eyes, legs, arms, tail, wings, antennae, mouth, teeth, etc.
@@ -66,8 +68,6 @@ export default async function handler(
   - NO made-up details not in the drawing
   - NO drawing style descriptions
   - Example: "A creature with a large nose-shaped body, two round spots on the front, and two thin legs with oval feet"
-
-  ${userDescription ? `Context from artist: "${userDescription}"` : ''}
 
   Describe the creature you see:`;
 
