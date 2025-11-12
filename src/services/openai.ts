@@ -98,7 +98,7 @@ export async function generatePokemonImageWithVision(
 
 ${analysis.visualDescription}
 
-Art style: Anime/manga style, Pokemon creature, bold outlines, vibrant colors, white background, front-facing view.
+Art style: Anime/manga style, bold outlines, vibrant colors, white background, front-facing view.
 
 ABSOLUTE REQUIREMENTS - NO EXCEPTIONS:
 - ZERO text anywhere in the image
@@ -106,19 +106,9 @@ ABSOLUTE REQUIREMENTS - NO EXCEPTIONS:
 - ZERO title or name text
 - ZERO annotation boxes or descriptions
 - ZERO watermarks or signatures
+- ZERO COLOR PALLETS
 - ONLY draw the creature itself - nothing else
-- Pure visual illustration with no written content whatsoever
-
-IMPORTANT:
-- Generate ONLY the finished character artwork. Do NOT include:
-- Color palette bars, swatches, or color reference strips at the bottom or sides
-- Design presentation elements, character sheets, or concept art layouts
-- Reference colors, color guides, or design mockup formats
-- Any text, labels, kanji, watermarks, or written characters
-- Logos, stamps, graphic design elements, or decorative borders
-- Traditional art style, woodblock prints, or realistic rendering
-
-This is a final character artwork, not a design concept or reference sheet.`;
+- Pure visual illustration with no written content whatsoever`;
 
     console.log('Generating new Pokémon image from analyzed drawing...');
     console.log('Final prompt length:', finalPrompt.length);
