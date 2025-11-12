@@ -43,6 +43,9 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
   // Track saved Pokemon ID for draft saves (so we update instead of creating duplicates)
   const [savedPokemonId, setSavedPokemonId] = useState<string | undefined>(existingPokemon?.id);
 
+  // Track if this is a fresh creation (not editing or continuing)
+  const [isFreshCreation, setIsFreshCreation] = useState<boolean>(!editMode && !existingPokemon?.id);
+
   // Form handling with React Hook Form
   const { register, handleSubmit, watch, getValues, setValue, formState: { errors } } = useForm<PokemonFormData>({
     defaultValues: editMode && existingPokemon ? existingPokemon : {
@@ -69,7 +72,17 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
   useEffect(() => {
     const savedImageState = localStorage.getItem('pokemonImageState');
     console.log('Loading from localStorage:', savedImageState ? 'Found saved state' : 'No saved state');
-    console.log('Edit mode:', editMode, 'Saved Pokemon ID:', savedPokemonId);
+    console.log('Edit mode:', editMode, 'Saved Pokemon ID:', savedPokemonId, 'Fresh creation:', isFreshCreation);
+
+    // If this is a fresh creation, clear localStorage and any stale state
+    if (isFreshCreation) {
+      console.log('Fresh creation detected - clearing localStorage and state');
+      localStorage.removeItem('pokemonImageState');
+      setUploadedImagePreview('');
+      setAiGeneratedImage('');
+      setValue('originalDrawingUrl', '');
+      return; // Don't restore anything
+    }
 
     // Only restore if in edit mode or if we have a savedPokemonId (continuing a draft)
     if (savedImageState && (editMode || savedPokemonId)) {
@@ -87,21 +100,34 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       } catch (e) {
         console.error('Failed to restore image state from localStorage', e);
       }
-    } else if (savedImageState && !editMode && !savedPokemonId) {
-      console.log('Skipping localStorage restore - starting fresh Pokemon creation');
     }
-  }, [setValue, editMode, savedPokemonId]);
+  }, [setValue, editMode, savedPokemonId, isFreshCreation]);
 
   // Save image state to localStorage whenever it changes
   // Store permanent Supabase URL, not blob URL, so it survives page refresh
+  // Only save if NOT a fresh creation, or if user has actually uploaded/generated images
   useEffect(() => {
     const originalDrawingUrl = watch('originalDrawingUrl');
+
+    // Don't save if it's a fresh creation with no user-uploaded content
+    if (isFreshCreation && !originalDrawingUrl && !aiGeneratedImage) {
+      console.log('Skipping localStorage save - fresh creation with no images');
+      return;
+    }
+
+    // Once user uploads or generates an image, it's no longer a "fresh" creation
+    if (isFreshCreation && (originalDrawingUrl || aiGeneratedImage)) {
+      console.log('User has added images - no longer a fresh creation');
+      setIsFreshCreation(false);
+    }
+
     const imageState = {
       permanentUrl: originalDrawingUrl, // Use Supabase URL, not blob URL
       generated: aiGeneratedImage,
     };
+    console.log('Saving to localStorage:', imageState);
     localStorage.setItem('pokemonImageState', JSON.stringify(imageState));
-  }, [watch('originalDrawingUrl'), aiGeneratedImage, watch]);
+  }, [watch('originalDrawingUrl'), aiGeneratedImage, watch, isFreshCreation]);
 
   // State for auto-save functionality
   const [autoSaveStatus, setAutoSaveStatus] = useState<'saved' | 'saving' | 'error'>('saved');

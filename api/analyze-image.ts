@@ -51,24 +51,21 @@ export default async function handler(
     }
 
     // Build Vision prompt optimized for DALL-E 3
-    // Describe accurately without over-interpreting
-    const visionPrompt = `You are analyzing a drawing of a creature. Describe what you see accurately using body part terms.
+    // Focus on literal visual descriptions only
+    const visionPrompt = `You are analyzing a simple children's drawing. Your job is to describe ONLY
+  what you literally see in the image - nothing more.
 
   RULES:
-  - Be accurate to what's actually drawn - don't interpret or assume
-  - Use body part terms: head, eyes, body, arms, legs, antennae, teeth, etc.
-  - Describe size relationships: large eyes, small body, thin legs, etc.
-  - Mention specific features: glasses, teeth, spikes, patterns, etc.
-  - Keep it concise and factual (20-30 words)
-  - NO animal comparisons unless extremely obvious
-  - NO geometric terms like "oval", "circle", "lines"
-  - NO negative descriptions ("lacks", "without", "missing")
-  - NO drawing style descriptions ("simple", "minimalist")
-  - Example: "A creature with a round head, oversized glasses covering large eyes, visible front teeth, small round body, and thin arms and legs"
+  - NO names, NO creative labels
+  - NO interpretive words like "delightful", "whimsical", "playful"
+  - NO assumptions about what it represents
+  - ONLY describe: shapes, lines, curves, positions
+  - Keep it under 3 sentences
+  - Example: "A large curved shape with two thin lines extending downward, each ending in an oval."
 
   ${userDescription ? `Context from artist: "${userDescription}"` : ''}
 
-  Describe the creature you see:`;
+  Describe ONLY the visual form you see:`;
 
     // Call GPT-4o with Vision to analyze the Pokémon image
     const analysisResponse = await openai.chat.completions.create({
