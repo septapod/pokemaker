@@ -103,7 +103,7 @@ export async function generatePokemonImageWithVision(
     const descriptor = getPromptDescriptor(typePrimary, evolutionStage);
     console.log('Using descriptor:', descriptor, 'for type:', typePrimary, 'evolution:', evolutionStage);
 
-    const finalPrompt = `Create a ${descriptor} fantasy creature for a children's game with these exact physical features:
+    const finalPrompt = `Create a safe and family-friendly ${descriptor} fantasy creature for a children's game with these exact physical features:
 
 ${analysis.visualDescription}
 ${userDescription ? `User specified: ${userDescription}` : ''}
