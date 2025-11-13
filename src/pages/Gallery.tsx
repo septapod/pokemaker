@@ -229,6 +229,20 @@ function Gallery() {
                   {p.typePrimary}
                 </div>
               )}
+              {/* Evolution Stage Badge */}
+              {p.evolutionStage && (
+                <div
+                  className={`absolute top-2 left-2 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg ${
+                    p.evolutionStage === 'Basic'
+                      ? 'bg-teal-500'
+                      : p.evolutionStage === 'Stage 1'
+                      ? 'bg-orange-500'
+                      : 'bg-purple-600'
+                  }`}
+                >
+                  {p.evolutionStage}
+                </div>
+              )}
               {/* Pokédex Number Badge */}
               {p.pokedexNumber && (
                 <div className="absolute top-2 right-2 bg-black bg-opacity-70 text-white px-3 py-1 rounded-full text-sm font-bold">

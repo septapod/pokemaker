@@ -229,9 +229,12 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
 
       // Call OpenAI API with the uploaded image and combined description
       // Returns base64 image data (not a URL) to avoid CORS issues
+      // Also pass type and evolution stage to influence visual aesthetic
       const base64ImageData = await generatePokemonImageWithVision(
         imageToUse,
-        combinedDescription || undefined
+        combinedDescription || undefined,
+        formData.typePrimary,
+        formData.evolutionStage
       );
 
       // Convert base64 to File and upload to Supabase Storage
