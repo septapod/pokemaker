@@ -11,8 +11,7 @@
  */
 
 import { generatePokemonImage as generateImage, analyzePokemonImage } from './api-client';
-import { AI_IMAGE_PROMPT_TEMPLATE, TYPE_AESTHETICS, PROMPT_DESCRIPTORS } from '../utils/constants';
-import type { PokemonType, EvolutionStage } from '../types/pokemon.types';
+import { AI_IMAGE_PROMPT_TEMPLATE } from '../utils/constants';
 
 /**
  * Generate a Pokémon-style image using the backend API
@@ -72,15 +71,11 @@ export async function generatePokemonImage(
  *
  * @param imageFile - The image file to analyze
  * @param userDescription - Optional user description to guide analysis
- * @param typePrimary - Primary Pokémon type (affects visual aesthetic)
- * @param evolutionStage - Evolution stage (Basic, Stage 1, Stage 2)
  * @returns Base64-encoded image data for the generated Pokémon image
  */
 export async function generatePokemonImageWithVision(
   imageFile: File,
-  userDescription?: string,
-  typePrimary?: PokemonType,
-  evolutionStage?: EvolutionStage
+  userDescription?: string
 ): Promise<string> {
   try {
     // Step 1: Convert image to base64
@@ -99,11 +94,7 @@ export async function generatePokemonImageWithVision(
     // GPT-4o can handle detailed prompts with style instructions
     console.log('Visual analysis from drawing:', analysis.visualDescription);
 
-    // Get dynamic descriptor based on type and evolution stage
-    const descriptor = getPromptDescriptor(typePrimary, evolutionStage);
-    console.log('Using descriptor:', descriptor, 'for type:', typePrimary, 'evolution:', evolutionStage);
-
-    const finalPrompt = `Create a safe and family-friendly ${descriptor} fantasy creature for a children's game with these exact physical features:
+    const finalPrompt = `Create a cute, family-friendly fantasy creature for a children's game with these exact physical features:
 
 ${analysis.visualDescription}
 ${userDescription ? `User specified: ${userDescription}` : ''}
@@ -111,6 +102,7 @@ ${userDescription ? `User specified: ${userDescription}` : ''}
 Art style: Anime/manga style with bold outlines, Japanese monster-collecting game aesthetic (like Pokemon), vibrant saturated colors, white background, front-facing view.
 
 Design requirements:
+- Cute and friendly-looking
 - Professional, polished, and clean
 - Colorful and cheerful
 - Appropriate for all ages
@@ -178,31 +170,6 @@ async function fileToBase64(file: File): Promise<string> {
     reader.onload = () => resolve(reader.result as string);
     reader.onerror = (error) => reject(error);
   });
-}
-
-/**
- * Get the appropriate prompt descriptor based on type and evolution stage
- * Falls back to 'cute, playful' (basic-friendly) if parameters are missing
- */
-function getPromptDescriptor(
-  typePrimary?: PokemonType,
-  evolutionStage?: EvolutionStage
-): string {
-  // Default to basic-friendly if no type provided
-  if (!typePrimary) {
-    return PROMPT_DESCRIPTORS['basic-friendly'];
-  }
-
-  // Determine if evolved (Stage 1 or Stage 2)
-  const isEvolved = evolutionStage === 'Stage 1' || evolutionStage === 'Stage 2';
-
-  // Get type aesthetic category
-  const category = TYPE_AESTHETICS[typePrimary] || 'friendly';
-
-  // Build descriptor key
-  const key = `${isEvolved ? 'evolved' : 'basic'}-${category}` as keyof typeof PROMPT_DESCRIPTORS;
-
-  return PROMPT_DESCRIPTORS[key];
 }
 
 

@@ -113,42 +113,6 @@ IMPORTANT - Generate ONLY the finished character artwork. Do NOT include:
 
 This is a final character artwork, not a design concept or reference sheet.`;
 
-// Type aesthetic categories for image generation
-// Groups types into 3 aesthetic categories for simpler prompt building
-export const TYPE_AESTHETICS: Record<PokemonType, 'friendly' | 'fierce' | 'mysterious'> = {
-  'Normal': 'friendly',
-  'Fairy': 'friendly',
-  'Electric': 'friendly',
-  'Grass': 'friendly',
-  'Water': 'friendly',
-  'Ice': 'friendly',
-  'Flying': 'friendly',
-  'Dragon': 'fierce',
-  'Fighting': 'fierce',
-  'Fire': 'fierce',
-  'Rock': 'fierce',
-  'Ground': 'fierce',
-  'Ghost': 'mysterious',
-  'Psychic': 'mysterious',
-  'Dark': 'mysterious',
-  'Poison': 'mysterious',
-  'Bug': 'mysterious',
-  'Steel': 'mysterious'
-};
-
-// Prompt descriptors based on evolution stage + type aesthetic
-// These descriptors replace "cute, family-friendly" in the prompt
-type DescriptorKey = 'basic-friendly' | 'basic-fierce' | 'basic-mysterious' | 'evolved-friendly' | 'evolved-fierce' | 'evolved-mysterious';
-
-export const PROMPT_DESCRIPTORS: Record<DescriptorKey, string> = {
-  'basic-friendly': 'cute, playful',
-  'basic-fierce': 'cute, spirited',
-  'basic-mysterious': 'cute, curious',
-  'evolved-friendly': 'friendly, fully-evolved',
-  'evolved-fierce': 'powerful, fierce',
-  'evolved-mysterious': 'mysterious, enigmatic'
-};
-
 // Type colors for visual display (matches official Pokémon type colors)
 export const TYPE_COLORS: Record<PokemonType, string> = {
   'Normal': '#A8A878',
