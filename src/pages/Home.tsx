@@ -45,14 +45,14 @@ function Home() {
           </div>
         </div>
 
-        {/* View Gallery Button */}
-        <Link to="/gallery">
+        {/* View My Pokémon Button */}
+        <Link to="/my-pokemon">
           <div className="bg-gradient-to-br from-green-400 to-teal-500 rounded-3xl p-8 shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 cursor-pointer min-h-64 flex items-center justify-center">
             <div className="text-center text-white">
               <div className="text-6xl mb-4"><i className="ri-book-line text-white"></i></div>
               <h3 className="text-3xl font-bold mb-2">My Pokémon</h3>
               <p className="text-lg opacity-90">
-                See all the amazing Pokémon you've created!
+                See all the amazing Pokémon you've created
               </p>
             </div>
           </div>
