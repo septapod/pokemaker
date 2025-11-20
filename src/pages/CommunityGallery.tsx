@@ -1,7 +1,7 @@
 /**
- * Gallery Page
+ * Community Gallery Page
  *
- * This page displays all the Pokémon that have been created.
+ * This page displays all Pokémon from all users.
  * Shows them in a grid of cards that can be filtered and sorted.
  */
 
@@ -13,7 +13,7 @@ import { TYPE_COLORS, TYPE_ICONS } from '../utils/constants';
 
 type SortOption = 'alphabetical' | 'newest' | 'oldest';
 
-function Gallery() {
+function CommunityGallery() {
   // State to store the list of Pokémon
   const [pokemon, setPokemon] = useState<Pokemon[]>([]);
   // State for loading status
@@ -123,10 +123,10 @@ function Gallery() {
       {/* Page Header */}
       <div className="text-center mb-8">
         <h2 className="text-4xl font-bold text-gray-800 mb-2">
-          My Pokémon Collection 📚
+          Community Gallery 🌍
         </h2>
         <p className="text-xl text-gray-600">
-          You've created {pokemon.length} amazing Pokémon!
+          {pokemon.length} amazing Pokémon from our community!
         </p>
       </div>
 
@@ -274,4 +274,4 @@ function Gallery() {
   );
 }
 
-export default Gallery;
+export default CommunityGallery;
