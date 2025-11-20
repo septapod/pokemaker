@@ -10,12 +10,15 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getPokemonById, deletePokemon, getPokemonByName } from '../services/supabase';
 import type { Pokemon } from '../types/pokemon.types';
 import { TYPE_COLORS, TYPE_ICONS } from '../utils/constants';
+import { useAuth } from '../contexts/AuthContext';
 
 function PokemonDetail() {
   // Get the Pokémon ID from the URL (e.g., /pokemon/123)
   const { id } = useParams<{ id: string }>();
   // useNavigate allows us to redirect to other pages
   const navigate = useNavigate();
+  // Get current user to check ownership
+  const { user } = useAuth();
 
   // State to store the Pokémon data
   const [pokemon, setPokemon] = useState<Pokemon | null>(null);
@@ -490,21 +493,23 @@ function PokemonDetail() {
             </div>
           )}
 
-          {/* Action Buttons */}
-          <div className="flex gap-4 pt-6 border-t border-gray-200">
-            <Link
-              to={`/pokemon/${id}/edit`}
-              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-center transition-colors flex items-center justify-center gap-2"
-            >
-              <i className="ri-edit-line"></i> Edit Pokémon
-            </Link>
-            <button
-              onClick={() => setShowDeleteConfirm(true)}
-              className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
-            >
-              <i className="ri-delete-bin-line"></i> Delete Pokémon
-            </button>
-          </div>
+          {/* Action Buttons - Only show to the pokemon's creator */}
+          {user && pokemon.userId === user.id && (
+            <div className="flex gap-4 pt-6 border-t border-gray-200">
+              <Link
+                to={`/pokemon/${id}/edit`}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-center transition-colors flex items-center justify-center gap-2"
+              >
+                <i className="ri-edit-line"></i> Edit Pokémon
+              </Link>
+              <button
+                onClick={() => setShowDeleteConfirm(true)}
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2"
+              >
+                <i className="ri-delete-bin-line"></i> Delete Pokémon
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
