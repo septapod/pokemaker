@@ -265,6 +265,13 @@ function CommunityGallery() {
                   <span>DEF: {p.defense ?? '-'}</span>
                 </div>
               </div>
+
+              {/* Creator Attribution */}
+              {p.username && (
+                <div className="mt-2 text-right">
+                  <span className="text-xs text-gray-400">by {p.username}</span>
+                </div>
+              )}
             </div>
           </Link>
         ))}

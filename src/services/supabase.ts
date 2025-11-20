@@ -133,13 +133,13 @@ export async function createPokemon(pokemon: Omit<Pokemon, 'id' | 'createdAt' | 
 }
 
 /**
- * Get all Pokémon from the database
+ * Get all Pokémon from the database (with creator username)
  * @returns Array of all Pokémon
  */
 export async function getAllPokemon(): Promise<Pokemon[]> {
   const { data, error } = await supabase
     .from('pokemon')
-    .select('*')
+    .select('*, users(username)')
     .order('created_at', { ascending: false });
 
   if (error) {
@@ -416,6 +416,8 @@ function convertDatabaseToPokemon(row: any): Pokemon {
     id: row.id,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
+    userId: row.user_id,
+    username: row.users?.username, // Extract username from joined users table
 
     // Basic Identity
     name: row.name,

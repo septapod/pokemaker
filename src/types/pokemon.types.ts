@@ -63,6 +63,7 @@ export interface Pokemon {
 
   // User ownership
   userId?: string;
+  username?: string; // Creator's username (joined from users table)
 
   // === BASIC IDENTITY ===
   name: string;
