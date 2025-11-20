@@ -104,7 +104,7 @@ function Layout({ children }: LayoutProps) {
                   </Link>
                 </li>
 
-                {/* Community Gallery Link */}
+                {/* Everyone's Pokémon Link */}
                 <li>
                   <Link
                     to="/gallery"
@@ -118,7 +118,7 @@ function Layout({ children }: LayoutProps) {
                       }
                     `}
                   >
-                    <i className="ri-global-line"></i> Community
+                    <i className="ri-global-line"></i> Everyone's
                   </Link>
                 </li>
 

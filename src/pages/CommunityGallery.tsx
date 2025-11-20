@@ -123,7 +123,7 @@ function CommunityGallery() {
       {/* Page Header */}
       <div className="text-center mb-8">
         <h2 className="text-4xl font-bold text-gray-800 mb-2">
-          Community Gallery 🌍
+          Everyone's Pokémon 🌍
         </h2>
         <p className="text-xl text-gray-600">
           {pokemon.length} amazing Pokémon from our community
