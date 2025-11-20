@@ -31,7 +31,7 @@ function Login() {
       navigate('/');
     } else {
       // Show error message
-      setError('Incorrect username or password. Please try again!');
+      setError('Incorrect username or password. Please try again');
       setPassword(''); // Clear password field
     }
   };

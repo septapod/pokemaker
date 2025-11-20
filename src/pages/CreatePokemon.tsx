@@ -210,7 +210,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
     }
 
     if (!imageToUse) {
-      alert('Please upload a drawing first!');
+      alert('Please upload a drawing first');
       return;
     }
 
@@ -288,17 +288,17 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
         // Editing an existing Pokemon - verify ownership
         await updatePokemon(existingPokemon.id, pokemonData, user?.id);
         finalPokemonId = existingPokemon.id;
-        alert(`${data.name} has been updated successfully!`);
+        alert(`${data.name} has been updated successfully`);
       } else if (savedPokemonId) {
         // Finalizing a draft that was auto-saved - verify ownership
         await updatePokemon(savedPokemonId, pokemonData, user?.id);
         finalPokemonId = savedPokemonId;
-        alert(`Congratulations! ${data.name} has been created!`);
+        alert(`${data.name} has been created`);
       } else {
         // Creating brand new Pokemon (no prior auto-save)
         const newPokemon = await createPokemon(pokemonData);
         finalPokemonId = newPokemon.id!;
-        alert(`Congratulations! ${data.name} has been created!`);
+        alert(`${data.name} has been created`);
       }
 
       // Link evolutions (create/find related Pokemon and link them)
@@ -355,13 +355,13 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
         // Update existing Pokemon (either from edit mode or previously saved draft) - verify ownership
         await updatePokemon(savedPokemonId, pokemonData, user?.id);
         draftPokemonId = savedPokemonId;
-        alert(`Draft saved! You can continue editing ${allFormData.name || 'your Pokemon'}.`);
+        alert(`Draft saved. You can continue editing ${allFormData.name || 'your Pokemon'}.`);
       } else {
         // Create new Pokemon for the first time
         const newPokemon = await createPokemon(pokemonData);
         draftPokemonId = newPokemon.id!;
         setSavedPokemonId(newPokemon.id); // Track ID for future saves
-        alert(`Draft saved! You can continue editing ${allFormData.name || 'your Pokemon'}.`);
+        alert(`Draft saved. You can continue editing ${allFormData.name || 'your Pokemon'}.`);
       }
 
       // Link evolutions (create/find related Pokemon and link them)

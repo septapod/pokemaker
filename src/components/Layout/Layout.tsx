@@ -146,10 +146,7 @@ function Layout({ children }: LayoutProps) {
       <footer className="bg-gray-800 text-white py-6 mt-auto">
         <div className="container mx-auto px-4 text-center">
           <p className="text-sm flex items-center justify-center gap-2">
-            Made with <i className="ri-heart-line text-red-500"></i>
-          </p>
-          <p className="text-xs text-gray-400 mt-2">
-            PokéMaker - Create your own Pokémon adventures!
+            Made with <i className="ri-heart-line text-red-500"></i> by Papa.
           </p>
         </div>
       </footer>

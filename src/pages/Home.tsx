@@ -22,7 +22,7 @@ function Home() {
       {/* Welcome Section */}
       <div className="text-center mb-12">
         <h2 className="text-4xl md:text-6xl font-bold text-gray-800 mb-4 flex items-center justify-center gap-3">
-          Welcome to PokéMaker! <i className="ri-test-tube-fill text-5xl text-blue-600"></i>
+          Welcome to PokéMaker <i className="ri-test-tube-fill text-5xl text-blue-600"></i>
         </h2>
         <p className="text-xl md:text-2xl text-gray-600">
           Create your very own Pokémon with magical art transformation!

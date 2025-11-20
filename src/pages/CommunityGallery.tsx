@@ -77,10 +77,10 @@ function CommunityGallery() {
       <div className="text-center py-12">
         <i className="ri-file-add-line text-6xl block mb-4 text-purple-500"></i>
         <h2 className="text-3xl font-bold text-gray-800 mb-4">
-          No Pokémon Yet!
+          No Pokémon Yet
         </h2>
         <p className="text-xl text-gray-600 mb-8">
-          You haven't created any Pokémon yet. Let's make your first one!
+          You haven't created any Pokémon yet. Let's make your first one
         </p>
         <Link to="/create" className="btn-pokemon inline-block">
           Create Your First Pokémon
@@ -126,7 +126,7 @@ function CommunityGallery() {
           Community Gallery 🌍
         </h2>
         <p className="text-xl text-gray-600">
-          {pokemon.length} amazing Pokémon from our community!
+          {pokemon.length} amazing Pokémon from our community
         </p>
       </div>
 
