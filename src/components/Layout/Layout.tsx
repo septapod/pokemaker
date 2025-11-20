@@ -86,7 +86,25 @@ function Layout({ children }: LayoutProps) {
                   </Link>
                 </li>
 
-                {/* Gallery Link */}
+                {/* My Pokémon Link */}
+                <li>
+                  <Link
+                    to="/my-pokemon"
+                    className={`
+                      px-4 py-2 rounded-full font-bold text-sm md:text-base
+                      transition-all duration-200 transform hover:scale-105
+                      flex items-center gap-2
+                      ${isActive('/my-pokemon')
+                        ? 'bg-white text-green-500 shadow-lg'
+                        : 'bg-green-600 text-white hover:bg-green-700'
+                      }
+                    `}
+                  >
+                    <i className="ri-book-line"></i> My Pokémon
+                  </Link>
+                </li>
+
+                {/* Community Gallery Link */}
                 <li>
                   <Link
                     to="/gallery"
@@ -95,12 +113,12 @@ function Layout({ children }: LayoutProps) {
                       transition-all duration-200 transform hover:scale-105
                       flex items-center gap-2
                       ${isActive('/gallery')
-                        ? 'bg-white text-green-500 shadow-lg'
-                        : 'bg-green-600 text-white hover:bg-green-700'
+                        ? 'bg-white text-purple-500 shadow-lg'
+                        : 'bg-purple-600 text-white hover:bg-purple-700'
                       }
                     `}
                   >
-                    <i className="ri-book-line"></i> My Pokémon
+                    <i className="ri-global-line"></i> Community
                   </Link>
                 </li>
 

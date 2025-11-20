@@ -13,7 +13,8 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Login from './pages/Login';
 import Home from './pages/Home';
 import CreatePokemon from './pages/CreatePokemon';
-import Gallery from './pages/Gallery';
+import MyPokemon from './pages/MyPokemon';
+import CommunityGallery from './pages/CommunityGallery';
 import PokemonDetail from './pages/PokemonDetail';
 import EditPokemon from './pages/EditPokemon';
 
@@ -51,12 +52,22 @@ function App() {
               }
             />
 
-            {/* View all Pokémon in a gallery - path: /gallery */}
+            {/* View my Pokémon - path: /my-pokemon */}
+            <Route
+              path="/my-pokemon"
+              element={
+                <ProtectedRoute>
+                  <MyPokemon />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* View all Pokémon from everyone - path: /gallery */}
             <Route
               path="/gallery"
               element={
                 <ProtectedRoute>
-                  <Gallery />
+                  <CommunityGallery />
                 </ProtectedRoute>
               }
             />
