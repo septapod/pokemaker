@@ -17,6 +17,7 @@ import { useForm } from 'react-hook-form';
 import type { Pokemon, PokemonFormData } from '../types/pokemon.types';
 import { createPokemon, updatePokemon, uploadImage, findOrCreatePokemonByName } from '../services/supabase';
 import { generatePokemonImageWithVision, base64ToFile } from '../services/openai';
+import { useAuth } from '../contexts/AuthContext';
 import {
   POKEMON_TYPES,
   EVOLUTION_STAGES,
@@ -36,6 +37,7 @@ interface CreatePokemonProps {
 
 function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps) {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   // Current step in the multi-step form (1-6)
   const [currentStep, setCurrentStep] = useState(1);
@@ -268,6 +270,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       // Prepare Pokemon data with validated stats
       const pokemonData: Omit<Pokemon, 'id' | 'createdAt' | 'updatedAt'> = {
         ...data,
+        userId: user?.id, // Associate with current user
         // Validate stats - default to 1 if invalid or undefined
         hp: Math.max(1, Math.min(255, parseInt(data.hp?.toString() || '1') || 1)),
         attack: Math.max(1, Math.min(255, parseInt(data.attack?.toString() || '1') || 1)),
@@ -334,6 +337,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       // Ensure all stats are within valid range (1-255)
       const pokemonData: Omit<Pokemon, 'id' | 'createdAt' | 'updatedAt'> = {
         ...allFormData,
+        userId: user?.id, // Associate with current user
         // Validate stats - default to 1 if invalid or undefined
         hp: Math.max(1, Math.min(255, parseInt(allFormData.hp?.toString() || '1') || 1)),
         attack: Math.max(1, Math.min(255, parseInt(allFormData.attack?.toString() || '1') || 1)),
@@ -395,6 +399,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       // Ensure all stats are within valid range (1-255)
       const pokemonData: Omit<Pokemon, 'id' | 'createdAt' | 'updatedAt'> = {
         ...allFormData,
+        userId: user?.id, // Associate with current user
         // Validate stats - default to 1 if invalid or undefined
         hp: Math.max(1, Math.min(255, parseInt(allFormData.hp?.toString() || '1') || 1)),
         attack: Math.max(1, Math.min(255, parseInt(allFormData.attack?.toString() || '1') || 1)),

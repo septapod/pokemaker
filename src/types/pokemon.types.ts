@@ -61,6 +61,9 @@ export interface Pokemon {
   createdAt?: string;
   updatedAt?: string;
 
+  // User ownership
+  userId?: string;
+
   // === BASIC IDENTITY ===
   name: string;
   pokedexNumber?: number;

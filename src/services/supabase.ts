@@ -38,6 +38,9 @@ export async function createPokemon(pokemon: Omit<Pokemon, 'id' | 'createdAt' | 
   const { data, error } = await supabase
     .from('pokemon')
     .insert([{
+      // User ownership (optional - for multi-user support)
+      user_id: pokemon.userId || null,
+
       // Basic Identity
       name: pokemon.name,
       pokedex_number: pokemon.pokedexNumber,
