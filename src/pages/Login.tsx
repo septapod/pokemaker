@@ -19,12 +19,12 @@ function Login() {
   const [error, setError] = useState('');
 
   // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
     // Try to log in
-    const success = login(username, password);
+    const success = await login(username, password);
 
     if (success) {
       // Redirect to home page on successful login

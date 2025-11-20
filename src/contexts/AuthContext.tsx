@@ -1,20 +1,26 @@
 /**
  * Authentication Context
  *
- * This manages the login state for the app.
+ * This manages the login state for the app using the users table.
  * It stores whether the user is logged in and provides login/logout functions.
  */
 
 import { createContext, useContext, useState, type ReactNode } from 'react';
+import bcrypt from 'bcryptjs';
+import { supabase } from '../services/supabase';
 
-// Simple credentials (hardcoded for this single-user app)
-const VALID_USERNAME = 'aza';
-const VALID_PASSWORD = 'aza';
+// User information
+export interface User {
+  id: string;
+  username: string;
+  displayName: string;
+}
 
 // Define what the context provides
 interface AuthContextType {
   isAuthenticated: boolean;
-  login: (username: string, password: string) => boolean;
+  user: User | null;
+  login: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
 }
 
@@ -28,24 +34,63 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return localStorage.getItem('pokemaker_auth') === 'true';
   });
 
-  // Login function - checks credentials and stores auth state
-  const login = (username: string, password: string): boolean => {
-    if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+  const [user, setUser] = useState<User | null>(() => {
+    const savedUser = localStorage.getItem('pokemaker_user');
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+
+  // Login function - checks credentials against users table
+  const login = async (username: string, password: string): Promise<boolean> => {
+    try {
+      // Query users table for username
+      const { data: userData, error } = await supabase
+        .from('users')
+        .select('id, username, password_hash, display_name')
+        .eq('username', username)
+        .single();
+
+      if (error || !userData) {
+        console.error('User not found:', error);
+        return false;
+      }
+
+      // Verify password using bcrypt
+      const passwordMatch = bcrypt.compareSync(password, userData.password_hash);
+
+      if (!passwordMatch) {
+        console.error('Invalid password');
+        return false;
+      }
+
+      // Set authenticated state
+      const userInfo: User = {
+        id: userData.id,
+        username: userData.username,
+        displayName: userData.display_name || userData.username,
+      };
+
       setIsAuthenticated(true);
+      setUser(userInfo);
       localStorage.setItem('pokemaker_auth', 'true');
+      localStorage.setItem('pokemaker_user', JSON.stringify(userInfo));
+
       return true;
+    } catch (err) {
+      console.error('Login error:', err);
+      return false;
     }
-    return false;
   };
 
   // Logout function - clears auth state
   const logout = () => {
     setIsAuthenticated(false);
+    setUser(null);
     localStorage.removeItem('pokemaker_auth');
+    localStorage.removeItem('pokemaker_user');
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
