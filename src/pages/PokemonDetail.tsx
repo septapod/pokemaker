@@ -86,12 +86,14 @@ function PokemonDetail() {
     if (!id) return;
 
     try {
-      await deletePokemon(id);
+      // Pass current user ID for ownership verification
+      await deletePokemon(id, user?.id);
       // Redirect to gallery after successful deletion
       navigate('/gallery');
     } catch (err) {
       console.error('Error deleting Pokémon:', err);
-      alert('Failed to delete Pokémon. Please try again.');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to delete Pokémon. Please try again.';
+      alert(errorMessage);
     }
   }
 

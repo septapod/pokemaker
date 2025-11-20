@@ -285,13 +285,13 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       // Create or update Pokemon in database
       let finalPokemonId: string;
       if (editMode && existingPokemon?.id) {
-        // Editing an existing Pokemon
-        await updatePokemon(existingPokemon.id, pokemonData);
+        // Editing an existing Pokemon - verify ownership
+        await updatePokemon(existingPokemon.id, pokemonData, user?.id);
         finalPokemonId = existingPokemon.id;
         alert(`${data.name} has been updated successfully!`);
       } else if (savedPokemonId) {
-        // Finalizing a draft that was auto-saved
-        await updatePokemon(savedPokemonId, pokemonData);
+        // Finalizing a draft that was auto-saved - verify ownership
+        await updatePokemon(savedPokemonId, pokemonData, user?.id);
         finalPokemonId = savedPokemonId;
         alert(`Congratulations! ${data.name} has been created!`);
       } else {
@@ -352,8 +352,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
       // Create or update Pokemon in database
       let draftPokemonId: string;
       if (savedPokemonId) {
-        // Update existing Pokemon (either from edit mode or previously saved draft)
-        await updatePokemon(savedPokemonId, pokemonData);
+        // Update existing Pokemon (either from edit mode or previously saved draft) - verify ownership
+        await updatePokemon(savedPokemonId, pokemonData, user?.id);
         draftPokemonId = savedPokemonId;
         alert(`Draft saved! You can continue editing ${allFormData.name || 'your Pokemon'}.`);
       } else {
@@ -413,7 +413,8 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
 
       // Create or update Pokemon in database
       if (savedPokemonId) {
-        await updatePokemon(savedPokemonId, pokemonData);
+        // Auto-save update - verify ownership
+        await updatePokemon(savedPokemonId, pokemonData, user?.id);
       } else {
         const newPokemon = await createPokemon(pokemonData);
         setSavedPokemonId(newPokemon.id);

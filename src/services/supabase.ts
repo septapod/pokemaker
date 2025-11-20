@@ -254,9 +254,18 @@ export async function findOrCreatePokemonByName(name: string): Promise<Pokemon |
  * Update an existing Pokémon
  * @param id - The Pokémon's ID
  * @param pokemon - The updated Pokémon data
+ * @param userId - The ID of the user attempting the update (optional for backward compatibility)
  * @returns The updated Pokémon
  */
-export async function updatePokemon(id: string, pokemon: Partial<Pokemon>) {
+export async function updatePokemon(id: string, pokemon: Partial<Pokemon>, userId?: string) {
+  // Verify ownership if userId is provided
+  if (userId) {
+    const existingPokemon = await getPokemonById(id);
+    if (existingPokemon.userId && existingPokemon.userId !== userId) {
+      throw new Error('You do not have permission to edit this Pokémon.');
+    }
+  }
+
   const { data, error } = await supabase
     .from('pokemon')
     .update({
@@ -356,8 +365,17 @@ export async function updatePokemon(id: string, pokemon: Partial<Pokemon>) {
 /**
  * Delete a Pokémon
  * @param id - The Pokémon's ID
+ * @param userId - The ID of the user attempting the deletion (optional for backward compatibility)
  */
-export async function deletePokemon(id: string) {
+export async function deletePokemon(id: string, userId?: string) {
+  // Verify ownership if userId is provided
+  if (userId) {
+    const existingPokemon = await getPokemonById(id);
+    if (existingPokemon.userId && existingPokemon.userId !== userId) {
+      throw new Error('You do not have permission to delete this Pokémon.');
+    }
+  }
+
   const { error } = await supabase
     .from('pokemon')
     .delete()
