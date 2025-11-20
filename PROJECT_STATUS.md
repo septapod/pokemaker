@@ -1,8 +1,8 @@
 # PokéMaker - Project Status
 
-**Last Updated**: November 12, 2025 (Morning)
-**Current Phase**: ✅ FULLY OPERATIONAL
-**Overall Progress**: 100% (MVP Complete & Deployed with Enhanced UX)
+**Last Updated**: November 20, 2025
+**Current Phase**: ✅ FULLY OPERATIONAL WITH MULTI-USER SUPPORT
+**Overall Progress**: 100% (MVP Complete & Deployed with Multi-User Features)
 
 ---
 
@@ -40,6 +40,85 @@
 - **Image Generation**: ✅ GPT-4o working
 - **Storage**: ✅ Supabase Storage working
 - **Deployment**: ✅ Vercel production stable
+- **Authentication**: ✅ Multi-user system operational
+- **User Collections**: ✅ Personal and community galleries working
+
+---
+
+## 🎉 NEW: Multi-User Support (November 20, 2025)
+
+PokéMaker now supports multiple users with individual collections and shared community features!
+
+### Features
+✅ **Custom Authentication System**
+- Username/password authentication with bcrypt password hashing
+- Admin-controlled account creation (no public signup)
+- Secure session management with localStorage persistence
+- No email required - simple username/password only
+
+✅ **Personal Collections ("My Pokémon")**
+- Each user has their own private collection
+- Filter shows only pokemon created by logged-in user
+- Personal gallery with search and sort options
+
+✅ **Community Gallery**
+- View all pokemon from all users in one place
+- Creator attribution shown on each pokemon card ("by username")
+- Search and sort across entire community
+- Everyone can view all pokemon, but can only edit their own
+
+✅ **Ownership & Permissions**
+- UI-level protection: Edit/Delete buttons only visible to pokemon creators
+- Service-level verification: Backend functions verify ownership before updates
+- Automatic user_id assignment when creating pokemon
+- Secure ownership checks prevent unauthorized modifications
+
+✅ **Shared Accounts**
+- Support for family/sibling shared accounts (e.g., "tanzillos" account)
+- Multiple people can use same login credentials
+- Perfect for households with multiple children
+
+### User Accounts
+- **aza**: Admin account (owns all existing pokemon)
+- **tanzillos**: Shared account for Parker & Charlie
+
+### Technical Implementation
+- Custom `users` table with bcrypt password hashing
+- `user_id` foreign key in `pokemon` table
+- SQL joins to display creator usernames
+- Ownership verification in `updatePokemon()` and `deletePokemon()`
+- Protected routes requiring authentication
+- Two separate gallery views with different data filtering
+
+### Database Changes
+- Created `users` table (id, username, password_hash, display_name, timestamps)
+- Added `user_id` column to `pokemon` table (UUID, references users.id)
+- Added `username` field to Pokemon TypeScript type for display
+- Modified queries to join users table for creator attribution
+
+### Adding New Users
+To create a new user account, use the provided script:
+
+```bash
+# Generate SQL with bcrypt hash
+node scripts/create-user.js <username> <password>
+
+# Example:
+node scripts/create-user.js newuser mypassword
+
+# Then run the generated SQL in Supabase SQL Editor
+```
+
+### Pending Database Migration
+To finalize multi-user security, run this SQL in Supabase SQL Editor:
+
+```sql
+-- Make user_id required for all new pokemon
+ALTER TABLE pokemon
+ALTER COLUMN user_id SET NOT NULL;
+```
+
+This ensures all future pokemon must be assigned to a user.
 
 ---
 
