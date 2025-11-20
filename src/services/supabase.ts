@@ -151,6 +151,26 @@ export async function getAllPokemon(): Promise<Pokemon[]> {
 }
 
 /**
+ * Get only the current user's Pokémon from the database
+ * @param userId - The ID of the user whose Pokémon to fetch
+ * @returns Array of Pokémon owned by the specified user
+ */
+export async function getMyPokemon(userId: string): Promise<Pokemon[]> {
+  const { data, error } = await supabase
+    .from('pokemon')
+    .select('*')
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching user Pokémon:', error);
+    throw error;
+  }
+
+  return data.map(convertDatabaseToPokemon);
+}
+
+/**
  * Get a single Pokémon by ID
  * @param id - The Pokémon's ID
  * @returns The Pokémon data
