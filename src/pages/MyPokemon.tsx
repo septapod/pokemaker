@@ -1,19 +1,22 @@
 /**
- * Gallery Page
+ * My Pokémon Page
  *
- * This page displays all the Pokémon that have been created.
+ * This page displays only the current user's Pokémon.
  * Shows them in a grid of cards that can be filtered and sorted.
  */
 
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getAllPokemon } from '../services/supabase';
+import { getMyPokemon } from '../services/supabase';
+import { useAuth } from '../contexts/AuthContext';
 import type { Pokemon } from '../types/pokemon.types';
 import { TYPE_COLORS, TYPE_ICONS } from '../utils/constants';
 
 type SortOption = 'alphabetical' | 'newest' | 'oldest';
 
-function Gallery() {
+function MyPokemon() {
+  const { user } = useAuth();
+
   // State to store the list of Pokémon
   const [pokemon, setPokemon] = useState<Pokemon[]>([]);
   // State for loading status
@@ -30,11 +33,13 @@ function Gallery() {
     loadPokemon();
   }, []);
 
-  // Function to fetch Pokémon from the database
+  // Function to fetch only current user's Pokémon from the database
   async function loadPokemon() {
+    if (!user?.id) return;
+
     try {
       setLoading(true);
-      const data = await getAllPokemon();
+      const data = await getMyPokemon(user.id);
       setPokemon(data);
       setError(null);
     } catch (err) {
@@ -274,4 +279,4 @@ function Gallery() {
   );
 }
 
-export default Gallery;
+export default MyPokemon;
