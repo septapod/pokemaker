@@ -197,24 +197,32 @@ export async function getPokemonById(id: string): Promise<Pokemon> {
  */
 export async function getPokemonByName(name: string): Promise<Pokemon | null> {
   try {
+    console.log(`🔍 getPokemonByName: searching for "${name}"`);
     const { data, error } = await supabase
       .from('pokemon')
       .select('*')
-      .ilike('name', name)
-      .single();
+      .ilike('name', `${name}`)
+      .limit(1);
 
     if (error) {
-      // Not found is not an error
-      if (error.code === 'PGRST116') {
-        return null;
-      }
-      console.error('Error fetching Pokémon by name:', error);
+      console.error('❌ Supabase error fetching Pokémon by name:', error);
       throw error;
     }
 
-    return convertDatabaseToPokemon(data);
-  } catch (error) {
-    console.error('Error in getPokemonByName:', error);
+    if (!data || data.length === 0) {
+      console.log(`ℹ️ getPokemonByName: No Pokémon found with name "${name}"`);
+      return null;
+    }
+
+    console.log(`✅ getPokemonByName: Found Pokémon "${data[0].name}"`);
+    return convertDatabaseToPokemon(data[0]);
+  } catch (error: any) {
+    console.error('❌ Error in getPokemonByName:', {
+      searchName: name,
+      errorMessage: error?.message,
+      errorCode: error?.code,
+      fullError: error,
+    });
     return null;
   }
 }
