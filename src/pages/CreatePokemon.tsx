@@ -460,7 +460,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
     try {
       // Handle "Evolves Into"
       if (pokemonData.evolvesInto) {
-        const evolutionPokemon = await findOrCreatePokemonByName(pokemonData.evolvesInto);
+        const evolutionPokemon = await findOrCreatePokemonByName(pokemonData.evolvesInto, pokemonData.userId);
         if (evolutionPokemon) {
           // Update the evolution Pokemon to have this one as "Evolves From"
           await updatePokemon(evolutionPokemon.id!, {
@@ -473,7 +473,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
 
       // Handle "Evolves From"
       if (pokemonData.evolvesFrom) {
-        const priorEvolutionPokemon = await findOrCreatePokemonByName(pokemonData.evolvesFrom);
+        const priorEvolutionPokemon = await findOrCreatePokemonByName(pokemonData.evolvesFrom, pokemonData.userId);
         if (priorEvolutionPokemon) {
           // Update the prior evolution Pokemon to have this one as "Evolves Into"
           await updatePokemon(priorEvolutionPokemon.id!, {

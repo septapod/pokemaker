@@ -225,7 +225,7 @@ export async function getPokemonByName(name: string): Promise<Pokemon | null> {
  * @param name - The Pokémon's name
  * @returns The Pokémon data (existing or newly created)
  */
-export async function findOrCreatePokemonByName(name: string): Promise<Pokemon | null> {
+export async function findOrCreatePokemonByName(name: string, userId?: string): Promise<Pokemon | null> {
   if (!name || name.trim() === '') {
     return null;
   }
@@ -240,6 +240,7 @@ export async function findOrCreatePokemonByName(name: string): Promise<Pokemon |
       pokemon = await createPokemon({
         name: name.trim(),
         typePrimary: 'Normal', // Default type for new evolution Pokemon
+        userId: userId, // Assign to current user if provided
       });
     }
 
