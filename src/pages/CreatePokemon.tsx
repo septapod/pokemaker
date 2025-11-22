@@ -458,32 +458,51 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
   // If "Evolves Into" or "Evolves From" is set, create or find that Pokemon and link them
   async function linkEvolutions(_pokemonId: string, pokemonData: Omit<Pokemon, 'id' | 'createdAt' | 'updatedAt'>) {
     try {
+      console.log('🔗 linkEvolutions() called with:', {
+        pokemonName: pokemonData.name,
+        userId: pokemonData.userId || 'undefined (NO USER!)',
+        evolvesInto: pokemonData.evolvesInto,
+        evolvesFrom: pokemonData.evolvesFrom,
+      });
+
       // Handle "Evolves Into"
       if (pokemonData.evolvesInto) {
+        console.log(`🔍 Attempting to find/create evolution Pokemon: ${pokemonData.evolvesInto}`);
         const evolutionPokemon = await findOrCreatePokemonByName(pokemonData.evolvesInto, pokemonData.userId);
         if (evolutionPokemon) {
+          console.log(`✅ Found/created evolution Pokemon, now linking...`);
           // Update the evolution Pokemon to have this one as "Evolves From"
           await updatePokemon(evolutionPokemon.id!, {
             evolvesFrom: pokemonData.name,
             evolutionStage: pokemonData.evolutionStage === 'Basic' ? 'Stage 1' : 'Stage 2',
           });
-          console.log(`Linked ${pokemonData.name} → ${evolutionPokemon.name}`);
+          console.log(`✅ Linked ${pokemonData.name} → ${evolutionPokemon.name}`);
+        } else {
+          console.warn(`⚠️ Failed to find/create evolution Pokemon: ${pokemonData.evolvesInto}`);
         }
       }
 
       // Handle "Evolves From"
       if (pokemonData.evolvesFrom) {
+        console.log(`🔍 Attempting to find/create prior evolution Pokemon: ${pokemonData.evolvesFrom}`);
         const priorEvolutionPokemon = await findOrCreatePokemonByName(pokemonData.evolvesFrom, pokemonData.userId);
         if (priorEvolutionPokemon) {
+          console.log(`✅ Found/created prior evolution Pokemon, now linking...`);
           // Update the prior evolution Pokemon to have this one as "Evolves Into"
           await updatePokemon(priorEvolutionPokemon.id!, {
             evolvesInto: pokemonData.name,
           });
-          console.log(`Linked ${priorEvolutionPokemon.name} → ${pokemonData.name}`);
+          console.log(`✅ Linked ${priorEvolutionPokemon.name} → ${pokemonData.name}`);
+        } else {
+          console.warn(`⚠️ Failed to find/create prior evolution Pokemon: ${pokemonData.evolvesFrom}`);
         }
       }
+
+      if (!pokemonData.evolvesInto && !pokemonData.evolvesFrom) {
+        console.log('ℹ️ No evolution data to link');
+      }
     } catch (error) {
-      console.error('Error linking evolutions:', error);
+      console.error('❌ Error linking evolutions:', error);
       // Don't throw - linking evolutions shouldn't prevent save
     }
   }

@@ -227,6 +227,7 @@ export async function getPokemonByName(name: string): Promise<Pokemon | null> {
  */
 export async function findOrCreatePokemonByName(name: string, userId?: string): Promise<Pokemon | null> {
   if (!name || name.trim() === '') {
+    console.log('findOrCreatePokemonByName: Name is empty, returning null');
     return null;
   }
 
@@ -236,17 +237,26 @@ export async function findOrCreatePokemonByName(name: string, userId?: string): 
 
     // If not found, create a new one with just the name
     if (!pokemon) {
-      console.log(`Creating new Pokémon: ${name}`);
+      console.log(`Creating new Pokémon: ${name} with userId: ${userId || 'undefined (NO USER LOGGED IN!)'}`);
       pokemon = await createPokemon({
         name: name.trim(),
         typePrimary: 'Normal', // Default type for new evolution Pokemon
         userId: userId, // Assign to current user if provided
       });
+      console.log(`✅ Successfully created evolution Pokémon: ${name}`, pokemon);
+    } else {
+      console.log(`✅ Found existing Pokémon: ${name}`);
     }
 
     return pokemon;
-  } catch (error) {
-    console.error('Error in findOrCreatePokemonByName:', error);
+  } catch (error: any) {
+    console.error('❌ ERROR in findOrCreatePokemonByName:', {
+      name,
+      userId,
+      errorMessage: error?.message,
+      errorCode: error?.code,
+      fullError: error,
+    });
     return null;
   }
 }
