@@ -1,6 +1,6 @@
 # PokéMaker - Project Status
 
-**Last Updated**: November 20, 2025
+**Last Updated**: February 24, 2026
 **Current Phase**: ✅ FULLY OPERATIONAL WITH MULTI-USER SUPPORT
 **Overall Progress**: 100% (MVP Complete & Deployed with Multi-User Features)
 
@@ -42,6 +42,16 @@
 - **Deployment**: ✅ Vercel production stable
 - **Authentication**: ✅ Multi-user system operational
 - **User Collections**: ✅ Personal and community galleries working
+
+---
+
+## What Changed (February 24, 2026)
+- Added `scripts/reset-password.js` for resetting user passwords (generates SQL like `create-user.js`)
+- Updated README with User Management section documenting both scripts
+- Updated PROJECT_STATUS user management section to cover both scripts
+
+### What's Left
+- Nothing pending. Password reset script is local-only (no deployment needed for the script itself).
 
 ---
 
@@ -96,17 +106,18 @@ PokéMaker now supports multiple users with individual collections and shared co
 - Added `username` field to Pokemon TypeScript type for display
 - Modified queries to join users table for creator attribution
 
-### Adding New Users
-To create a new user account, use the provided script:
+### User Management Scripts
+Create or reset user accounts with these scripts (output SQL to run in Supabase SQL Editor):
 
 ```bash
-# Generate SQL with bcrypt hash
+# Create a new user
 node scripts/create-user.js <username> <password>
 
-# Example:
-node scripts/create-user.js newuser mypassword
+# Reset a user's password
+node scripts/reset-password.js <username> <new_password>
 
-# Then run the generated SQL in Supabase SQL Editor
+# List all users (prints query to run in Supabase)
+node scripts/reset-password.js --list
 ```
 
 ### Pending Database Migration

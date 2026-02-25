@@ -239,6 +239,21 @@ npm run preview
 npm run type-check
 ```
 
+## 🔑 User Management
+
+Accounts are admin-controlled (no public signup). Use these scripts to manage users:
+
+```bash
+# Create a new user (generates SQL to run in Supabase SQL Editor)
+node scripts/create-user.js <username> <password>
+
+# Reset a user's password (generates SQL to run in Supabase SQL Editor)
+node scripts/reset-password.js <username> <new_password>
+
+# List all users (prints a SQL query to run in Supabase SQL Editor)
+node scripts/reset-password.js --list
+```
+
 ## 📄 License
 
 This project is for personal use. Feel free to fork and adapt for your own purposes!
