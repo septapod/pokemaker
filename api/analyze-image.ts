@@ -50,6 +50,19 @@ export default async function handler(
       });
     }
 
+    // Validate and normalize mediaType to one OpenAI Vision accepts
+    const supportedMediaTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/webp'];
+    const normalizedMediaType = supportedMediaTypes.includes(imageMediaType)
+      ? imageMediaType
+      : 'image/png';
+
+    // Diagnostic logging for debugging image format issues
+    console.log('[analyze-image] Received mediaType:', imageMediaType);
+    if (imageMediaType !== normalizedMediaType) {
+      console.log('[analyze-image] Normalized unsupported mediaType to:', normalizedMediaType);
+    }
+    console.log('[analyze-image] base64 preview:', imageBase64.substring(0, 100));
+
     // Build Vision prompt - focus on ONLY physical, visual characteristics
     const visionPrompt = `Describe ONLY the physical, visual characteristics of this creature drawing. Focus on what you can SEE, not concepts or personality.
 
@@ -75,7 +88,7 @@ export default async function handler(
             {
               type: 'image_url',
               image_url: {
-                url: `data:${imageMediaType};base64,${imageBase64}`,
+                url: `data:${normalizedMediaType};base64,${imageBase64}`,
               },
             },
             {

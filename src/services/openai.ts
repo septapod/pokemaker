@@ -82,9 +82,19 @@ export async function generatePokemonImageWithVision(
     console.log('Converting image to base64...');
     const base64Image = await fileToBase64(imageFile);
 
-    // Extract base64 data from data URL
-    const base64Data = base64Image.split(',')[1] || base64Image;
-    const mediaType = imageFile.type || 'image/png';
+    // Extract base64 data from data URL, handling potential double-prefixed URIs
+    let base64Data = base64Image;
+    if (base64Data.startsWith('data:')) {
+      base64Data = base64Data.split(',')[1] || base64Data;
+    }
+    // Validate it looks like base64 (no remaining data: prefix)
+    if (base64Data.startsWith('data:')) {
+      throw new Error('Malformed base64 data: double-prefixed data URI');
+    }
+
+    // Ensure mediaType is one OpenAI Vision accepts
+    const supportedTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/webp'];
+    const mediaType = supportedTypes.includes(imageFile.type) ? imageFile.type : 'image/png';
 
     // Step 2: Send to backend for Vision analysis (includes userDescription inline)
     console.log('Analyzing image via backend API...');

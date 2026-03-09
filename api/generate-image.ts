@@ -1,7 +1,7 @@
 /**
  * Vercel Serverless Function: Generate Pokémon Image
  *
- * This endpoint generates a Pokémon image using DALL-E 3.
+ * This endpoint generates a Pokémon image using gpt-image-1.
  * API key is stored server-side and never exposed to the browser.
  *
  * POST /api/generate-image
@@ -50,10 +50,10 @@ export default async function handler(
       });
     }
 
-    if (description.length > 4000) {
+    if (description.length > 32000) {
       return response.status(400).json({
         error: {
-          message: 'Description must not exceed 4000 characters (DALL-E 3 limit)',
+          message: 'Description must not exceed 32000 characters',
           code: 'INVALID_REQUEST',
         },
       });

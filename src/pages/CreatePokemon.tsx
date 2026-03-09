@@ -174,18 +174,70 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
     }
   }, [genderRatioMale, setValue]);
 
+  // Normalize any image file to PNG via canvas (handles HEIC, HEIF, WEBP, etc.)
+  async function normalizeImageFile(file: File): Promise<File> {
+    // If already a supported format that OpenAI accepts, skip conversion
+    const supportedTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/webp'];
+    if (supportedTypes.includes(file.type)) {
+      return file;
+    }
+
+    // Convert to PNG via canvas (works for any format the browser can render)
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const objectUrl = URL.createObjectURL(file);
+
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          URL.revokeObjectURL(objectUrl);
+          reject(new Error('Could not get canvas context'));
+          return;
+        }
+        ctx.drawImage(img, 0, 0);
+        canvas.toBlob(
+          (blob) => {
+            URL.revokeObjectURL(objectUrl);
+            if (!blob) {
+              reject(new Error('Could not convert image to PNG'));
+              return;
+            }
+            const normalizedFile = new File([blob], file.name.replace(/\.[^.]+$/, '.png'), {
+              type: 'image/png',
+            });
+            resolve(normalizedFile);
+          },
+          'image/png'
+        );
+      };
+
+      img.onerror = () => {
+        URL.revokeObjectURL(objectUrl);
+        reject(new Error('Could not load image for conversion'));
+      };
+
+      img.src = objectUrl;
+    });
+  }
+
   // Handle image file selection - uploads immediately to Supabase for persistence
   async function handleImageUpload(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
     if (file) {
       try {
+        // Normalize image to PNG if needed (handles HEIC from iOS, etc.)
+        const normalizedFile = await normalizeImageFile(file);
+
         // Create preview URL for immediate display
-        const previewUrl = URL.createObjectURL(file);
+        const previewUrl = URL.createObjectURL(normalizedFile);
         setUploadedImagePreview(previewUrl);
-        setUploadedImage(file);
+        setUploadedImage(normalizedFile);
 
         // Upload immediately to Supabase Storage to ensure it persists
-        const permanentUrl = await uploadImage(file, 'pokemon-images');
+        const permanentUrl = await uploadImage(normalizedFile, 'pokemon-images');
 
         // Update form with the permanent URL
         setValue('originalDrawingUrl', permanentUrl);

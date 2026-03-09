@@ -45,13 +45,23 @@
 
 ---
 
+## What Changed (March 8, 2026)
+- Fixed iPad Safari "string did not match expected pattern" error on image upload
+- Added `normalizeImageFile()` in CreatePokemon.tsx to convert HEIC/HEIF images to PNG via canvas
+- Added server-side mediaType validation in `api/analyze-image.ts` (falls back to image/png for unsupported types)
+- Hardened base64 extraction in `src/services/openai.ts` to prevent double-prefixed data URIs
+- Added diagnostic logging for image format debugging in analyze-image endpoint
+- Fixed stale DALL-E 3 docstring and 4000-char prompt limit in `api/generate-image.ts` (now 32K)
+- Updated OpenAI SDK from 6.8.1 to 6.27.0
+
+### What's Left
+- Deploy to Vercel and test on iPad Safari with camera upload
+- Verify both Vision analysis and image generation complete on iOS
+
 ## What Changed (February 24, 2026)
 - Added `scripts/reset-password.js` for resetting user passwords (generates SQL like `create-user.js`)
 - Updated README with User Management section documenting both scripts
 - Updated PROJECT_STATUS user management section to cover both scripts
-
-### What's Left
-- Nothing pending. Password reset script is local-only (no deployment needed for the script itself).
 
 ---
 
