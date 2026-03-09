@@ -53,6 +53,7 @@
 - Added diagnostic logging for image format debugging in analyze-image endpoint
 - Fixed stale DALL-E 3 docstring and 4000-char prompt limit in `api/generate-image.ts` (now 32K)
 - Updated OpenAI SDK from 6.8.1 to 6.27.0
+- Upgraded Vision analysis model from gpt-4o to gpt-4.1 (better performance, 20% cheaper)
 
 ### What's Left
 - Deploy to Vercel and test on iPad Safari with camera upload

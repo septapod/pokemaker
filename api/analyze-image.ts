@@ -1,7 +1,7 @@
 /**
  * Vercel Serverless Function: Analyze Pokémon Image
  *
- * This endpoint analyzes a Pokémon image using GPT-4o Vision.
+ * This endpoint analyzes a Pokémon image using GPT-4.1 Vision.
  * API key is stored server-side and never exposed to the browser.
  *
  * POST /api/analyze-image
@@ -78,9 +78,9 @@ export default async function handler(
 
               Provide a purely visual, physical description with NO personality traits, NO elemental types, NO mood descriptions, NO abstract concepts. Just describe what the creature physically looks like.`;
 
-    // Call GPT-4o with Vision to analyze the Pokémon image
+    // Call GPT-4.1 with Vision to analyze the Pokémon image
     const analysisResponse = await openai.chat.completions.create({
-      model: 'gpt-4o',
+      model: 'gpt-4.1',
       messages: [
         {
           role: 'user',
@@ -103,7 +103,7 @@ export default async function handler(
 
     const content = analysisResponse.choices[0]?.message?.content;
     if (!content) {
-      throw new Error('No response from GPT-4o Vision');
+      throw new Error('No response from GPT-4.1 Vision');
     }
 
     // Truncate if necessary to prevent overly long descriptions
