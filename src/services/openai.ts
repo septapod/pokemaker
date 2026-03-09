@@ -78,31 +78,40 @@ export async function generatePokemonImageWithVision(
   userDescription?: string
 ): Promise<string> {
   try {
-    // Step 1: Resize image to fit within Vercel's 4.5MB body limit
-    // iPad camera photos are 12+ MP which can be 20-40MB as base64
-    console.log('Resizing image for API upload...');
-    const resizedFile = await resizeImageForUpload(imageFile, 1024);
+    // === STEP 1: Resize image ===
+    let resizedFile: File;
+    try {
+      console.log('[vision] Step 1: Resizing image...', { name: imageFile.name, type: imageFile.type, size: imageFile.size });
+      resizedFile = await resizeImageForUpload(imageFile, 1024);
+      console.log('[vision] Step 1 OK:', { name: resizedFile.name, type: resizedFile.type, size: resizedFile.size });
+    } catch (e: any) {
+      throw new Error(`[Step 1 - resize] ${e.message}`);
+    }
 
-    // Step 2: Convert resized image to base64
-    console.log('Converting image to base64...');
-    const base64Image = await fileToBase64(resizedFile);
-
-    // Extract base64 data from data URL
-    let base64Data = base64Image;
-    if (base64Data.startsWith('data:')) {
-      base64Data = base64Data.split(',')[1] || base64Data;
+    // === STEP 2: Convert to base64 ===
+    let base64Data: string;
+    try {
+      console.log('[vision] Step 2: Converting to base64...');
+      const base64Image = await fileToBase64(resizedFile);
+      base64Data = base64Image.startsWith('data:') ? base64Image.split(',')[1] || base64Image : base64Image;
+      console.log('[vision] Step 2 OK: base64 length =', base64Data.length);
+    } catch (e: any) {
+      throw new Error(`[Step 2 - base64] ${e.message}`);
     }
 
     const mediaType = 'image/jpeg';
 
-    // Step 2: Send to backend for Vision analysis (includes userDescription inline)
-    console.log('Analyzing image via backend API...');
-    const analysis = await analyzePokemonImage(base64Data, mediaType, userDescription);
+    // === STEP 3: Vision analysis ===
+    let analysis: { visualDescription: string };
+    try {
+      console.log('[vision] Step 3: Sending to Vision API...');
+      analysis = await analyzePokemonImage(base64Data, mediaType, userDescription);
+      console.log('[vision] Step 3 OK:', analysis.visualDescription?.substring(0, 100));
+    } catch (e: any) {
+      throw new Error(`[Step 3 - vision API] ${e.message}`);
+    }
 
-    // Step 3: Build final prompt for GPT-4o image generation
-    // GPT-4o can handle detailed prompts with style instructions
-    console.log('Visual analysis from drawing:', analysis.visualDescription);
-
+    // === STEP 4: Generate image from description ===
     const finalPrompt = `Create a cute, family-friendly fantasy creature for a children's game with these exact physical features:
 
 ${analysis.visualDescription}
@@ -126,25 +135,25 @@ ABSOLUTE REQUIREMENTS - NO EXCEPTIONS:
 - ONLY draw the creature itself - nothing else
 - Pure visual illustration with no written content whatsoever`;
 
-    console.log('Generating new Pokémon image from analyzed drawing...');
-    console.log('Final prompt length:', finalPrompt.length);
-    console.log('Sending to GPT-4o image generation:', finalPrompt);
-    const imageResponse = await generateImage(finalPrompt);
+    let imageResponse;
+    try {
+      console.log('[vision] Step 4: Generating image, prompt length:', finalPrompt.length);
+      imageResponse = await generateImage(finalPrompt);
+      console.log('[vision] Step 4 OK: got response, imageUrl length =', imageResponse.imageUrl?.length);
+    } catch (e: any) {
+      throw new Error(`[Step 4 - image gen] ${e.message}`);
+    }
 
     if (!imageResponse.imageUrl) {
-      throw new Error('No image URL returned from image generation');
+      throw new Error('[Step 4] No image URL returned from image generation');
     }
 
-    // Step 4: Extract base64 data from data URL
-    console.log('Extracting base64 data from data URL...');
-    // imageResponse.imageUrl is in format: "data:image/png;base64,<base64data>"
+    // === STEP 5: Extract base64 from data URL ===
     const generatedBase64Data = imageResponse.imageUrl.split(',')[1];
-
     if (!generatedBase64Data) {
-      throw new Error('Invalid data URL format');
+      throw new Error('[Step 5] Invalid data URL format from image generation');
     }
 
-    // Return the base64 data
     return generatedBase64Data;
 
   } catch (error: any) {
