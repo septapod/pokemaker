@@ -55,9 +55,12 @@
 - Updated OpenAI SDK from 6.8.1 to 6.27.0
 - Upgraded Vision analysis model from gpt-4o to gpt-4.1 (better performance, 20% cheaper)
 
+- Fixed actual root cause: iPad camera photos (12+ MP) exceeded Vercel's 4.5MB body limit as base64
+- Added resizeImageForUpload() to downscale images to 1024px max and compress as JPEG before API call
+- Fixed api-client.ts to handle non-JSON error responses (413, plain text errors)
+
 ### What's Left
-- Deploy to Vercel and test on iPad Safari with camera upload
-- Verify both Vision analysis and image generation complete on iOS
+- Test on iPad with camera upload to confirm fix
 
 ## What Changed (February 24, 2026)
 - Added `scripts/reset-password.js` for resetting user passwords (generates SQL like `create-user.js`)

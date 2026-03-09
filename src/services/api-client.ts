@@ -88,13 +88,21 @@ export async function analyzePokemonImage(
       } as AnalyzeImageRequest),
     });
 
-    const data = (await response.json()) as AnalyzeImageResponse | ErrorResponse;
-
     if (!response.ok) {
-      throw new Error(parseErrorResponse(data));
+      // Handle non-JSON error responses (e.g., Vercel's "Request Entity Too Large")
+      const contentType = response.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        const data = await response.json();
+        throw new Error(parseErrorResponse(data));
+      }
+      if (response.status === 413) {
+        throw new Error('Image is too large. Please use a smaller image or take a photo at lower resolution.');
+      }
+      throw new Error(`Server error (${response.status}). Please try again.`);
     }
 
-    return data as AnalyzeImageResponse;
+    const data = (await response.json()) as AnalyzeImageResponse;
+    return data;
   } catch (error) {
     if (error instanceof Error) {
       throw error;

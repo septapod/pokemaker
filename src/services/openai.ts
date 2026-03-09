@@ -78,23 +78,22 @@ export async function generatePokemonImageWithVision(
   userDescription?: string
 ): Promise<string> {
   try {
-    // Step 1: Convert image to base64
-    console.log('Converting image to base64...');
-    const base64Image = await fileToBase64(imageFile);
+    // Step 1: Resize image to fit within Vercel's 4.5MB body limit
+    // iPad camera photos are 12+ MP which can be 20-40MB as base64
+    console.log('Resizing image for API upload...');
+    const resizedFile = await resizeImageForUpload(imageFile, 1024);
 
-    // Extract base64 data from data URL, handling potential double-prefixed URIs
+    // Step 2: Convert resized image to base64
+    console.log('Converting image to base64...');
+    const base64Image = await fileToBase64(resizedFile);
+
+    // Extract base64 data from data URL
     let base64Data = base64Image;
     if (base64Data.startsWith('data:')) {
       base64Data = base64Data.split(',')[1] || base64Data;
     }
-    // Validate it looks like base64 (no remaining data: prefix)
-    if (base64Data.startsWith('data:')) {
-      throw new Error('Malformed base64 data: double-prefixed data URI');
-    }
 
-    // Ensure mediaType is one OpenAI Vision accepts
-    const supportedTypes = ['image/png', 'image/jpeg', 'image/gif', 'image/webp'];
-    const mediaType = supportedTypes.includes(imageFile.type) ? imageFile.type : 'image/png';
+    const mediaType = 'image/jpeg';
 
     // Step 2: Send to backend for Vision analysis (includes userDescription inline)
     console.log('Analyzing image via backend API...');
@@ -168,6 +167,61 @@ ABSOLUTE REQUIREMENTS - NO EXCEPTIONS:
 
     throw new Error(errorMessage);
   }
+}
+
+/**
+ * Resize an image to fit within maxDimension (longest side) and compress as JPEG.
+ * This keeps the base64 payload under Vercel's 4.5MB request body limit.
+ * A 1024px JPEG at 0.8 quality is typically 100-300KB as base64.
+ */
+async function resizeImageForUpload(file: File, maxDimension: number): Promise<File> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+
+    img.onload = () => {
+      let { naturalWidth: w, naturalHeight: h } = img;
+
+      // Only downscale, never upscale
+      if (w > maxDimension || h > maxDimension) {
+        const scale = maxDimension / Math.max(w, h);
+        w = Math.round(w * scale);
+        h = Math.round(h * scale);
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        URL.revokeObjectURL(objectUrl);
+        reject(new Error('Could not get canvas context'));
+        return;
+      }
+      ctx.drawImage(img, 0, 0, w, h);
+
+      canvas.toBlob(
+        (blob) => {
+          URL.revokeObjectURL(objectUrl);
+          if (!blob) {
+            reject(new Error('Could not compress image'));
+            return;
+          }
+          console.log(`Resized image: ${img.naturalWidth}x${img.naturalHeight} → ${w}x${h}, ${(blob.size / 1024).toFixed(0)}KB`);
+          resolve(new File([blob], 'drawing.jpg', { type: 'image/jpeg' }));
+        },
+        'image/jpeg',
+        0.8
+      );
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      reject(new Error('Could not load image for resizing'));
+    };
+
+    img.src = objectUrl;
+  });
 }
 
 /**
