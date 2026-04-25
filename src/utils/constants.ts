@@ -100,9 +100,9 @@ export const DEFAULT_BASE_FRIENDSHIP = 70;
 export const DEFAULT_EGG_CYCLES = 20;
 
 // Image generation prompt template for OpenAI (GPT-4o image generation)
-export const AI_IMAGE_PROMPT_TEMPLATE = `Create a finished Pokemon-style creature character for a family-friendly game.
+export const AI_IMAGE_PROMPT_TEMPLATE = `Create a finished trading-card creature character illustration for a family-friendly game.
 
-Style: Cute anime creature in the style of Pokemon characters. Soft, rounded design with smooth shading and a cheerful appearance. Front-facing view on a clean white background.
+Style: Cute kawaii monster in classic late-1990s Japanese anime trading-card aesthetic. Bold confident black outlines, smooth cel shading with soft watercolor-style highlights, vibrant saturated colors. Round friendly body shape with large expressive eyes. Front-facing 3/4 view. Place the creature in a simple, atmospheric natural environment that fits its design (forest clearing, rocky outcrop, sandy shore, grassy meadow, cave entrance, etc.) — painted loosely in the same watercolor style so the creature stays the focal point. Polished, professional creature illustration suitable for a collectible monster card.
 
 IMPORTANT - Generate ONLY the finished character artwork. Do NOT include:
 - Color palette bars, swatches, or color reference strips

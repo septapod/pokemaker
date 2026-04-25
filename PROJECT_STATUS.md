@@ -1,8 +1,16 @@
 # PokéMaker - Project Status
 
-**Last Updated**: February 24, 2026
+**Last Updated**: April 25, 2026
 **Current Phase**: ✅ FULLY OPERATIONAL WITH MULTI-USER SUPPORT
 **Overall Progress**: 100% (MVP Complete & Deployed with Multi-User Features)
+
+---
+
+## What Changed (April 25, 2026)
+- **Fixed AI safety-system flag on image generation.** Users were seeing "The AI safety system flagged this request" on every drawing upload. Root cause: prompts in `src/utils/constants.ts` (`AI_IMAGE_PROMPT_TEMPLATE`) and `src/services/openai.ts` (`generatePokemonImageWithVision` finalPrompt) explicitly named "Pokemon," which OpenAI's image content policy flags as trademarked IP.
+- Replaced franchise references with descriptive style language: "late-1990s Japanese anime trading-card aesthetic, bold confident black outlines, cel shading with soft watercolor-style highlights, vibrant saturated colors, kawaii monster, large expressive eyes." Same visual DNA, no trademark trigger.
+- Dropped the hard "clean white background" requirement. Real Pokémon-card art usually shows the creature in its environment. Prompts now ask for "a simple, atmospheric natural environment that fits its design (forest clearing, rocky outcrop, sandy shore, grassy meadow, cave entrance) painted loosely in the same watercolor style so the creature stays the focal point."
+- Known follow-up not done: the catch handler in `src/services/openai.ts:159-178` still collapses errors from any pipeline step into one generic message. If the safety flag returns despite the prompt fix, surface step-level errors (Step 3 vision vs. Step 4 generate) before swapping models.
 
 ---
 

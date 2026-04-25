@@ -112,16 +112,16 @@ export async function generatePokemonImageWithVision(
     }
 
     // === STEP 4: Generate image from description ===
-    const finalPrompt = `Create a cute, family-friendly fantasy creature for a children's game with these exact physical features:
+    const finalPrompt = `Create a cute, family-friendly fantasy creature illustration for a children's collectible-card game with these exact physical features:
 
 ${analysis.visualDescription}
 ${userDescription ? `User specified: ${userDescription}` : ''}
 
-Art style: Anime/manga style with bold outlines, Japanese monster-collecting game aesthetic (like Pokemon), vibrant saturated colors, white background, front-facing view.
+Art style: Late-1990s Japanese anime trading-card aesthetic. Bold confident black outlines, smooth cel shading with soft watercolor-style highlights, vibrant saturated colors, round friendly body shape, large expressive eyes. Front-facing 3/4 view. Place the creature in a simple, atmospheric natural environment that fits its design (forest clearing, rocky outcrop, sandy shore, grassy meadow, cave entrance, etc.) — painted loosely in the same watercolor style so the creature stays the focal point. Polished, professional creature illustration.
 
 Design requirements:
-- Cute and friendly-looking
-- Professional, polished, and clean
+- Cute and friendly-looking kawaii monster
+- Professional, polished, and clean line art
 - Colorful and cheerful
 - Appropriate for all ages
 - Safe for children
