@@ -7,7 +7,7 @@ A web app where you draw a creature and AI turns it into a Pokemon, complete wit
 The interesting technical feature is the two-stage AI pipeline:
 
 1. **Vision analysis** (GPT-4.1): Analyzes the uploaded drawing and extracts visual characteristics (shape, color, features, posture).
-2. **Image generation** (gpt-image-1): Takes that description and generates a polished Pokemon-style illustration that preserves the original creature's design.
+2. **Image generation** (gpt-image-2): Takes that description and generates a polished Pokemon-style illustration that preserves the original creature's design.
 
 This two-stage approach keeps the generated art faithful to the kid's drawing instead of hallucinating a generic Pokemon.
 
@@ -116,7 +116,7 @@ This two-stage approach keeps the generated art faithful to the kid's drawing in
 ```
 /api
   analyze-image.ts     - GPT-4.1 vision analysis endpoint
-  generate-image.ts    - gpt-image-1 generation endpoint
+  generate-image.ts    - gpt-image-2 generation endpoint
   fetch-image.ts       - Image proxy for Supabase storage
   _lib/                - Shared API utilities
 /src
@@ -152,7 +152,7 @@ This two-stage approach keeps the generated art faithful to the kid's drawing in
 - **Routing**: React Router v6
 - **Forms**: React Hook Form
 - **Database/Storage**: Supabase (PostgreSQL)
-- **AI**: OpenAI GPT-4.1 (vision) + gpt-image-1 (generation)
+- **AI**: OpenAI GPT-4.1 (vision) + gpt-image-2 (generation)
 - **Deployment**: Vercel (serverless API functions)
 
 ## User Management

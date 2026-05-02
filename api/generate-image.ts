@@ -1,7 +1,7 @@
 /**
  * Vercel Serverless Function: Generate Pokémon Image
  *
- * This endpoint generates a Pokémon image using gpt-image-1.
+ * This endpoint generates a Pokémon image using gpt-image-2.
  * API key is stored server-side and never exposed to the browser.
  *
  * POST /api/generate-image
@@ -59,11 +59,11 @@ export default async function handler(
       });
     }
 
-    // Call GPT-4o image generation via OpenAI API (uses gpt-image-1 model)
+    // Call OpenAI image generation API (gpt-image-2, released April 2026)
     // Pass the description directly - it's already properly formatted by the frontend
-    // Note: gpt-image-1 returns b64_json by default (doesn't accept response_format param)
+    // Note: gpt-image-2 returns b64_json by default (doesn't accept response_format param)
     const imageResponse = await openai.images.generate({
-      model: 'gpt-image-1',
+      model: 'gpt-image-2',
       prompt: description,
       n: 1,
       size: '1024x1024',

@@ -1,10 +1,13 @@
 # PokéMaker - Project Status
 
-**Last Updated**: April 25, 2026
+**Last Updated**: May 2, 2026
 **Current Phase**: ✅ FULLY OPERATIONAL WITH MULTI-USER SUPPORT
 **Overall Progress**: 100% (MVP Complete & Deployed with Multi-User Features)
 
 ---
+
+## What Changed (May 2, 2026)
+- **Upgraded image generation to gpt-image-2.** Replaced `'gpt-image-1'` with `'gpt-image-2'` in `api/generate-image.ts`. gpt-image-2 launched April 21, 2026 with reasoning, near-perfect text rendering, and 4K resolution. Same `images.generate` API surface; size param left at `1024x1024`. README.md and current-state lines below updated to match.
 
 ## What Changed (April 25, 2026)
 - **Fixed AI safety-system flag on image generation.** Users were seeing "The AI safety system flagged this request" on every drawing upload. Root cause: prompts in `src/utils/constants.ts` (`AI_IMAGE_PROMPT_TEMPLATE`) and `src/services/openai.ts` (`generatePokemonImageWithVision` finalPrompt) explicitly named "Pokemon," which OpenAI's image content policy flags as trademarked IP.
@@ -22,7 +25,7 @@
 - **Production URL**: https://pokemaker.vercel.app
 - **Latest Commit**: `d1b8f35` - Replace battle stats number inputs with range sliders
 - **Deployment Status**: ✅ Successfully deployed and tested
-- **Image Generation**: ✅ Working with GPT-4o (gpt-image-1 model)
+- **Image Generation**: ✅ Working with gpt-image-2 (upgraded from gpt-image-1 on May 2, 2026)
 
 ### Recent Commits (ALL DEPLOYED)
 - `d1b8f35` - Replace battle stats number inputs with range sliders (LATEST) ⭐
@@ -32,7 +35,7 @@
 - `33cf0b1` - Fix GPT-4o image generation to handle b64_json response
 
 ### What Works Now
-✅ GPT-4o image generation with gpt-image-1 model
+✅ Image generation with gpt-image-2
 ✅ Base64 image response handling (no CORS issues)
 ✅ Image upload to Supabase Storage
 ✅ Full Pokémon creation workflow with slider-based battle stats ⭐
@@ -160,7 +163,7 @@ This ensures all future pokemon must be assigned to a user.
 PokéMaker is a web application for creating custom Pokémon with comprehensive details, upload drawings, and generate AI-powered Pokémon artwork. The app stores all creations in a Supabase database and provides an intuitive, child-friendly interface.
 
 **Target User**: Child who loves Pokémon
-**Tech Stack**: React + TypeScript + Vite + Supabase + OpenAI GPT-4o Image Generation (gpt-image-1) + GPT-4o Vision
+**Tech Stack**: React + TypeScript + Vite + Supabase + OpenAI gpt-image-2 (image generation) + GPT-4.1 (vision)
 
 ---
 
