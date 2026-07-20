@@ -1,0 +1,13 @@
+# Internal material never ships to Vercel. Conservative baseline written 2026-07-19
+# after the June exposure incidents; *.md deliberately NOT blanket-excluded until each
+# build is confirmed not to consume markdown. Enforced by guard-destructive-bash.sh.
+.claude/
+docs/
+handoff*.md
+handoff-*.md
+PROJECT_STATUS.md
+PROGRESS.md
+notes/
+*.bak.html
+.DS_Store
+node_modules/
