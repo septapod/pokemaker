@@ -7,7 +7,7 @@
 
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getMyPokemon } from '../services/supabase';
+import { getMyPokemon } from '../services/pokemon-data';
 import { useAuth } from '../contexts/AuthContext';
 import type { Pokemon } from '../types/pokemon.types';
 import { TYPE_COLORS, TYPE_ICONS } from '../utils/constants';

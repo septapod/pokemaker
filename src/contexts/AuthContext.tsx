@@ -1,102 +1,119 @@
 /**
  * Authentication Context
  *
- * This manages the login state for the app using the users table.
- * It stores whether the user is logged in and provides login/logout functions.
+ * Accounts live in the shared Neon `users` table, the same one PokeTracker
+ * uses, so one username and password works in both apps.
+ *
+ * This used to query the users table straight from the browser and run the
+ * bcrypt comparison client-side, which meant shipping password hashes to the
+ * browser. The check now happens on the server and the browser only ever holds
+ * a signed session cookie.
  */
 
-import { createContext, useContext, useState, type ReactNode } from 'react';
-import bcrypt from 'bcryptjs';
-import { supabase } from '../services/supabase';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { signIn, signOut, getCurrentUser } from '../services/pokemon-data';
 
-// User information
 export interface User {
   id: string;
   username: string;
   displayName: string;
 }
 
-// Define what the context provides
 interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
+  /** True until the first session check finishes, so guards do not flash. */
+  isLoading: boolean;
   login: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
 }
 
-// Create the context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Provider component that wraps the app
+const CACHE_KEY = 'pokemaker_user';
+
+function readCachedUser(): User | null {
+  try {
+    const saved = localStorage.getItem(CACHE_KEY);
+    return saved ? (JSON.parse(saved) as User) : null;
+  } catch {
+    return null;
+  }
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  // Check localStorage to see if user was previously logged in
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('pokemaker_auth') === 'true';
-  });
+  // Rendered immediately so a returning user does not see a login flash. The
+  // cookie, checked just below, is the real authority.
+  const [user, setUser] = useState<User | null>(readCachedUser);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const [user, setUser] = useState<User | null>(() => {
-    const savedUser = localStorage.getItem('pokemaker_user');
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
+  useEffect(() => {
+    let cancelled = false;
+    getCurrentUser()
+      .then((session) => {
+        if (cancelled) return;
+        if (session) {
+          const info: User = {
+            id: session.id,
+            username: session.username ?? '',
+            displayName: session.firstName || session.username || '',
+          };
+          setUser(info);
+          try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify(info));
+          } catch {
+            // A browser refusing storage is not a reason to fail the session.
+          }
+        } else {
+          setUser(null);
+          try {
+            localStorage.removeItem(CACHE_KEY);
+          } catch { /* ignore */ }
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, []);
 
-  // Login function - checks credentials against users table
   const login = async (username: string, password: string): Promise<boolean> => {
     try {
-      // Query users table for username
-      const { data: userData, error } = await supabase
-        .from('users')
-        .select('id, username, password_hash, display_name')
-        .eq('username', username)
-        .single();
-
-      if (error || !userData) {
-        console.error('User not found:', error);
-        return false;
-      }
-
-      // Verify password using bcrypt
-      const passwordMatch = bcrypt.compareSync(password, userData.password_hash);
-
-      if (!passwordMatch) {
-        console.error('Invalid password');
-        return false;
-      }
-
-      // Set authenticated state
-      const userInfo: User = {
-        id: userData.id,
-        username: userData.username,
-        displayName: userData.display_name || userData.username,
+      const session = await signIn(username, password);
+      const info: User = {
+        id: session.id,
+        username: session.username ?? username,
+        displayName: session.firstName || session.username || username,
       };
-
-      setIsAuthenticated(true);
-      setUser(userInfo);
-      localStorage.setItem('pokemaker_auth', 'true');
-      localStorage.setItem('pokemaker_user', JSON.stringify(userInfo));
-
+      setUser(info);
+      try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify(info));
+      } catch { /* ignore */ }
       return true;
     } catch (err) {
-      console.error('Login error:', err);
+      console.error('Login failed:', err);
       return false;
     }
   };
 
-  // Logout function - clears auth state
   const logout = () => {
-    setIsAuthenticated(false);
     setUser(null);
-    localStorage.removeItem('pokemaker_auth');
-    localStorage.removeItem('pokemaker_user');
+    try {
+      localStorage.removeItem(CACHE_KEY);
+      localStorage.removeItem('pokemaker_auth');
+    } catch { /* ignore */ }
+    void signOut().catch(() => { /* the cookie expires on its own */ });
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated: user !== null, user, isLoading, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
 }
 
-// Custom hook to use the auth context
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {

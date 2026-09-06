@@ -7,7 +7,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getPokemonById, getAllPokemon } from '../services/supabase';
+import { getPokemonById, getAllPokemon } from '../services/pokemon-data';
 import type { Pokemon } from '../types/pokemon.types';
 import CreatePokemon from './CreatePokemon';
 

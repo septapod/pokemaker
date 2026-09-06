@@ -15,7 +15,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import type { Pokemon, PokemonFormData } from '../types/pokemon.types';
-import { createPokemon, updatePokemon, uploadImage, findOrCreatePokemonByName } from '../services/supabase';
+import { createPokemon, updatePokemon, uploadImage, findOrCreatePokemonByName } from '../services/pokemon-data';
 import { generatePokemonImageWithVision, base64ToFile } from '../services/openai';
 import { useAuth } from '../contexts/AuthContext';
 import {
@@ -288,7 +288,7 @@ function CreatePokemon({ editMode = false, existingPokemon }: CreatePokemonProps
         combinedDescription || undefined
       );
 
-      // Convert base64 to File and upload to Supabase Storage
+      // Convert base64 to File and upload to Vercel Blob
       // (This gives us a permanent URL that won't expire)
       const imageFile = base64ToFile(base64ImageData, 'ai-generated.png');
       const permanentImageUrl = await uploadImage(imageFile, 'pokemon-images');
